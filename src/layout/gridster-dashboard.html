@@ -1,0 +1,25 @@
+<template>
+  <div  ref="layoutContainer">
+    <ul class="gridster">
+      <template repeat.for="lw of layoutWidgets">
+        <li class="gridster-item col-md-12" data-row="${lw.row}" data-col="${lw.col}" data-sizex="${lw.size_x}" data-sizey="${lw.size_y}" data-name="${lw.widget.name}">
+          <compose  view='layout/widgets/widget.html' view-model.bind='lw.widget'></compose>
+        </li>
+      </template>
+    </ul>
+  </div>
+  <div id="basicModal" class="modal fade" ref='popWidgetHost'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" click.trigger="hide()">&times;</button>
+        </div>
+        <div class="modal-body widgets-panel-modal">
+          <!--<div repeat.for='widget of widgets'>
+            <compose  view='layout/widgets/widget.html' view-model.bind='widget'></compose>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

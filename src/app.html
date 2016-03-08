@@ -1,0 +1,23 @@
+<template>
+  <require from='./layout/partials/nav-bar'></require>
+  <require from='./layout/partials/nav-menu'></require>
+  <require from='./layout/partials/app-footer'></require>
+  <div id="wrapper">
+    <header class="navbar">
+      <div class="container">
+        <nav-bar router.bind="router"></nav-bar>
+      </div>
+    </header>
+    <nav-menu router.bind="router"></nav-menu>
+    <div class="content">
+      <div class="container">
+          <div class="layout layout-stack-sm layout-main-right">
+            <div class="col-sm-12 col-md-12 layout-main">
+              <router-view name="default"></router-view>
+            </div>
+          </div>
+      </div>
+    </div>
+    <!--<app-footer></app-footer>-->
+  </div>
+</template>

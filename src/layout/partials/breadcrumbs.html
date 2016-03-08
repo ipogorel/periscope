@@ -1,0 +1,12 @@
+<template>
+  <ol class="breadcrumb" show.bind="history.length>1">
+    <li repeat.for="item of history">
+      <template if.bind="!$last">
+        <button class="btn btn-link" click.trigger="navigate(item)">${item.title}</button>
+      </template>
+      <template if.bind="$last">
+        <button class="btn btn-link">${item.title}</button>
+      </template>
+    </li>
+  </ol>
+</template>

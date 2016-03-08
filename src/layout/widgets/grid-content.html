@@ -1,0 +1,30 @@
+<template>
+  <require from='layout/controls/checkbox-list'></require>
+    <div ref="gridElement"></div>
+    <div id="colunsModal" class="modal fade" ref='columnsChooserPopup'>
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body widgets-panel-modal">
+
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="text" class="form-control" id="filter" placeholder="Filter" value.bind="columnsFilterExpression">
+              </div>
+            </form>
+            <br/>
+            <template repeat.for="item of filteredColumns">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" checked.bind="!item.hidden" click.trigger="selectColumn(item)"/> ${item.field}
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+

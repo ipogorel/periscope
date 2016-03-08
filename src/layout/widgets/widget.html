@@ -1,0 +1,24 @@
+<template>
+  <div class="portlet portlet-default">
+    <div class="portlet-header" show.bind="showHeader">
+      <header>
+        <h4 class="portlet-title">
+          <button type="button" show.bind="hasNavStack" class="btn btn-link" click.trigger="back()"><i class="fa fa-chevron-left"></i></button>
+          ${header}
+          <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></a>
+          <ul class="dropdown-menu">
+            <li><button type="button" class="btn btn-link" click.trigger="refresh()"><i class="fa fa-refresh"></i> Refresh</button></li>
+            <li><button type="button" class="btn btn-link" click.trigger="remove()"><i class="fa fa-remove"></i> Delete</button></li>
+            <li><button type="button" class="btn btn-link" click.trigger="resize()" show.bind="!resized"><i class="fa fa-arrows-h"></i> Maximize</button></li>
+            <li><button type="button" class="btn btn-link" click.trigger="resize()" show.bind="resized"><i class="fa fa-undo"></i> Undo Maximize</button></li>
+          </ul>
+        </h4>
+      </header>
+    </div>
+    <div class="portlet-body">
+      <compose
+        view-model.bind="content">
+      </compose>
+    </div>
+  </div>
+</template>

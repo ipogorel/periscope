@@ -1,0 +1,32 @@
+<template>
+  <require from='layout/controls/list'></require>
+  <div class="row">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+  <div class="row search-box-widget">
+    <div class="col-md-12">
+        <div class="form-group has-feedback search-box-widget-input ${isValid ? '' : 'has-error'}">
+          <div class="input-group">
+            <div class="input-group-addon"><i class="fa ${isValid ? 'fa-check success-check-mark' : 'fa-close'}"></i></div>
+            <input type="text" ref="searchBox" placeholder="Search..." class="form-control" autofocus value.bind="searchString"/>
+          </div>
+          <!--<span class="fa ${!isValid ? 'fa-question-circle' : ''} form-control-feedback" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"></span>-->
+        </div>
+    </div>
+  </div>
+  <div class="row" show.bind = "suggestionsListSettings.displaySuggestions">
+      <div class="col-md-6 overlay">
+        <list items.bind="suggestionsListSettings.suggestions" focused-item-index.bind="suggestionsListSettings.focusedSuggestion" selected-item.bind="selectedSuggestion" visible.bind = "suggestionsListSettings.displaySuggestions" highlight-text.bind="suggestionsListSettings.lastWord" title.bind="suggestionsListSettings.title"/>
+      </div>
+    </div>
+  </div>
+  <div class="row" show.bind="showAssumption">
+    <div class="col-md-12">
+      <p>
+        <b>Did you mean: <button class="btn btn-link" click.trigger="selectAssumption()">${assumptionString}</button></b>
+      </p>
+    </div>
+  </div>
+</template>

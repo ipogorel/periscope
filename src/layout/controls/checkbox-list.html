@@ -1,0 +1,15 @@
+<template>
+      <form class="form-inline">
+        <div class="form-group">
+          <input type="text" class="form-control" id="filter" placeholder="Filter" value.bind="filterExpression">
+        </div>
+      </form>
+      <br>
+      <template repeat.for="item of filteredItems">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" checked.bind="item[$parent.checkboxField]" click.trigger="clicked(item)"> ${item[$parent.captionField]}
+            </label>
+          </div>
+      </template>
+</template>

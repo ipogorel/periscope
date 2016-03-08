@@ -1,0 +1,141 @@
+
+html, body {
+  height: 100%;
+  margin: 0px;
+}
+
+#wrapper{
+  padding-bottom: 0px;
+}
+
+.container{
+  width:100%;
+}
+
+.content {
+  margin-bottom: 0px;
+}
+
+.content .container {
+  height: 100%;
+}
+
+.content .container .layout, .content .container .layout .layout-main {
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/*.dashboard-container { height: 100%;}*/
+
+
+#dashboard {
+  height: 100%;
+}
+
+
+.navbar-brand {
+  color:white !important;
+  padding-top: 15px !important;
+}
+
+
+.search-box-widget .success-check-mark{
+  color: #3c763d;
+}
+.widget-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.widget-container .portlet {
+  margin: 0px 0px 0px;
+}
+
+@media (min-width: 768px) {
+  .form-inline .form-control {
+    display: inline-block;
+    width: 100% !important;
+    vertical-align: middle;
+  }
+}
+
+
+.overlay {
+  background-color:#fff;
+  position:absolute;
+  z-index:12;
+  top:100%;
+  left:0;
+  margin-top: -23px;
+}
+
+.list-view{
+  background-color: white;
+
+  margin-left: 15px;
+  margin-right: 15px;
+
+  padding: 0px;
+  margin-bottom: 0px;
+
+  max-height: 220px;
+  width:auto;
+  overflow-y: scroll;
+  position: relative !important;
+  border: solid 1px #c5c5c5;
+}
+
+
+.list-view .list-container ul{
+  list-style: none;
+  padding-bottom: 10px;
+}
+
+.list-item.focused-item {
+  border: solid 1px #c5c5c5;
+}
+.list-item button:focus{
+  outline:0;
+  color: #d74b4b;
+}
+
+
+
+
+th.k-header {
+  vertical-align: middle;
+  font-family: 'Oswald', 'Trebuchet MS', 'Open Sans', arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.col-selected{
+  background-color: #c5c5c5;
+}
+
+.k-state-focused {
+  border-color:#c5c5c5!important;
+}
+
+li.gridster-item  {
+  list-style-type:none;
+}
+
+.gridster ul{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+
+.x-small {font-size: 65%;}
+
+
+.k-virtual-scrollable-wrap td {
+  font-size: 12px;
+  white-space:nowrap;
+  line-height: 15px;
+}
+.k-virtual-scrollable-wrap tr td{
+  height: 15px;
+  font-size: 12px;
+}

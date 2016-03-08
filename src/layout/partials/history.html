@@ -1,0 +1,29 @@
+<template>
+  <require from="helpers/converters/date-format"></require>
+  <div show.bind="items.length==0">
+    no data found
+  </div>
+  <template repeat.for="item of items">
+    <div class="feed-item feed-item-idea">
+      <div class="${$parent.isCurrent(item)? 'feed-icon bg-secondary' : 'feed-icon'}">
+        <div class="x-small">
+          ${item.dateTime  | dateFormat:'hh:mm'}
+        </div>
+      </div>
+
+      <div class="feed-subject">
+        <p>
+          <button class="btn btn-link" click.trigger="navigate(item)">${item.title}</button>
+        </p>
+      </div> <!-- /.feed-subject -->
+
+      <div class="feed-content">
+        <template repeat.for="stateItem of item.state">
+            <compose
+              view-model.bind="getStateView(stateItem)">
+            </compose>
+        </template>
+      </div> <!-- /.feed-content -->
+    </div>
+  </template>
+</template>

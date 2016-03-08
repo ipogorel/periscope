@@ -1,0 +1,35 @@
+<template>
+  <require from='./history'></require>
+  <require from='./dashboards-list'></require>
+  <nav>
+    <ul class="list-unstyled main-menu">
+      <li>
+        <h4><a  role="button" data-toggle="collapse" href="#collapseDashboards" aria-expanded="true"><i class="fa fa-table"></i> Dashboards</a></h4>
+        <div class="collapse" id="collapseDashboards">
+          <dashboards-list></dashboards-list>
+        </div>
+      </li>
+      <li>
+        <h4><a  role="button" data-toggle="collapse" href="#collapseHistory"><i class="fa fa-clock-o"></i> History</a></h4>
+        <div class="collapse" id="collapseHistory">
+          <history></history>
+        </div>
+      </li>
+    </ul>
+
+  </nav>
+
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <a href="/" class="navbar-brand">
+        ${router.title}
+      </a>
+    </div>
+    <div class="navbar-header pull-right">
+      <a id="nav-expander" class="nav-expander fixed">
+        <i class="fa fa-bars fa-lg white"></i>
+      </a>
+    </div>
+  </div>
+
+</template>

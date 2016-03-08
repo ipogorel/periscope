@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Periscope</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,300,700">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2015.1.318/styles/kendo.common-bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body aurelia-app="main">
+    <div class="splash">
+      <div class="message">Loading....</div>
+      <i class="fa fa-spinner fa-spin"></i>
+    </div>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+    <script>
+      System.import('aurelia-bootstrapper');
+      System.import('font-awesome');
+      System.import('./styles/kendo.custom.css!');
+      System.import('./styles/jquery.gridster.min.css!');
+      System.import('twbs/bootstrap/css/bootstrap.css!').then(() => {
+        System.import('./styles/mvpready-admin.css!').then(() => {
+          System.import('./styles/app.css!');
+          System.import('./styles/sidebar.css!');
+        });
+      });
+    </script>
+
+  </body>
+</html>

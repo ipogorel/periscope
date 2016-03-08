@@ -1,0 +1,14 @@
+<template>
+  <div class="well list-view" show.bind="visible">
+    <form class="form-inline">
+      <div ref="listViewContainer" class="list-container">
+        <h4>${title}</h4>
+        <ul class="text-md">
+          <li repeat.for="item of items" class="list-item">
+            <button class="btn btn-link" type="button" click.trigger="$parent.select($index)" innerHTML.bind="$parent.format(item.value)"></button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+</template>
