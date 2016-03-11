@@ -1,9 +1,18 @@
-# aurelia-skeleton-navigation
+# Periscope
 
-[![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.io)
-[![Join the chat at https://gitter.im/aurelia/discuss](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aurelia/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Periscope is a framework for building highly dynamic data discovery and integration dashboards.
 
-This skeleton is part of the [Aurelia](http://www.aurelia.io/) platform. It sets up a standard navigation-style app using gulp to build your ES6 code with the Babel compiler. Karma/Protractor/Jasmine testing is also configured.
+When a developer is faced with building a modern web application he is faced with a myriad of choices.
+There are numerous commercial Business Intelligence (BI) products, but they cost money and tie you in with the vendor.
+You can take a stab and building a web application from scratch, but given the fast evolution of web technologies this a rather risky exercise with uncertain outcome, with significant time to be invested into researching the crop of latest and greatest libraries, languages, tooling etc.
+
+Periscope was born out of many years of building modular enterprise dashboard applications, but re-imagined for the latest technology trends as of 2016:
+ - web: single page app 
+ - easy discovery of data: google like search interface to enable natural data discovery
+ - highly composable interface to allow seamless navigation between related data
+
+After spending some time researching various frameworks we have determined that a relative newcomer, [Aurelia](http://www.aurelia.io), had the right design philosophy and technical capabilities that would allow us to build extensible, future-proof (as far as this things go (5 years?)) foundation for building a variety of applications.
+
 
 > To keep up to date on [Aurelia](http://www.aurelia.io/), please visit and subscribe to [the official blog](http://blog.durandal.io/). If you have questions, we invite you to [join us on Gitter](https://gitter.im/aurelia/discuss). If you would like to have deeper insight into our development process, please install the [ZenHub](https://zenhub.io) Chrome Extension and visit any of our repository's boards. You can get an overview of all Aurelia work by visiting [the framework board](https://github.com/aurelia/framework#boards).
 
@@ -34,12 +43,15 @@ To run the app, follow these steps.
   jspm install -y
   ```
   >**Note:** Windows users, if you experience an error of "unknown command unzip" you can solve this problem by doing `npm install -g unzip` and then re-running `jspm install`.
-6. To run the app, execute the following command:
+
+6. Install Kendo-UI pro or eval libraries (we use their grids because they have a lot of features, but Periscope will work with anything). Simply drop the files into `local-packages/kendo` folder.
+  
+7. To run the app, execute the following command:
 
   ```shell
   gulp watch
   ```
-7. Browse to [http://localhost:9000](http://localhost:9000) to see the app. You can make changes in the code found under `src` and the browser should auto-refresh itself as you save files.
+8. Browse to [http://localhost:9000](http://localhost:9000) to see the app. You can make changes in the code found under `src` and the browser should auto-refresh itself as you save files.
 
 > Note: At present there is a bug in the HTMLImports polyfill which only occurs on IE. We have submitted a pull request to the team with the fix. In the mean time, if you want to test on IE, you can work around the issue by explicitly adding a script tag before you load system.js. The script tag should look something like this (be sure to confirm the version number):
 
