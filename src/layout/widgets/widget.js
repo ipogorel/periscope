@@ -2,6 +2,7 @@ import {computedFrom} from 'aurelia-framework';
 import {WidgetEvent} from 'navigator/events/widget-event';
 import lodash from 'lodash';
 import {Query} from 'data/query';
+
 export class Widget {
 
   constructor(settings) {
@@ -16,10 +17,9 @@ export class Widget {
     this._dataFilterChanged = new WidgetEvent();
     this._dataFieldSelected = new WidgetEvent();
 
+    if (this.dataSource)
+      this.dataHolder = this.dataSource.createDataHolder();
     this.attachBehaviors(this.settings.behavior);
-
-    this.initContent();
-
     this._resized = false;
   }
 
@@ -79,6 +79,13 @@ export class Widget {
 
   get showHeader(){
     return this.settings.showHeader;
+  }
+
+  set dataHolder(value){
+    this._dataHolder = value;
+  }
+  get dataHolder(){
+    return this._dataHolder;
   }
 
   set data(value) {
@@ -155,7 +162,7 @@ export class Widget {
       _.forOwn(newSettings, (v, k)=> {
         this.settings[k] = v;
       });
-      this.initContent(this.settings);
+      this.refresh();
     }
   }
 
@@ -176,16 +183,12 @@ export class Widget {
 
 
   refresh() {
-    var query = new Query();
-    query.clientSideFilter = this.dataFilter;
-    var me = this;
-    return this.dataSource
-      .getData(query)
-      .then(d=> {
-        if (me.dataMapper)
-          me.data = me.dataMapper(d);
-        else
-          me.data = d;
+      this.dataHolder.query = new Query();
+      this.dataHolder.query.serverSideFilter = this.dataFilter;
+      this.dataHolder.query.skip = 0;
+      //this.dataHolder.load();
+      this.dataHolder.load().then(d=>{
+        this.content.refresh();
       });
   }
 

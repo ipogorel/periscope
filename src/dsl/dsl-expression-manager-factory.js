@@ -11,14 +11,15 @@ export class DslExpressionManagerFactory {
     this.expressionParserFactory = expressionParserFactory;
   }
 
-  createInstance(data, fields) {
-    var numericFields = _.map(DataHelper.getNumericFields(fields),"field");
-    var stringFields = _.map(DataHelper.getStringFields(fields),"field");
-    var dateFields = _.map(DataHelper.getDateFields(fields),"field");
-    return this.expressionParserFactory
+  createInstance(dataHolder, fields) {
+      var allFields = _.map(fields,"field");
+      var numericFields = _.map(DataHelper.getNumericFields(fields),"field");
+      var stringFields = _.map(DataHelper.getStringFields(fields),"field");
+      var dateFields = _.map(DataHelper.getDateFields(fields),"field");
+      return this.expressionParserFactory
         .createInstance(numericFields, stringFields, dateFields)
         .then(parser=>{
-            return new DslExpressionManager(parser, data, _.map(fields, 'field'));
-      });
+          return new DslExpressionManager(parser, dataHolder, allFields);
+        });
   }
 }

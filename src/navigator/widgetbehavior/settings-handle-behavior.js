@@ -14,7 +14,7 @@ export class SettingsHandleBehavior extends WidgetBehavior
     this.subscription = this._eventAggregator.subscribe(this._channel, message => {
       var settingsToApply = me._messageMapper ? me._messageMapper(message) : message;
       me.widget.changeSettings(settingsToApply);
-      me.widget.refresh();
+      //me.widget.refresh();
     });
   }
 

@@ -11,17 +11,20 @@ export class WidgetContent {
   }
 
 
-  // owerride this in child widgets
-  set data(value) {
+  get dataHolder() {
+    return this._widget.dataHolder
   }
-  // end owerride
-
-
+  set dataHolder(value) {
+    this._widget.dataHolder = value;
+  }
   get settings() {
     return this.widget.settings;
   }
 
 
+  refresh(){
+    this.dataHolder.cacheKey();
+  }
 
   _calculateHeight(contentRootElement){
     var p = $(contentRootElement).parents(".widget-container")

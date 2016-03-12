@@ -7,37 +7,32 @@ export class DetailedViewContent extends WidgetContent {
   constructor(widget) {
     super(widget);
     this.columns = widget.settings.columns;
+
   }
 
-  set data(value) {
-    this._data = value[0];
-    this.fields = [];
-    if (!this._data)
-      return;
 
+  get fields() {
+    var result = []
+    if (!this.dataHolder.data || !this.dataHolder.data[0])
+      return result;
+    var _data = this.dataHolder.data[0];
     if (this.columns) {
-      this.fields = _.map(this.columns, c=>{
+      result = _.map(this.columns, c=>{
         return {
           name: c.title ? c.title : c.field,
-          value: this._data[c.field]
+          value: _data[c.field]
         }
       })
     }
     else {
-      _.forOwn(this._data, (v, k)=>{
-        this.fields.push({
+      _.forOwn(_data, (v, k)=>{
+        result.push({
           name: k,
           value: v
         });
       })
     }
-  }
-
-  set fields(value) {
-    this._fields = value;
-  }
-  get fields() {
-    return this._fields;
+    return result;
   }
 
   set columns(value) {

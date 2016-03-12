@@ -30,9 +30,9 @@ export class Index {
       if (!payload.instruction.params.dashboard){ // first load
         this._userStateStorage.clearAll();
         self._router.navigate({
-          title: "Positions",
-          route: "/positions",
-          dashboardName: "positions"
+          title: "Customers",
+          route: "/customers",
+          dashboardName: "customers"
         });
       }
       else

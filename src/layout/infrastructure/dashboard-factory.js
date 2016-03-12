@@ -24,6 +24,8 @@ import {NavigationHistory} from 'navigator/navigation-history';
 import {UserStateStorage} from 'state/user-state-storage';
 import {StateUrlParser} from 'state/state-url-parser';
 import {StringHelper} from 'helpers/string-helper';
+/*import {Factory} from './factory';
+import {CacheManager} from './' Factory.of(MyClass)*/
 
 @inject(Repository, EventAggregator, WidgetFactory, PeriscopeRouter, UserStateStorage, NavigationHistory)
 export class DashboardFactory {
@@ -41,11 +43,11 @@ export class DashboardFactory {
   getDashboard(name, params){
     var dashboard;
     switch (name.toLowerCase()) {
-      case 'positions':
+      case 'customers':
         dashboard = this._getDefaultDashboard(params);
         break;
-      case 'trades':
-        dashboard = this._getTradesDashboard(params);
+      case 'orders':
+        dashboard = this._getOrdersDashboard(params);
         break;
     }
     if (dashboard) {
@@ -56,8 +58,7 @@ export class DashboardFactory {
   }
 
   _getDefaultDashboard(params){
-      var dsPositions = this._repository.getDatasource("positions");
-      var dsTrades = this._repository.getDatasource("trades");
+      var dsCustomers = this._repository.getDatasource("customers");
 
 
       //Search box
@@ -65,7 +66,7 @@ export class DashboardFactory {
         name:"positionsSearchWidget",
         header:"Positions",
         showHeader:false,
-        dataSource: dsPositions,
+        dataSource: dsCustomers,
         dataFilter:"",
         stateStorage: this._stateStorage,
         behavior:[
@@ -73,10 +74,10 @@ export class DashboardFactory {
         ]
       });
 
-      //Positions grid
-      var positionsGrid = this._widgetFactory.createWidget(Grid, {
+      //customers grid
+      var customersGrid = this._widgetFactory.createWidget(Grid, {
         name:"gridWidget",
-        header:"Positions",
+        header:"Customers",
         showHeader:true,
         minHeight: 450,
         pageSize: 40,
@@ -88,43 +89,40 @@ export class DashboardFactory {
           new DataActivatedBehavior("gridCommandChannel",this._eventAggregator),
           new DataFieldSelectedBehavior("gridFieldSelectionChannel",this._eventAggregator)
         ],
-        dataSource: dsPositions,
+        dataSource: dsCustomers,
         dataFilter:"",
         columns:[
           {
-            field: "AssetClass",
-            title: "Asset Class",
+            field: "Id",
+            title: "#"
+          },
+          {
+            field: "ContactName",
+            title: "Contact Name"
+          },
+          {
+            field: "ContactTitle",
+            title: "Contact Title",
             selectable: true
           },
           {
-            field: "Portfolio",
+            field: "Country",
             selectable: true
           },
           {
-            field: "BookEndingMarketValue",
-            title: "Market Value"
-          },
-          {
-            field: "CCY",
-            title: "CCY",
-            selectable: true
-          },
-          {
-            field: "SecurityType",
-            title: "Security Type",
-            selectable: true
+            field: "City"
           }
         ],
         group: {
-          field: "AssetClass",
+          field: "Country",
           dir: "asc"
         }
       });
 
       var chart = this._widgetFactory.createWidget(Chart, {
         name:"chartWidget",
-        header:"Portfolio",
-        dataSource: dsPositions,
+        header:"Country",
+        dataSource: dsCustomers,
         showHeader:true,
         dataFilter:"",
         behavior:[
@@ -147,34 +145,33 @@ export class DashboardFactory {
             background: "transparent"
           }
         },
-        categoriesField: "Portfolio",
+        categoriesField: "Country",
         minHeight: 450
 
       });
 
 
-      //var dashboard = new GridsterDashboard("positions");
-      var dashboard = new BootstrapDashboard("positions");
-      dashboard.title = "Positions";
+      var dashboard = new BootstrapDashboard("customers");
+      dashboard.title = "Customers";
 
 
       dashboard.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-      dashboard.addWidget(positionsGrid,{size_x:6, size_y:"*", col:1, row:2});
+      dashboard.addWidget(customersGrid,{size_x:6, size_y:"*", col:1, row:2});
       dashboard.addWidget(chart, {size_x:"*", size_y:"*", col:7, row:2});
 
       var changeRoureBefavior = new ChangeRouteBehavior(
         {
           chanel: "gridCommandChannel",
           newRoute: {
-            title:'Trades',
-            route: '/trades',
-            dashboardName:'trades'
+            title:'Orders',
+            route: '/orders',
+            dashboardName:'orders'
           },
           paramsMapper: filterEvent => {return StateUrlParser.stateToQuery([{
-              key: "trades:tradesSearchWidget",
+              key: "orders:ordersSearchWidget",
               value: {
                 stateType: "searchBoxState",
-                stateObject: "Portfolio = '" + filterEvent.activatedData.get("Portfolio").toString() + "'"
+                stateObject: "CustomerId = '" + filterEvent.activatedData.get("Id").toString() + "'"
               }
             }])
           },
@@ -187,20 +184,16 @@ export class DashboardFactory {
           'gridSelectionChannel',
           DetailedView,
           {
-            name:"detailsWidgetPositions",
-            header:"Position details",
+            name:"detailsWidgetCustomers",
+            header:"Customer details",
             behavior:[],
-            dataSource: dsPositions,
+            dataSource: dsCustomers,
             showHeader:true
           },
           {size_x:3, size_y:"*", col:6, row:2},
           this._eventAggregator,
           this._widgetFactory,
-          message => { return ("record.Portfolio=='" + message.selectedData.get("Portfolio").toString() + "' " +
-            "&& record.SecurityType=='" + message.selectedData.get("SecurityType").toString() + "' " +
-            "&& record.BookEndingMarketValue==" + message.selectedData.get("BookEndingMarketValue").toString()
-            );
-          }
+          message => { return ("record.Id=='" + message.selectedData.get("Id").toString() + "'");}
       );
       changeRoureBefavior.attach(dashboard);
       createWidgetBehavior.attach(dashboard);
@@ -208,86 +201,89 @@ export class DashboardFactory {
       return dashboard;
     }
 
-    _getTradesDashboard(params){
+    _getOrdersDashboard(params){
 
-        var dsTrades = this._repository.getDatasource("trades");
-        var dsPositions = this._repository.getDatasource("positions");
+        var dsOrders = this._repository.getDatasource("orders");
 
 
-        var tradesGrid = this._widgetFactory.createWidget(Grid, {
-            name:"gridWidgetTrades",
-            header:"Trades",
+        var ordersGrid = this._widgetFactory.createWidget(Grid, {
+            name:"gridWidgetOrders",
+            header:"Orders",
             stateStorage: this._stateStorage,
             minHeight: 450,
             pageSize: 40,
             behavior:[
-              new DataFilterHandleBehavior("tradesSearchChannel",this._eventAggregator),
-              new DataActivatedBehavior("trades-details",this._eventAggregator)
+              new DataFilterHandleBehavior("ordersSearchChannel",this._eventAggregator),
+              new DataActivatedBehavior("order-details",this._eventAggregator)
             ],
-            dataSource: dsTrades,
+            dataSource: dsOrders,
               showHeader:true,
               dataFilter:"",
               columns:[
-              {
-                field: "TradeDate",
-                title: "Trade Date",
-                format: "{0: MMM.dd yyyy}"
-              }
-              ,
-              {
-                field: "Sycode"
-              },
-              {
-                field: "TradePrice",
-                title: "Price"
-              },
-              {
-                field: "Portfolio"
-              }
-              ,
-              {
-                field: "Quantity"
-              }
+                {
+                  field: "Id",
+                  title: "#"
+                },
+                {
+                  field: "CustomerId",
+                  title: "Customer"
+                },
+                {
+                  field: "OrderDate",
+                  title: "Order Date",
+                  format: "{0: MMM.dd yyyy}"
+                }
+                ,
+                {
+                  field: "Freight"
+                },
+                {
+                  field: "ShipName",
+                  title: "Ship Name"
+                },
+                {
+                  field: "ShipCountry",
+                  title: "Ship Country"
+                }
             ]
           });
 
         //Search box
-        var searchBoxName = "tradesSearchWidget";
+        var searchBoxName = "ordersSearchWidget";
 
         // create search box
         var searchBox = this._widgetFactory.createWidget(SearchBox, {
           name:searchBoxName,
-          header:"Trades",
+          header:"Orders",
           showHeader:false,
-          dataSource: dsTrades,
+          dataSource: dsOrders,
           dataFilter:"",
           stateStorage: this._stateStorage,
           behavior:[
-            new DataFilterChangedBehavior("tradesSearchChannel",this._eventAggregator)
+            new DataFilterChangedBehavior("ordersSearchChannel",this._eventAggregator)
           ]
         });
 
 
-        //var dashboard = new GridsterDashboard("trades");
-        var dashboard = new BootstrapDashboard("trades");
-        dashboard.title = "Trades";
+        var dashboard = new BootstrapDashboard("orders");
+        dashboard.title = "Orders";
 
         dashboard.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-        dashboard.addWidget(tradesGrid, {size_x:12, size_y:'*', col:1, row:2});
+        dashboard.addWidget(ordersGrid, {size_x:12, size_y:'*', col:1, row:2});
 
         var replaceWidgetBehavior = new ReplaceWidgetBehavior(
-            'trades-details',
+            'order-details',
             this._eventAggregator,
             this._widgetFactory,
-            "gridWidgetTrades",
+            "gridWidgetOrders",
             DetailedView,
             {
-              name:"detailsWidgetTrades",
-              header:"Trade Details",
+              name:"detailsWidgetOrder",
+              header:"Order Details",
               behavior:[],
-              dataSource: dsTrades,
+              dataSource: dsOrders,
               showHeader:true,
-              columns:[
+              /*columns:[
                 {
                   field: "Sycode"
                 },
@@ -318,9 +314,9 @@ export class DashboardFactory {
                   field: "CustodianAccountCode",
                   title: "Account Code"
                 }
-              ]
+              ]*/
             },
-            message => { return ("record.TransactionID=='" + message.activatedData.get("TransactionID").toString() + "'"); }
+            message => { return ("record.Id=='" + message.activatedData.get("Id").toString() + "'"); }
         );
         replaceWidgetBehavior.attach(dashboard);
 

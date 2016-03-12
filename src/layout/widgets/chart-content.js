@@ -7,15 +7,32 @@ import kendo from 'kendo-ui';
 export class ChartContent extends WidgetContent {
   constructor(widget) {
     super(widget);
-    this._chartDataSource = new kendo.data.DataSource({});
+
+    var self = this;
+    this._chartDataSource = new kendo.data.DataSource({
+      type: "json",
+      transport: {
+        read: options=> {
+          self.dataHolder.load().then(d=> {
+            self.dataHolder.data = self.mapData(self.dataHolder.data, self.settings.categoriesField);
+            options.success(self.dataHolder);
+          });
+        }
+      },
+      schema: {
+        type: "json",
+        data: "data"
+      }
+    });
   }
 
-  set data(value) {
-    this._chartDataSource.data(this.mapData(value, this.settings.categoriesField));
+  refresh(){
+    this._chartDataSource.read();
   }
 
   attached() {
     $(this.chartElement).kendoChart({
+      autoBind: false,
       dataSource: this._chartDataSource,
       legend: {
         visible: true
@@ -28,7 +45,6 @@ export class ChartContent extends WidgetContent {
         field: "value"
       }],
       valueAxis: {
-        max: 1000,
         majorGridLines: {
           visible: false
         },

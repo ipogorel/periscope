@@ -9,6 +9,7 @@ export class Chart extends Widget {
   constructor(settings) {
     super(settings);
     this.stateType = "chartState";
+    this.initContent();
   }
 
   initContent() {

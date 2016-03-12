@@ -8,6 +8,9 @@ export class DetailedView extends Widget {
   constructor(settings) {
     super(settings);
     this.stateType = "detailedViewState";
+    this.dataHolder.take = 1;
+    this.dataHolder.skip = 0;
+    this.initContent()
   }
 
   initContent() {

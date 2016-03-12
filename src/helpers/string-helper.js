@@ -8,6 +8,17 @@ export class StringHelper {
     return str.replace(new RegExp(find, 'g'), replace);
   }
 
+  static hashCode(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+      let char = str.charCodeAt(i);
+      hash = ((hash<<5)-hash)+char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+  }
+
   static getEditDistance(a, b){
     if(a.length == 0) return b.length;
     if(b.length == 0) return a.length;

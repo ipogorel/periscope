@@ -33,7 +33,6 @@ export class DslSearchBoxContent extends WidgetContent {
       displaySuggestions: false,
       lastWord: ''
     }
-
   }
 
 
@@ -68,23 +67,18 @@ export class DslSearchBoxContent extends WidgetContent {
     return this.expressionManager.validate(this.searchString);
   }
 
-
-  // override parent property
-  set data(value) {
-    this._data = value;
-    var self = this;
-    self.widget.dataSource.getMetadata().then(meta => {
-        self._expressionManagerFactory.createInstance(self._data, meta.fields).then(
-            x=> {
-            self.expressionManager = x;
-            if (self.widget.state){
-              self.searchString = self.widget.state;
-              self.suggestionsListSettings.displaySuggestions = false;
-            }
-          });
-      }
-    );
+  refresh(){
+    this._expressionManagerFactory.createInstance(this.dataHolder, this.widget.dataSource.transport.readService.configuration.schema.fields).then(
+        x=> {
+        this.expressionManager = x;
+        if (this.widget.state){
+          this.searchString = this.widget.state;
+          this.suggestionsListSettings.displaySuggestions = false;
+        }
+      });
   }
+
+
 
 
 
@@ -101,7 +95,6 @@ export class DslSearchBoxContent extends WidgetContent {
 
   get caretPosition(){
     return this._caretPosition;
-    //return $(this.searchBox)[0].selectionEnd;
   }
 
   set caretPosition(value){
@@ -146,22 +139,20 @@ export class DslSearchBoxContent extends WidgetContent {
     searchStr = searchStr.substring(0, this.caretPosition);
     var lastWord = this.getLastWord(searchStr)
     this.suggestionsListSettings.title = '';
-    this.suggestionsListSettings.suggestions = this.expressionManager.populate(searchStr).filter(item => {
-      if ((lastWord!="")&&(item.value))
-        return item.value.toLowerCase().indexOf(lastWord.toLowerCase())==0;
-      return true;
+    this.expressionManager.populate(searchStr, lastWord).then(data=>{
+      this.suggestionsListSettings.suggestions =  data;
+      /*if ((lastWord!="") && (this.suggestionsListSettings.suggestions.length == 0) && (!this.isValid)){ // suspect misspelling
+        // count levenstein distance for each suggestion
+        var assumptions = this.getAssumptions(lastWord, this.suggestionsListSettings.suggestions)
+        if (assumptions.length>0){
+          this.suggestionsListSettings.title = '';
+          this.suggestionsListSettings.suggestions = assumptions;
+        }
+      }*/
+      this.suggestionsListSettings.lastWord = lastWord;
+      this.suggestionsListSettings.displaySuggestions = this.suggestionsListSettings.suggestions.length > 0;
     });
 
-    if ((lastWord!="") && (this.suggestionsListSettings.suggestions.length == 0) && (!this.isValid)){ // suspect misspelling
-      // count levenstein distance for each suggestion
-      var assumptions = this.getAssumptions(lastWord, this.expressionManager.populate(searchStr))
-      if (assumptions.length>0){
-        this.suggestionsListSettings.title = '';
-        this.suggestionsListSettings.suggestions = assumptions;
-      }
-    }
-    this.suggestionsListSettings.lastWord = lastWord;
-    this.suggestionsListSettings.displaySuggestions = this.suggestionsListSettings.suggestions.length > 0;
   }
 
   select(suggestion){
@@ -170,10 +161,6 @@ export class DslSearchBoxContent extends WidgetContent {
     while ((position<searchStr.length)&&(searchStr[position]!=" ")){
       position++;
     }
-
-    /*var strLeft = searchStr.substring(0, this.caretPosition);
-    var strRight = this.caretPosition < searchStr.length? searchStr.substring(this.caretPosition, searchStr.length) : '';*/
-
 
     var strLeft = searchStr.substring(0, position);
     var strRight = position < searchStr.length? searchStr.substring(position, searchStr.length) : '';
@@ -217,7 +204,6 @@ export class DslSearchBoxContent extends WidgetContent {
     {
       assumptions.push({
         distance: StringHelper.getEditDistance(sg.value.substring(0,wrongString.length), wrongString),
-        //distance: StringHelper.getEditDistance(sg.value, lastWord),
         value: sg.value,
         type: sg.type
       });
@@ -255,9 +241,9 @@ export class DslSearchBoxContent extends WidgetContent {
             var searchExpression = self.expressionManager.parse(self.searchString)
           self.widget.dataFilterChanged.raise(searchExpression);
         }
-        else{
+        /*else{
           self.assumptionString = self.createSearchStringAssumption(self.searchString)
-        }
+        }*/
       }, 500);
   }
 

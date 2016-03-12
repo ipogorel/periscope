@@ -30,7 +30,10 @@ export class ExpressionParserFactory {
     for (var i = 0; i < fieldList.length; i++) {
       fieldList[i] = '\'' + fieldList[i] + '\'i';
     }
-    return fieldList.join('/ ');
+    if (fieldList.length>0)
+      return fieldList.join('/ ');
+    else
+      return "'unknown_field'"
   }
 }
 

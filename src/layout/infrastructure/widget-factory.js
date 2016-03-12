@@ -12,13 +12,6 @@ export class WidgetFactory
     this._eventAggregator = eventAggregator;
   }
 
-  /*createWidget(name, type, datasourceName, header) {
-    var widget =  new Widget(name, type, this._repository.getDatasource(datasourceName), header);
-    var backButtonPressed = new BackButtonPressedBehavior(this._eventAggregator)
-    backButtonPressed.attachToWidget(widget);
-    return widget;
-  }*/
-
   createWidget(type, settings) {
     var widget =  new type(settings);
     var backButtonPressed = new BackButtonPressedBehavior(this._eventAggregator)
