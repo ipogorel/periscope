@@ -2,6 +2,7 @@ import {DataService} from 'data/data-service';
 import {JsonFileQuery} from 'data/query';
 import {localDB} from 'mike183/localDB';
 import {inject, transient} from 'aurelia-framework';
+import {QueryExpressionEvaluator} from '../data/query-expression-evaluator';
 
 export class LocalStorageDataService extends DataService {
 
