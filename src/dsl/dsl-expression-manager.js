@@ -149,7 +149,7 @@ export class DslExpressionManager {
     this.dataHolder.fields = [fieldName];
     return this.dataHolder.load().then(d=>{
       var result = _.map(this.dataHolder.data,fieldName);
-      return result.sort();
+      return _.uniq(result).sort();
     })
   }
 
