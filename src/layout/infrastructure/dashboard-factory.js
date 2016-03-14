@@ -211,7 +211,7 @@ export class DashboardFactory {
             header:"Orders",
             stateStorage: this._stateStorage,
             minHeight: 450,
-            pageSize: 200,
+            pageSize: 40,
             behavior:[
               new DataFilterHandleBehavior("ordersSearchChannel",this._eventAggregator),
               new DataActivatedBehavior("order-details",this._eventAggregator)

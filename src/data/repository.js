@@ -6,8 +6,6 @@ import {StaticJsonDataService} from './static-json-data-service';
 import {CacheManager} from '../cache/cache-manager'
 import {MemoryCacheStorage} from '../cache/memory-cache-storage'
 import {Factory} from '../infrastructure/factory';
-/*import {Factory} from './factory';
- import {CacheManager} from './' Factory.of(MyClass)*/
 
 @inject(Factory.of(StaticJsonDataService), Factory.of(CacheManager), MemoryCacheStorage)
 export class Repository {
@@ -154,12 +152,17 @@ export class Repository {
             return data.Results.length
           }
         });
-        /*var jsonDataService = this._container.get(StaticJsonDataService);
-        jsonDataService.configuration = config;*/
+
         var jsonDataService = this._dataServiceFactory(config)
+        var cacheManager = this._cacheManagerFactory(this._memoryCacheStorage);
+        cacheManager.startCleaner();
 
         return new Datasource({
           name: name,
+          cache: {
+            cacheTimeSeconds: 120,
+            cacheManager: cacheManager
+          },
           transport:{
             readService: jsonDataService
           }

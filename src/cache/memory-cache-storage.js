@@ -9,20 +9,24 @@ export class MemoryCacheStorage extends CacheStorage{
   setItem(key, value, seconds){
     var t = new Date();
     t.setSeconds(t.getSeconds() + seconds);
+    var v = _.assign({},value);
     this._cache[key] = {
-      value: value,
-      exp: t};
+      value: v,
+      exp: t
+    };
   }
   getItem(key){
-    return this._cache[key].value;
+    if (this._cache[key] && this._cache[key].exp >= Date.now())
+      return this._cache[key].value;
   }
   removeItem(key){
     delete this._cache[key];
   }
   removeExpired(){
-    _.forOwn(this._cache, function(v, k) {
-      if (this._cache[k].exp < Date.now()){
-        this.removeItem(k);
+    var self = this;
+    _.forOwn(self._cache, function(v, k) {
+      if (self._cache[k].exp < Date.now()){
+        self.removeItem(k);
       }
     });
   }

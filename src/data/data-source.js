@@ -27,15 +27,27 @@ export class Datasource {
     }
 
     cacheOn(cacheKey){
-      if ((!this._cache)||(this._cache.cacheManager))
-        throw "cacheManager is not configured";
-      var storage = this._cache.cacheManager.getStorage();
-      return storage.getItem(cacheKey);
+      if (this._cache&&this._cache.cacheManager) {
+        var storage = this._cache.cacheManager.getStorage();
+        return storage.getItem(cacheKey);
+      }
     }
 
     fill(dataHolder) {
       if ((!this.transport)&&(!this.transport.readService))
         throw "readService is not configured";
+      var storage;
+      if (this._cache&&this._cache.cacheManager){
+        storage = this._cache.cacheManager.getStorage();
+        var cachedDataHolder = storage.getItem(dataHolder.cacheKey());
+        if (cachedDataHolder) {
+          dataHolder.data = cachedDataHolder.data;
+          dataHolder.total = cachedDataHolder.total;
+          return new Promise((resolve, reject)=> {
+            resolve(dataHolder);
+          });
+        }
+      }
       return this.transport.readService.read(
           {
             fields: dataHolder.fields,
@@ -48,7 +60,8 @@ export class Datasource {
           .then(d => {
             dataHolder.data = d.data;
             dataHolder.total = d.total;
-
+            if (storage)
+              storage.setItem(dataHolder.cacheKey(), {data:dataHolder.data, total:dataHolder.total}, this._cache.cacheTimeSeconds);
             return dataHolder;
       });
     }

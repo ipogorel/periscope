@@ -23,6 +23,7 @@ export class DataHolder {
     this._total = value;
   }
 
+
   get query(){
     return this._query;
   }
@@ -79,6 +80,11 @@ export class DataHolder {
   }
 
   cacheKey(){
-    return StringHelper.hashCode(this.query + this.sort + this.sortDir + this.take + this.skip);
+    return this._dataSource.name + Math.abs(StringHelper.hashCode(
+      (this.query.serverSideFilter?this.query.serverSideFilter:"") +
+      (this.sort?this.sort:"") +
+      (this.sortDir?this.sortDir:"") +
+      (this.take?this.take:"0") +
+      (this.skip?this.skip:"0")));
   }
 }

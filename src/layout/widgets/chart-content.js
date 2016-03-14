@@ -15,6 +15,7 @@ export class ChartContent extends WidgetContent {
         read: options=> {
           self.dataHolder.load().then(d=> {
             self.dataHolder.data = self.mapData(self.dataHolder.data, self.settings.categoriesField);
+            //var d  = {data: self.mapData(self.dataHolder.data, self.settings.categoriesField)};
             options.success(self.dataHolder);
           });
         }
@@ -45,6 +46,7 @@ export class ChartContent extends WidgetContent {
         field: "value"
       }],
       valueAxis: {
+        max: 100,
         majorGridLines: {
           visible: false
         },
