@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {bootstrap} from 'twbs/bootstrap';
+import {bootstrap} from 'bootstrap';
 import {bindable} from 'aurelia-framework';
 
 export class NavBar {

@@ -34,7 +34,7 @@ export class GridsterDashboard extends DashboardBase {
     };
 
     this.gridster.remove_widget(oldElement, function(){
-      super.replaceWidget(oldWidget, newWidget);
+      this.replaceWidget(oldWidget, newWidget);
       self._timer = window.setTimeout(function () {
         self.gridster.add_widget.apply(self.gridster, [self.getWidgetElement(newWidget.name), oldElementDimensions.size_x, oldElementDimensions.size_y, oldElementDimensions.col, oldElementDimensions.row]);
       }, 250);

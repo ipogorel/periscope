@@ -5,6 +5,6 @@ export function configure(aurelia) {
     .standardConfiguration()
     .developmentLogging()
     .plugin('aurelia-animator-css');
-
+  //aurelia.use.plugin('aurelia-html-import-template-loader')
   aurelia.start().then(a => a.setRoot());
 }

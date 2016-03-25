@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import {computedFrom} from 'aurelia-framework';
-import {bootstrap} from 'twbs/bootstrap';
 import {inject, bindable} from 'aurelia-framework';
 import {PeriscopeRouter} from 'navigator/periscope-router';
 import {NavigationHistory} from 'navigator/navigation-history';
