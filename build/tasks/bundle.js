@@ -9,7 +9,7 @@ var config = {
     "dist/app-build": {           // bundle name/path. Must be within `baseURL`. Final path is: `baseURL/dist/app-build.js`.
       includes: [
         '[**/*.js]',
-        '*.html!text',
+        '**/*.html!text',
         '*.css!text'
       ],
       options: {
