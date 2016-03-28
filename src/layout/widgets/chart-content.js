@@ -1,6 +1,4 @@
-import {inject} from 'aurelia-framework';
 import {WidgetContent} from './widget-content';
-import lodash from 'lodash';
 import $ from 'jquery';
 import kendo from 'kendo-ui';
 

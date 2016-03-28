@@ -1,8 +1,6 @@
-import {inject, computedFrom} from 'aurelia-framework';
 import {WidgetContent} from './widget-content';
 import {DataHelper} from 'helpers/data-helper';
 import $ from 'jquery';
-import lodash from 'lodash';
 import kendo from 'kendo-ui';
 
 export class GridContent extends WidgetContent {
