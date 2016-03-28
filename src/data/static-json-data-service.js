@@ -9,25 +9,30 @@ import lodash from 'lodash';
 @transient()
 @inject(HttpClient)
 export class StaticJsonDataService extends DataService {
-  constructor(http, configuration) {
+  constructor(http) {
     super();
     http.configure(config => {
       config.useStandardConfiguration();
     });
     this._http = http;
-    this._configuration = configuration;
   }
 
-  get configuration(){return this._configuration;}
+
+  configure(configuration){
+    this.dataMapper = configuration.dataMapper;
+    this.url = configuration.url;
+    this.totalMapper = configuration.totalMapper;
+    this.schema = configuration.schema;
+
+  }
 
   read(options) {
-    var url = this.configuration.url;
     return this._http
-      .fetch(this.configuration.url)
+      .fetch(this.url)
       .then(response => {return response.json(); })
       .then(jsonData => {
         var d = jsonData;
-        d = this.configuration.dataMapper? this.configuration.dataMapper(d) : d;
+        d = this.dataMapper? this.dataMapper(d) : d;
         if (options.filter){
           var evaluator = new QueryExpressionEvaluator();
           d = evaluator.evaluate(d, options.filter);
@@ -40,7 +45,7 @@ export class StaticJsonDataService extends DataService {
           });
         return {
           data: DataHelper.deserializeDates(d),
-          total: (this.configuration.totalMapper? this.configuration.totalMapper(jsonData) : jsonData.length)
+          total: (this.totalMapper? this.totalMapper(jsonData) : jsonData.length)
         }
       });
   }

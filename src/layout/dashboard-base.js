@@ -12,13 +12,14 @@ export class DashboardBase
     return this._name;
   }
 
+  get route() {
+    return this._route;
+  }
+
   get title() {
     return this._title;
   }
 
-  set title(value) {
-    this._title = value;
-  }
 
   get layoutWidgets() {
     return this._layoutWidgets;
@@ -26,6 +27,11 @@ export class DashboardBase
 
   get behaviors() {
     return this._behaviors;
+  }
+
+  configure(dashboardConfiguration){
+    this._title = dashboardConfiguration.title;
+    this._route = dashboardConfiguration.route;
   }
 
   addWidget(widget, dimensions) {
@@ -38,7 +44,6 @@ export class DashboardBase
     })
     widget.dashboard = this;
   }
-
 
 
 

@@ -51,7 +51,7 @@ export class Datasource {
       return this.transport.readService.read(
           {
             fields: dataHolder.fields,
-            filter: dataHolder.query.serverSideFilter,
+            filter: ((dataHolder.query && dataHolder.query.serverSideFilter)?dataHolder.query.serverSideFilter:""),
             take: dataHolder.take,
             skip: dataHolder.skip,
             sort: dataHolder.sort,

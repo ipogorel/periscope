@@ -1,5 +1,6 @@
 <template>
-  &nbsp;&nbsp;<button class="btn btn-link" click.trigger="navigate({url: '/customers',name:'customers', title:'Customers'})">Customers</button>
-  <br/>
-  &nbsp;&nbsp;<button class="btn btn-link" click.trigger="navigate({url: '/orders',name:'orders', title:'Orders'})">Orders</button>
+  <template repeat.for="dboard of dashboards">
+    &nbsp;&nbsp;<button class="btn btn-link" click.trigger="navigate(dboard)">${dboard.title}</button>
+    <br/>
+  </template>
 </template>

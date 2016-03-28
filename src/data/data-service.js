@@ -1,5 +1,5 @@
 ﻿export class DataService{
-
+  configure(configuration){}
   read(options) {}
   create(entity) {}
   update(id, entity) {}
