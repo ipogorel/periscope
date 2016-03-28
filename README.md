@@ -2,7 +2,7 @@
 
 Periscope is a framework for building highly dynamic data discovery and integration dashboards.
 
-When a developer is faced with building a modern web application he is faced with a myriad of choices.
+When a developer is tasked with building a modern web application he is faced with a myriad of choices.
 There are numerous commercial Business Intelligence (BI) products, but they cost money and tie you in with the vendor.
 You can take a stab and building a web application from scratch, but given the fast evolution of web technologies this a rather risky exercise with uncertain outcome, with significant time to be invested into researching the crop of latest and greatest libraries, languages, tooling etc.
 
