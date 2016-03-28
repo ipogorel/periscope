@@ -31,9 +31,8 @@ export class Index {
       }
       else
       {
-        /*if (self.dashboard)
-          self.dashboard.dispose();*/
         self.dashboard = _.find(self._dashboardManager.dashboards, {"route": "/" + payload.instruction.params.dashboard});
+        self.dashboard.refresh();
       }
     });
 

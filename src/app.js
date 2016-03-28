@@ -404,9 +404,9 @@ export class App {
         new DataFilterChangedBehavior("ordersSearchChannel",this._eventAggregator)
       ]
     });
-    
 
-    var dbOrders = this._dashboardManager.createDashboard("customers",{
+
+    var dbOrders = this._dashboardManager.createDashboard("orders",{
       title:"Orders",
       route: "/orders"
     });

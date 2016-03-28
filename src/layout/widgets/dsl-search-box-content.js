@@ -68,13 +68,14 @@ export class DslSearchBoxContent extends WidgetContent {
   }
 
   refresh(){
-    this._expressionManagerFactory.createInstance(this.dataHolder, this.widget.dataSource.transport.readService.configuration.schema.fields).then(
+    var self = this;
+    this._expressionManagerFactory.createInstance(this.dataHolder, this.widget.dataSource.transport.readService.schema.fields).then(
         x=> {
-        this.expressionManager = x;
-        if (this.widget.state){
-          this.searchString = this.widget.state;
-          this.suggestionsListSettings.displaySuggestions = false;
-        }
+          self.expressionManager = x;
+          if (self.widget.state){
+            self.searchString = self.widget.state;
+            self.suggestionsListSettings.displaySuggestions = false;
+          }
       });
   }
 
