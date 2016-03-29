@@ -17,7 +17,7 @@ export class GridContent extends WidgetContent {
       pageSize: self.dataHolder.take,
       serverPaging: true,
       serverSorting: true,
-      group: self.dataHolder.group,
+      //group: self.dataHolder.group,
       transport: {
         read: options=> {
           self.dataHolder.sort = options.data.sort;
@@ -70,6 +70,7 @@ export class GridContent extends WidgetContent {
     me._grid = $(this.gridElement).kendoGrid({
       dataSource: this._gridDataSource,
       autoBind: false,
+      //groupable: true,
       height: this._calculateHeight(this.gridElement),
       sortable: true,
       scrollable: {
@@ -90,9 +91,9 @@ export class GridContent extends WidgetContent {
       navigate: e => {
         // select the entire row
         var row = $(e.element).closest("tr");
-
         var colIdx = $("td,th", row).index(e.element);
-        var col = me.columns[colIdx-1];
+        var dataColIdx = $("td[role='gridcell']", row).index(e.element);
+        var col = me.columns[dataColIdx];
         if ((col)&&(col.selectable)) {
           if (col!=this.selectedCol) {
             $(me.gridElement).find('th').removeClass("col-selected")
@@ -106,7 +107,6 @@ export class GridContent extends WidgetContent {
           $(me.gridElement).find('th').removeClass("col-selected");
         me._grid.data("kendoGrid").select(row);
       },
-      groupable: true,
       columnMenu:true,
       columnMenuInit: e=> {
         var menu = e.container.find(".k-menu").data("kendoMenu");
