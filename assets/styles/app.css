@@ -8,6 +8,13 @@ html, body {
   padding-bottom: 0px;
 }
 
+#periscope-logo{
+  width:150px;
+  background-image: url("../images/periscope_logo_white_md.png");
+  background-size: 40px;
+  background-repeat: no-repeat;
+  background-position: right;
+}
 .container{
   width:100%;
 }
