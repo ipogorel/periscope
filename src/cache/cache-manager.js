@@ -1,6 +1,3 @@
-import {inject} from 'aurelia-framework';
-
-
 export class CacheManager{
   constructor(storage){
     this._cacheStorage = storage;

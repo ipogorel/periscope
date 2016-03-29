@@ -46,7 +46,6 @@ export class ChartContent extends WidgetContent {
         field: "value"
       }],
       valueAxis: {
-        max: 100,
         majorGridLines: {
           visible: false
         },

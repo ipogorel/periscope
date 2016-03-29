@@ -82,6 +82,7 @@ export class DataHolder {
   cacheKey(){
     return this._dataSource.name + Math.abs(StringHelper.hashCode(
       ((this.query && this.query.serverSideFilter)?this.query.serverSideFilter:"") +
+      (this.fields?this.fields.join(""):"") +
       (this.sort?this.sort:"") +
       (this.sortDir?this.sortDir:"") +
       (this.take?this.take:"0") +

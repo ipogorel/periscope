@@ -446,5 +446,4 @@ export class App {
     $(".content").css("height",$("#wrapper")[0].clientHeight-elementsHeight);
   }
 
-
 }

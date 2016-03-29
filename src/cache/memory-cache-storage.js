@@ -1,5 +1,5 @@
 import {CacheStorage} from './cache-storage'
-import lodash from 'lodash';
+import _ from 'lodash';
 
 export class MemoryCacheStorage extends CacheStorage{
   constructor(){
