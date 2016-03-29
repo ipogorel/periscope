@@ -1,6 +1,4 @@
-import {inject, bindable} from 'aurelia-framework';
-import lodash from 'lodash';
-import {Router} from 'aurelia-router';
+import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DashboardManager} from 'infrastructure/dashboard-manager';
 import {PeriscopeRouter} from 'navigator/periscope-router';
@@ -31,8 +29,10 @@ export class Index {
       }
       else
       {
-        self.dashboard = _.find(self._dashboardManager.dashboards, {"route": "/" + payload.instruction.params.dashboard});
-        self.dashboard.refresh();
+        self.dashboard = self._dashboardManager.find(payload.instruction.params.dashboard);
+        //self.dashboard = _.find(self._dashboardManager.dashboards, {"route": "/" + payload.instruction.params.dashboard});
+        if (self.dashboard)
+          self.dashboard.refresh();
       }
     });
 
