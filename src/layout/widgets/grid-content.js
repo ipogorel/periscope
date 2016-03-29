@@ -17,7 +17,7 @@ export class GridContent extends WidgetContent {
       pageSize: self.dataHolder.take,
       serverPaging: true,
       serverSorting: true,
-      //group: self.dataHolder.group,
+      group: self.dataHolder.group,
       transport: {
         read: options=> {
           self.dataHolder.sort = options.data.sort;
@@ -70,7 +70,7 @@ export class GridContent extends WidgetContent {
     me._grid = $(this.gridElement).kendoGrid({
       dataSource: this._gridDataSource,
       autoBind: false,
-      //groupable: true,
+      groupable: true,
       height: this._calculateHeight(this.gridElement),
       sortable: true,
       scrollable: {
