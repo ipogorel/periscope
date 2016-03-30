@@ -18,7 +18,6 @@ export class App {
   }
 
 
-
   
   attached(){
     // calculate the content element height

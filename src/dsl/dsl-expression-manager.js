@@ -68,7 +68,7 @@ export class DslExpressionManager {
         case "STRING_FIELD_NAME":
         case "NUMERIC_FIELD_NAME":
         case "DATE_FIELD_NAME":
-          var filteredFields = lastWord? _.filter(this.fields,f=>{return f.startsWith(lastWord)}) : this.fields;
+          var filteredFields = lastWord? _.filter(this.fields,f=>{return f.toLowerCase().startsWith(lastWord.toLowerCase())}) : this.fields;
           resolve(this._normalizeData("field", filteredFields.sort()));
           break;
         case "STRING_OPERATOR_EQUAL":
@@ -127,8 +127,10 @@ export class DslExpressionManager {
   _getLastFieldName(searchStr, fieldsArray, index) {
     var tmpArr = searchStr.substr(0, index).split(" ");
     for (let i=(tmpArr.length-1); i>=0; i--)  {
-      if (fieldsArray.findIndex(x=>x == tmpArr[i].trim())>=0)
-        return tmpArr[i].trim();
+      let j = fieldsArray.findIndex(x=>x.toLowerCase() == tmpArr[i].trim().toLowerCase());
+      if (j>=0)
+        return fieldsArray[j];
+        //return tmpArr[i].trim();
     }
     return "";
 
