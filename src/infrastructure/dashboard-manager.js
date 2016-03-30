@@ -6,6 +6,9 @@ export class DashboardManager {
     this._dashboards = [];
   }
 
+  get dashboards(){
+    return this._dashboards;
+  }
 
   find(dashboardName){
     return  _.find(this._dashboards, {name:dashboardName});
