@@ -23,7 +23,7 @@ export class WidgetContent {
 
 
   refresh(){
-    this.dataHolder.cacheKey();
+    
   }
 
   _calculateHeight(contentRootElement){
