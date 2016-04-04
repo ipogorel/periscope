@@ -186,10 +186,11 @@ export class Widget {
       this.dataHolder.query = new Query();
       this.dataHolder.query.serverSideFilter = this.dataFilter;
       this.dataHolder.query.skip = 0;
-      //this.dataHolder.load();
-      this.dataHolder.load().then(d=>{
+
+      /*this.dataHolder.load().then(d=>{
         this.content.refresh();
-      });
+      });*/
+      this.content.refresh();
   }
 
   back() {

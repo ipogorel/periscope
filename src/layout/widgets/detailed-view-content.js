@@ -42,5 +42,7 @@ export class DetailedViewContent extends WidgetContent {
     return this._columns;
   }
 
-
+  refresh(){
+    this.dataHolder.load();
+  }
 }
