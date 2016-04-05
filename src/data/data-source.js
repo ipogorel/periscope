@@ -1,4 +1,5 @@
-import {DataService} from './data-service'
+import {DataService} from './service/data-service'
+import * as _ from 'lodash';
 import {DataHolder} from './data-holder'
 import {DataHelper} from '../helpers/data-helper'
 
@@ -7,6 +8,7 @@ export class Datasource {
     constructor(datasourceConfiguration) {
         this._name = datasourceConfiguration.name;
         this._transport = datasourceConfiguration.transport;
+        this._schemeConfig = datasourceConfiguration.schemeConfig;
         this._cache = datasourceConfiguration.cache;
     }
 
@@ -33,13 +35,18 @@ export class Datasource {
       }
     }
 
-    fill(dataHolder) {
+    getData(query) {
+      let dataHolder = new DataHolder();
+      dataHolder.query = query;
+
       if ((!this.transport)&&(!this.transport.readService))
         throw "readService is not configured";
-      var storage;
+
+      let storage;
+      let cacheKey = this.transport.readService.url + query.cacheKey();
       if (this._cache&&this._cache.cacheManager){
         storage = this._cache.cacheManager.getStorage();
-        var cachedDataHolder = storage.getItem(dataHolder.cacheKey());
+        let cachedDataHolder = storage.getItem(cacheKey);
         if (cachedDataHolder) {
           dataHolder.data = cachedDataHolder.data;
           dataHolder.total = cachedDataHolder.total;
@@ -50,18 +57,18 @@ export class Datasource {
       }
       return this.transport.readService.read(
           {
-            fields: dataHolder.fields,
-            filter: ((dataHolder.query && dataHolder.query.serverSideFilter)?dataHolder.query.serverSideFilter:""),
-            take: dataHolder.take,
-            skip: dataHolder.skip,
-            sort: dataHolder.sort,
-            sortDir: dataHolder.sortDir
+            fields: query.fields,
+            filter: (query.serverSideFilter? query.serverSideFilter:""),
+            take: query.take,
+            skip: query.skip,
+            sort: query.sort,
+            sortDir: query.sortDir
           })
           .then(d => {
-            dataHolder.data = d.data;
+            dataHolder.data = _.isArray(d.data)?d.data : [d.data];
             dataHolder.total = d.total;
             if (storage)
-              storage.setItem(dataHolder.cacheKey(), {data:dataHolder.data, total:dataHolder.total}, this._cache.cacheTimeSeconds);
+              storage.setItem(cacheKey, {data:dataHolder.data, total:dataHolder.total}, this._cache.cacheTimeSeconds);
             return dataHolder;
       });
     }
@@ -83,7 +90,30 @@ export class Datasource {
         throw "deleteService is not configured";
       return this.transport.updateService.delete(entity);
     }
-
 }
+
+export class DataSourceConfiguration {
+  get cache(){
+    return this._cache;
+  }
+  set cache(value){
+    this._cache = value;
+  }
+
+  get transport(){
+    return this._transport;
+  }
+  set transport(value){
+    this._transport = value;
+  }
+  
+  get name(){
+    return this._name;
+  }
+  set name(value){
+    this._name = value;
+  }
+}
+
 
 

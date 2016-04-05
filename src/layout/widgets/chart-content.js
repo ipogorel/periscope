@@ -1,6 +1,6 @@
-import {inject} from 'aurelia-framework';
+import {Query} from './../../data/query'
 import {WidgetContent} from './widget-content';
-import lodash from 'lodash';
+import * as _ from 'lodash';
 import $ from 'jquery';
 import kendo from 'kendo-ui';
 
@@ -13,16 +13,16 @@ export class ChartContent extends WidgetContent {
       type: "json",
       transport: {
         read: options=> {
-          self.dataHolder.load().then(d=> {
-            self.dataHolder.data = self.mapData(self.dataHolder.data, self.settings.categoriesField);
-            //var d  = {data: self.mapData(self.dataHolder.data, self.settings.categoriesField)};
-            options.success(self.dataHolder);
+          let query = new Query();
+          query.serverSideFilter = self.widget.dataFilter;
+          self.widget.dataSource.getData(query).then(dH=>{
+            self.dataHolder = dH;
+            options.success(self.mapData(self.dataHolder.data, self.settings.categoriesField));
           });
         }
       },
       schema: {
-        type: "json",
-        data: "data"
+        type: "json"
       }
     });
   }

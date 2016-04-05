@@ -1,8 +1,7 @@
-import {inject, computedFrom} from 'aurelia-framework';
 import {WidgetContent} from './widget-content';
-import {DataHelper} from 'helpers/data-helper';
+import {Query} from './../../data/query'
 import $ from 'jquery';
-import lodash from 'lodash';
+import * as _ from 'lodash';
 import kendo from 'kendo-ui';
 
 export class GridContent extends WidgetContent {
@@ -10,23 +9,30 @@ export class GridContent extends WidgetContent {
     super(widget);
     this.columns = this.settings.columns;
     this.navigatable = this.settings.navigatable;
-
+    
     var self = this;
     this._gridDataSource = new kendo.data.DataSource({
       type: "json",
-      pageSize: self.dataHolder.take,
+      pageSize: self.widget.settings.pageSize ? self.widget.settings.pageSize : 20,
       serverPaging: true,
       serverSorting: true,
-      group: self.dataHolder.group,
+      group: self.widget.settings.group,
       transport: {
         read: options=> {
-          self.dataHolder.sort = options.data.sort;
-          self.dataHolder.take = options.data.take;
-          self.dataHolder.skip = options.data.skip;
-          self.dataHolder.load().then(d=>{
-            options.success(self.dataHolder);
-            //self.resreshColumns(self.widget.dataHolder.fields);
-          });
+          if (self.widget.dataSource){
+            var query = new Query();
+            query.sort = options.data.sort;
+            query.take = options.data.take;
+            query.skip = options.data.skip;
+            query.serverSideFilter = self.widget.dataFilter;
+            self.widget.dataSource.getData(query).then(data=>{
+              options.success(data);
+            }, error => {
+              options.error();
+            });
+          }
+          else
+            options.error();
         }
       },
       schema: {
@@ -93,7 +99,9 @@ export class GridContent extends WidgetContent {
         var row = $(e.element).closest("tr");
         var colIdx = $("td,th", row).index(e.element);
         var dataColIdx = $("td[role='gridcell']", row).index(e.element);
-        var col = me.columns[dataColIdx];
+        var col;
+        if (me.columns)
+          col = me.columns[dataColIdx];
         if ((col)&&(col.selectable)) {
           if (col!=this.selectedCol) {
             $(me.gridElement).find('th').removeClass("col-selected")

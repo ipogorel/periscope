@@ -1,5 +1,14 @@
 ﻿export class DataService{
-  configure(configuration){}
+  configure(configuration){
+    this.url = configuration.url;
+    this.schemaProvider = configuration.schemaProvider;
+    this.queryMapper = configuration.queryMapper;
+    this.totalMapper = configuration.totalMapper;
+    this.dataMapper = configuration.dataMapper;
+  }
+  getSchema(){
+    return this.schemaProvider.getSchema();
+  }
   read(options) {}
   create(entity) {}
   update(id, entity) {}
@@ -11,7 +20,7 @@ export class DataServiceConfiguration {
   constructor(options){
     if (options) {
       this._url = options.url;
-      this._schema = options.schema? options.schema : { fields:[] };
+      this._schemaProvider = options.schemaProvider;
       this._totalMapper = options.totalMapper;
       this._queryMapper = options.queryMapper;
       this._dataMapper = options.dataMapper;
@@ -22,8 +31,8 @@ export class DataServiceConfiguration {
     return this._url;
   }
 
-  get schema() {
-    return this._schema;
+  get schemaProvider(){
+    return this._schemaProvider
   }
 
   get totalMapper(){

@@ -12,12 +12,16 @@ import {SettingsHandleBehavior} from './../navigator/widgetbehavior/settings-han
 import {CreateWidgetBehavior} from './../navigator/dashboardbehavior/create-widget-behavior';
 import {ReplaceWidgetBehavior} from './../navigator/dashboardbehavior/replace-widget-behavior';
 import {ChangeRouteBehavior} from './../navigator/dashboardbehavior/change-route-behavior';
+import {DataSourceChangedBehavior} from './../navigator/widgetbehavior/data-source-changed-behavior';
+import {DataSourceHandleBehavior} from './../navigator/widgetbehavior/data-source-handle-behavior';
 
 import {CacheManager} from './../cache/cache-manager'
 import {MemoryCacheStorage} from './../cache/memory-cache-storage'
 import {Factory} from './../infrastructure/factory';
-import {StaticJsonDataService} from './../data/static-json-data-service';
+import {StaticJsonDataService} from './../data/service/static-json-data-service';
+import {JsonDataService} from './../data/service/json-data-service';
 import {Datasource} from './../data/data-source';
+import {StaticSchemaProvider} from './../data/schema/providers/static-schema-provider';
 
 import {WidgetFactory} from './../infrastructure/widget-factory';
 import {UserStateStorage} from './../state/user-state-storage';
@@ -29,12 +33,13 @@ import {Grid} from './../layout/widgets/grid';
 import {Chart} from './../layout/widgets/chart';
 import {SearchBox} from './../layout/widgets/search-box';
 import {DetailedView} from './../layout/widgets/detailed-view';
+import {DataSourceConfigurator} from './../layout/widgets/data-source-configurator';
 
-import {DashboardConfiguration} from './dashboard-configuration'
+import {DashboardConfiguration} from './dashboard-configuration';
 
-@inject(EventAggregator, WidgetFactory, UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(CacheManager))
+@inject(EventAggregator, WidgetFactory, UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
 export class DefaultDashboardConfiguration extends DashboardConfiguration  {
-  constructor(eventAggregator, widgetFactory, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, cacheManagerFactory){
+  constructor(eventAggregator, widgetFactory, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
     super();
     this._eventAggregator = eventAggregator;
     this._periscopeRouter = periscopeRouter;
@@ -42,6 +47,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     this._stateStorage = userStateStorage;
     this._widgetFactory = widgetFactory;
     this._dataServiceFactory = dataServiceFactory;
+    this._swaggerServiceFactory = swaggerServiceFactory;
     this._cacheManager = cacheManagerFactory(new MemoryCacheStorage());
   }
 
@@ -49,7 +55,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     var customersDataService = this._dataServiceFactory()
     customersDataService.configure({
         url:'/data/customers.json',
-        schema:{
+        schemaProvider: new StaticSchemaProvider({
           fields:[
             {
               field:"Id",
@@ -92,7 +98,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
               type:"string"
             }
           ]
-        },
+        }),
         dataMapper: data=>{
           return data.Results
         },
@@ -256,7 +262,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     var ordersDataService = this._dataServiceFactory()
     ordersDataService.configure({
         url:'/data/orders.json',
-        schema:{
+        schemaProvider: new StaticSchemaProvider({
           fields:[
             {
               field:"Id",
@@ -311,7 +317,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
               type:"string"
             }
           ]
-        },
+        }),
         dataMapper: data=>{
           return data.Results
         },
@@ -415,5 +421,61 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     var manageNavigationStackBehavior = new ManageNavigationStackBehavior(this._eventAggregator);
     replaceWidgetBehavior.attach(dbOrders);
     manageNavigationStackBehavior.attach(dbOrders);
+
+
+    // CONFIGURE SWAGGER-BASED DASHBOARD
+    var swaggerDataService = this._swaggerServiceFactory();
+    var dsSwagger = new Datasource({
+      name: "datasource",
+      cache: {
+        cacheTimeSeconds: 120,
+        cacheManager: this._cacheManager
+      },
+      transport:{
+        readService: swaggerDataService
+      }
+    });
+
+
+    //customers grid
+    var swGrid = this._widgetFactory.createWidget(Grid, {
+      name:"swaggerGridWidget",
+      header:"Swagger Data",
+      showHeader:true,
+      minHeight: 450,
+      pageSize: 40,
+      stateStorage: this._stateStorage,
+      navigatable: true,
+      behavior:[
+        new DataSourceHandleBehavior("dataSourceConfigChannel",this._eventAggregator),
+        new DataSelectedBehavior("gridSelectionChannel",this._eventAggregator),
+        new DataActivatedBehavior("gridCommandChannel",this._eventAggregator),
+        new DataFieldSelectedBehavior("gridFieldSelectionChannel",this._eventAggregator)
+      ],
+      dataFilter:""
+    });
+
+
+    var swgConfiguratorWidget =  this._widgetFactory.createWidget(DataSourceConfigurator, {
+      name:"dsConfiguratorWidget",
+      header:"Swagger Configuration",
+      showHeader:true,
+      minHeight: 450,
+      stateStorage: this._stateStorage,
+      definitionsUrl: "http://petstore.swagger.io/v2/swagger.json",
+      dataSourceToConfigurate: dsSwagger,
+      behavior:[
+        new DataSourceChangedBehavior("dataSourceConfigChannel",this._eventAggregator),
+      ]
+    });
+
+
+
+    var dbSwagger = this._dashboardManager.createDashboard("swagger-api",{
+      title:"Swagger",
+      route: "/swagger-api"
+    });
+    dbSwagger.addWidget(swgConfiguratorWidget,{size_x:4, size_y:"*", col:1, row:1});
+    dbSwagger.addWidget(swGrid,{size_x:8, size_y:"*", col:5, row:1});
   }
 }

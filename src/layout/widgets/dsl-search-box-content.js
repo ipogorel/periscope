@@ -1,4 +1,4 @@
-import {Container, Decorators, customElement, bindable, inject} from 'aurelia-framework';
+import {Container, Decorators, bindable} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import $ from 'jquery';
 import {bootstrap} from 'bootstrap'
@@ -68,20 +68,17 @@ export class DslSearchBoxContent extends WidgetContent {
   }
 
   refresh(){
-    var self = this;
-    this._expressionManagerFactory.createInstance(this.dataHolder, this.widget.dataSource.transport.readService.schema.fields).then(
+      var self = this;
+      this._expressionManagerFactory.createInstance(this.widget.dataSource).then(
         x=> {
           self.expressionManager = x;
           if (self.widget.state){
             self.searchString = self.widget.state;
             self.suggestionsListSettings.displaySuggestions = false;
           }
-      });
+        });
   }
-
-
-
-
+  
 
   get searchString(){
     return this._searchString;

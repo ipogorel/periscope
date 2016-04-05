@@ -1,11 +1,12 @@
 import {DataHelper} from '../helpers/data-helper';
+import {Query} from '../data/query';
 import {StringHelper} from '../helpers/string-helper';
 import lodash from 'lodash';
 
 export class DslExpressionManager {
 
-  constructor(parser, dataHolder, fieldsList) {
-    this.dataHolder = dataHolder;
+  constructor(parser, dataSource, fieldsList) {
+    this.dataSource = dataSource;
     this.fields = fieldsList;
     this.parser = parser;
   }
@@ -142,15 +143,16 @@ export class DslExpressionManager {
 
 
   _getFieldValuesArray(fieldName, lastWord) {
-    this.dataHolder.take = 100;
-    this.dataHolder.skip = 0;
+    let query = new Query();
+    query.take = 100;
+    query.skip = 0;
     if (lastWord)
-      this.dataHolder.query.serverSideFilter = this.parse(fieldName + " = '" + lastWord + "%'");
+      query.serverSideFilter = this.parse(fieldName + " = '" + lastWord + "%'");
     else
-      this.dataHolder.query.serverSideFilter ="";
-    this.dataHolder.fields = [fieldName];
-    return this.dataHolder.load().then(d=>{
-      var result = _.map(this.dataHolder.data,fieldName);
+      query.serverSideFilter ="";
+    query.fields = [fieldName];
+    return this.dataSource.getData(query).then(dH=>{
+      var result = _.map(dH.data,fieldName);
       return _.uniq(result).sort();
     })
   }

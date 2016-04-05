@@ -1,0 +1,34 @@
+<template>
+  <form>
+    <div class="form-group">
+      <label>Definitions Url:</label>
+      ${definitionUrl}
+    </div>
+    <div class="form-group" show.bind="definitionUrl">
+      <label>Api:</label>
+      <select class="form-control" value.bind="api">
+        <option repeat.for="a of apis" value.bind="a">${a}</option>
+      </select>
+    </div>
+    <div class="form-group" show.bind="api">
+      <label>Method:</label>
+      <select class="form-control" value.bind="method">
+        <option repeat.for="m of methods" value.bind="m">${m}</option>
+      </select>
+    </div>
+    <div class="form-group" show.bind="method">
+      <label>Parameters:</label>
+      <template repeat.for="p of parameters">
+        <div class="form-group" if.bind="!p.items || !p.items.enum">
+          <input  class="form-control" type="text" value.bind="p.value" placeholder="${p.name}">
+        </div>
+        <div class="form-group" if.bind="p.items && p.items.enum">
+          <select class="form-control" value.bind="p.value">
+            <option repeat.for="e of p.items.enum" value.bind="e">${e}</option>
+          </select>
+        </div>
+      </template>
+    </div>
+    <button type="button" class="btn btn-primary" click.trigger="submit()">Submit</button>
+  </form>
+</template>

@@ -16,9 +16,8 @@ export class Widget {
     this._dataActivated = new WidgetEvent();
     this._dataFilterChanged = new WidgetEvent();
     this._dataFieldSelected = new WidgetEvent();
+    this._dataSourceChanged = new WidgetEvent();
 
-    if (this.dataSource)
-      this.dataHolder = this.dataSource.createDataHolder();
     this.attachBehaviors(this.settings.behavior);
     this._resized = false;
   }
@@ -112,6 +111,10 @@ export class Widget {
     return this.settings.stateStorage;
   }
 
+
+  set dataSource(value) {
+    this.settings.dataSource = value;
+  }
   get dataSource() {
     return this.settings.dataSource;
   }
@@ -183,14 +186,7 @@ export class Widget {
 
 
   refresh() {
-      this.dataHolder.query = new Query();
-      this.dataHolder.query.serverSideFilter = this.dataFilter;
-      this.dataHolder.query.skip = 0;
-
-      /*this.dataHolder.load().then(d=>{
-        this.content.refresh();
-      });*/
-      this.content.refresh();
+    this.content.refresh();
   }
 
   back() {
@@ -243,7 +239,12 @@ export class Widget {
   set dataFilterChanged(handler) {
     this._dataFilterChanged.attach(handler);
   }
-
+  get dataSourceChanged() {
+    return this._dataSourceChanged;
+  }
+  set dataSourceChanged(handler) {
+    this._dataSourceChanged.attach(handler);
+  }
 }
 
 

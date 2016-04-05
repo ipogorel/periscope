@@ -1,9 +1,9 @@
-import {DataService} from '../data/data-service';
-import {DataHelper} from '../helpers/data-helper'
-import {Query} from '../data/query';
+import {DataService} from './data-service';
+import {DataHelper} from '../../helpers/data-helper'
+import {Query} from '../query';
 import {inject, transient} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
-import {QueryExpressionEvaluator} from './query-expression-evaluator'
+import {QueryExpressionEvaluator} from './../query-expression-evaluator'
 import lodash from 'lodash';
 
 @transient()
@@ -16,20 +16,14 @@ export class StaticJsonDataService extends DataService {
     });
     this._http = http;
   }
-
-
-  configure(configuration){
-    this.dataMapper = configuration.dataMapper;
-    this.url = configuration.url;
-    this.totalMapper = configuration.totalMapper;
-    this.schema = configuration.schema;
-
-  }
+  
 
   read(options) {
     return this._http
       .fetch(this.url)
-      .then(response => {return response.json(); })
+      .then(response => {
+        return response.json();
+      })
       .then(jsonData => {
         var d = jsonData;
         d = this.dataMapper? this.dataMapper(d) : d;

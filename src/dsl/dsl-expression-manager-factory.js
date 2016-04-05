@@ -11,7 +11,9 @@ export class DslExpressionManagerFactory {
     this.expressionParserFactory = expressionParserFactory;
   }
 
-  createInstance(dataHolder, fields) {
+  createInstance(dataSource, fields) {
+    return dataSource.transport.readService.getSchema().then(schema=>{
+      let fields = schema.fields;
       var allFields = _.map(fields,"field");
       var numericFields = _.map(DataHelper.getNumericFields(fields),"field");
       var stringFields = _.map(DataHelper.getStringFields(fields),"field");
@@ -19,7 +21,9 @@ export class DslExpressionManagerFactory {
       return this.expressionParserFactory
         .createInstance(numericFields, stringFields, dateFields)
         .then(parser=>{
-          return new DslExpressionManager(parser, dataHolder, allFields);
+          return new DslExpressionManager(parser, dataSource, allFields);
         });
+    })
+
   }
 }
