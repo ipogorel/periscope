@@ -1,31 +1,43 @@
 <template>
-  <form>
+  <form class="form-horizontal">
     <div class="form-group">
-      <label>Definitions Url:</label>
-      ${definitionUrl}
+      <label class="control-label col-sm-3">Definitions Url:</label>
+      <div class="col-sm-9">
+        ${definitionUrl}
+      </div>
     </div>
     <div class="form-group" show.bind="definitionUrl">
-      <label>Api:</label>
-      <select class="form-control" value.bind="api">
-        <option repeat.for="a of apis" value.bind="a">${a}</option>
-      </select>
+      <label class="control-label col-sm-3">Api:</label>
+      <div class="col-sm-9">
+        <select class="form-control" value.bind="api">
+          <option repeat.for="a of apis" value.bind="a">${a}</option>
+        </select>
+      </div>
     </div>
     <div class="form-group" show.bind="api">
-      <label>Method:</label>
-      <select class="form-control" value.bind="method">
-        <option repeat.for="m of methods" value.bind="m">${m}</option>
-      </select>
+      <label class="control-label col-sm-3">Method:</label>
+      <div class="col-sm-9">
+        <select class="form-control" value.bind="method">
+          <option repeat.for="m of methods" value.bind="m">${m}</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group" show.bind="method">
-      <label>Parameters:</label>
+    <div show.bind="method">
+      <h5>Parameters:</h5>
       <template repeat.for="p of parameters">
         <div class="form-group" if.bind="!p.items || !p.items.enum">
-          <input  class="form-control" type="text" value.bind="p.value" placeholder="${p.name}">
+          <label class="control-label col-sm-3">${p.name}:</label>
+          <div class="col-sm-9">
+            <input  class="form-control" type="text" value.bind="p.value">
+          </div>
         </div>
         <div class="form-group" if.bind="p.items && p.items.enum">
-          <select class="form-control" value.bind="p.value">
-            <option repeat.for="e of p.items.enum" value.bind="e">${e}</option>
-          </select>
+          <label class="control-label col-sm-3">${p.name}:</label>
+          <div class="col-sm-9">
+            <select class="form-control" value.bind="p.value">
+              <option repeat.for="e of p.items.enum" value.bind="e">${e}</option>
+            </select>
+          </div>
         </div>
       </template>
     </div>
