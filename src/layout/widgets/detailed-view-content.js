@@ -1,5 +1,5 @@
-import {inject} from 'aurelia-framework';
-import lodash from 'lodash';
+import * as _ from 'lodash';
+import {Query} from './../../data/query'
 import {WidgetContent} from './widget-content';
 
 export class DetailedViewContent extends WidgetContent {
@@ -10,22 +10,27 @@ export class DetailedViewContent extends WidgetContent {
 
   }
 
+  get data(){
+    return this._data;
+  }
+  set data(value){
+    this._data = value;
+  }
 
   get fields() {
     var result = []
-    if (!this.dataHolder.data || !this.dataHolder.data[0])
+    if (!this.data)
       return result;
-    var _data = this.dataHolder.data[0];
     if (this.columns) {
       result = _.map(this.columns, c=>{
         return {
           name: c.title ? c.title : c.field,
-          value: _data[c.field]
+          value: this.data[c.field]
         }
       })
     }
     else {
-      _.forOwn(_data, (v, k)=>{
+      _.forOwn(this.data, (v, k)=>{
         result.push({
           name: k,
           value: v
@@ -43,6 +48,13 @@ export class DetailedViewContent extends WidgetContent {
   }
 
   refresh(){
-    this.dataHolder.load();
+    let q = new Query();
+    q.take = 1;
+    q.skip = 0;
+    q.serverSideFilter = this.widget.dataFilter;
+    this.widget.dataSource.getData(q).then(dH=>{
+      if (dH.data.length>0)
+        this.data = dH.data[0];
+    })
   }
 }

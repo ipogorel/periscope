@@ -7,8 +7,9 @@ import kendo from 'kendo-ui';
 export class GridContent extends WidgetContent {
   constructor(widget) {
     super(widget);
-    this.columns = this.settings.columns;
+    this.columns = this.settings.columns? this.settings.columns : [];
     this.navigatable = this.settings.navigatable;
+    this.autoGenerateColumns = this.settings.autoGenerateColumns;
     
     var self = this;
     this._gridDataSource = new kendo.data.DataSource({
@@ -25,10 +26,12 @@ export class GridContent extends WidgetContent {
             query.take = options.data.take;
             query.skip = options.data.skip;
             query.serverSideFilter = self.widget.dataFilter;
-            self.widget.dataSource.getData(query).then(data=>{
-              options.success(data);
+            self.widget.dataSource.getData(query).then(dH=>{
+              this.data = dH.data;
+              options.success(dH);
             }, error => {
-              options.error();
+              this.data = [];
+              options.success({total:0,data:[]});
             });
           }
           else
@@ -65,13 +68,49 @@ export class GridContent extends WidgetContent {
     return this._columns;
   }
 
+  get autoGenerateColumns(){
+    return this._autoGenerateColumns;
+  }
+  set autoGenerateColumns(value){
+    this._autoGenerateColumns = value;
+  }
+
+
+  get data(){
+    return this._data;
+  }
+  set data(value){
+    this._data = value;
+  }
+
+  get kendoGrid(){
+
+  }
+
   refresh(){
-    this._gridDataSource.read();
+    this._gridDataSource.read().then(x=>{
+      if (this.autoGenerateColumns===true && this.data.length>0){
+        this.columns = [];
+        _.forOwn(this.data[0], (v, k)=>{
+          this.columns.push({field:k});
+        });
+
+        /*$(this.gridElement).data("kendoGrid").setOptions({
+         columns: this.columns
+        });*/
+      }
+    });
+
+
   }
 
   attached() {
     this.restoreState();
+    this.createGrid();
+    this._gridDataSource.read();
+  }
 
+  createGrid(){
     var me = this;
     me._grid = $(this.gridElement).kendoGrid({
       dataSource: this._gridDataSource,
@@ -144,10 +183,10 @@ export class GridContent extends WidgetContent {
         });
       }
     });
-    this._gridDataSource.read();
+
   }
 
-  resreshColumns(columnsSet){
+  /*resreshColumns(columnsSet){
     if ($(this.gridElement).data("kendoGrid")) {
       for (let fld of columnsSet) {
         var c = _.find(this.columns, {'field': fld.field});
@@ -160,7 +199,7 @@ export class GridContent extends WidgetContent {
         columns: this.columns
       });
     }
-  }
+  }*/
 
 
   saveState(){
@@ -225,9 +264,12 @@ export class GridContent extends WidgetContent {
     c.hidden=(!c.hidden);
     if (!c.format)
       c.format = this.getColumnFormat(c.field, this._gridDataSource.data());
-    $(this.gridElement).data("kendoGrid").setOptions({
-      columns: this.columns
-    });
+    if (c.hidden)
+      $(this.gridElement).data("kendoGrid").hideColumn(c.field);
+    else
+      $(this.gridElement).data("kendoGrid").showColumn(c.field);
+
+
     this.saveState();
     return true;
   }

@@ -16,8 +16,7 @@ export class ChartContent extends WidgetContent {
           let query = new Query();
           query.serverSideFilter = self.widget.dataFilter;
           self.widget.dataSource.getData(query).then(dH=>{
-            self.dataHolder = dH;
-            options.success(self.mapData(self.dataHolder.data, self.settings.categoriesField));
+            options.success(self.mapData(dH.data, self.settings.categoriesField));
           });
         }
       },

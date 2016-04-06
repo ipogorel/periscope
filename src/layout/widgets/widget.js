@@ -87,9 +87,7 @@ export class Widget {
     return this._dataHolder;
   }
 
-  set data(value) {
-    this.content.data = value;
-  }
+  
 
   @computedFrom('navigationStack')
   get hasNavStack() {

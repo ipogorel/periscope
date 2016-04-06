@@ -10,13 +10,7 @@ export class WidgetContent {
     return this._widget;
   }
 
-
-  get dataHolder() {
-    return this._widget.dataHolder
-  }
-  set dataHolder(value) {
-    this._widget.dataHolder = value;
-  }
+  
   get settings() {
     return this.widget.settings;
   }

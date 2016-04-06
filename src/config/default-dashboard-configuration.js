@@ -446,11 +446,9 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       pageSize: 40,
       stateStorage: this._stateStorage,
       navigatable: true,
+      autoGenerateColumns: true,
       behavior:[
-        new DataSourceHandleBehavior("dataSourceConfigChannel",this._eventAggregator),
-        new DataSelectedBehavior("gridSelectionChannel",this._eventAggregator),
-        new DataActivatedBehavior("gridCommandChannel",this._eventAggregator),
-        new DataFieldSelectedBehavior("gridFieldSelectionChannel",this._eventAggregator)
+        new DataSourceHandleBehavior("dataSourceConfigChannel",this._eventAggregator)
       ],
       dataFilter:""
     });
