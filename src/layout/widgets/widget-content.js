@@ -10,7 +10,7 @@ export class WidgetContent {
     return this._widget;
   }
 
-  
+
   get settings() {
     return this.widget.settings;
   }

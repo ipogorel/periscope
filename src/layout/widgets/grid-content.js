@@ -88,20 +88,18 @@ export class GridContent extends WidgetContent {
   }
 
   refresh(){
+    this.destroyGrid();
+    if (this.autoGenerateColumns)
+      this.columns = [];
     this._gridDataSource.read().then(x=>{
       if (this.autoGenerateColumns===true && this.data.length>0){
         this.columns = [];
         _.forOwn(this.data[0], (v, k)=>{
           this.columns.push({field:k});
         });
-
-        /*$(this.gridElement).data("kendoGrid").setOptions({
-         columns: this.columns
-        });*/
       }
     });
-
-
+    this.createGrid();
   }
 
   attached() {
@@ -110,6 +108,12 @@ export class GridContent extends WidgetContent {
     this._gridDataSource.read();
   }
 
+  destroyGrid(){
+    if ($(this.gridElement).data("kendoGrid"))
+      $(this.gridElement).data("kendoGrid").destroy();
+    $(this.gridElement).empty()
+
+  }
   createGrid(){
     var me = this;
     me._grid = $(this.gridElement).kendoGrid({
