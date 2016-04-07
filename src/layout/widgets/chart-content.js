@@ -16,6 +16,7 @@ export class ChartContent extends WidgetContent {
           let query = new Query();
           query.serverSideFilter = self.widget.dataFilter;
           self.widget.dataSource.getData(query).then(dH=>{
+            var a = 1;
             options.success(self.mapData(dH.data, self.settings.categoriesField));
           });
         }
@@ -30,7 +31,7 @@ export class ChartContent extends WidgetContent {
     this._chartDataSource.read();
   }
 
-  attached() {
+  attached(){
     $(this.chartElement).kendoChart({
       autoBind: false,
       dataSource: this._chartDataSource,
@@ -60,7 +61,10 @@ export class ChartContent extends WidgetContent {
         }
       }
     });
+    $(this.chartElement).data("kendoChart").refresh();
   }
+
+
 
   mapData(data, categoryField){
     var result = []
