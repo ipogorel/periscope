@@ -91,27 +91,23 @@ export class GridContent extends WidgetContent {
     this.destroyGrid();
     if (this.autoGenerateColumns)
       this.columns = [];
-    this._gridDataSource.read().then(x=>{
-      if (this.autoGenerateColumns===true && this.data.length>0){
-        this.columns = [];
-        _.forOwn(this.data[0], (v, k)=>{
-          this.columns.push({field:k});
-        });
-      }
-    });
     this.createGrid();
+    this._gridDataSource.read().then(x=>{
+    });
   }
 
   attached() {
     this.restoreState();
     this.createGrid();
     this._gridDataSource.read();
+
   }
 
   destroyGrid(){
     if ($(this.gridElement).data("kendoGrid"))
       $(this.gridElement).data("kendoGrid").destroy();
     $(this.gridElement).empty()
+
 
   }
   createGrid(){
@@ -133,9 +129,9 @@ export class GridContent extends WidgetContent {
           display: "{2} data items"
         }
       },
-      filterable: {
+      /*filterable: {
         mode: "row"
-      },
+      },*/
       navigatable: true, //this.navigatable,
       navigate: e => {
         // select the entire row

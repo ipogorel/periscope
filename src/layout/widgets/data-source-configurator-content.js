@@ -3,6 +3,7 @@ import {Datasource} from './../../data/data-source';
 import {SwaggerSchemaProvider} from './../../data/schema/providers/swagger-schema-provider'
 import {WidgetContent} from './widget-content';
 import Swagger from "swagger-client"
+import Resolver from "swagger-client"
 import * as _ from 'lodash';
 
 export class DataSourceConfiguratorContent extends WidgetContent {
@@ -83,6 +84,20 @@ export class DataSourceConfiguratorContent extends WidgetContent {
       if (p.value)
         return p.name + "=" + p.value
     });
+
+    let definitionModelName;
+    let responseDef = this.client[this.api].apis[this.method].successResponse["200"].definition;
+    if (responseDef.type === "array") {
+      if (responseDef.items.$ref.indexOf('#/definitions/') === 0) {
+        if (this.client.definitions[responseDef.items.$ref.substring('#/definitions/'.length)])
+          definitionModelName = this.client.definitions[responseDef.items.$ref.substring('#/definitions/'.length)].name;
+      }
+    }
+    else if (responseDef.name){
+      definitionModelName = responseDef.name;
+    }
+
+
     _.forEach(_.filter(this.parameters, x=>{ return (x.value && x.in == "path")}), pathParam=>{
       url = url.replace("{" + pathParam.name + "}", pathParam.value);
     })
@@ -93,11 +108,10 @@ export class DataSourceConfiguratorContent extends WidgetContent {
 
     ds.transport.readService.configure({
         url: url,
-        schemaProvider: new SwaggerSchemaProvider(this.definitionUrl, this.api, this.method, "")
+        schemaProvider: new SwaggerSchemaProvider(this.definitionUrl, this.api, this.method, definitionModelName)
     });
     this.widget.dataSourceChanged.raise(ds);
   }
-
 
   _initSwaggerClient(url){
     return new Swagger({
@@ -106,5 +120,4 @@ export class DataSourceConfiguratorContent extends WidgetContent {
         this.client = client;
     })
   }
-
 }
