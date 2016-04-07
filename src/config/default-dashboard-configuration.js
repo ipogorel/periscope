@@ -101,9 +101,6 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         }),
         dataMapper: data=>{
           return data.Results
-        },
-        totalMapper: data=>{
-          return data.Results.length
         }
       }
     )
@@ -320,9 +317,6 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         }),
         dataMapper: data=>{
           return data.Results
-        },
-        totalMapper: data=>{
-          return data.Results.length
         }
       }
     );

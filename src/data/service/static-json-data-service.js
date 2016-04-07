@@ -31,6 +31,7 @@ export class StaticJsonDataService extends DataService {
           var evaluator = new QueryExpressionEvaluator();
           d = evaluator.evaluate(d, options.filter);
         }
+        var total = d.length;
         var l = options.skip + options.take;
         d = l? _.slice(d, options.skip, (l>d.length?d.length:l)) : d;
         if (options.fields && options.fields.length>0)
@@ -39,7 +40,7 @@ export class StaticJsonDataService extends DataService {
           });
         return {
           data: DataHelper.deserializeDates(d),
-          total: (this.totalMapper? this.totalMapper(jsonData) : jsonData.length)
+          total: (this.totalMapper? this.totalMapper(jsonData) : total)
         }
       });
   }
