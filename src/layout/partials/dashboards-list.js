@@ -1,6 +1,6 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
-import {DashboardManager} from 'infrastructure/dashboard-manager';
-import {PeriscopeRouter} from 'navigator/periscope-router';
+import {DashboardManager} from './../../infrastructure/dashboard-manager';
+import {PeriscopeRouter} from './../../navigator/periscope-router';
 
 @inject(PeriscopeRouter, DashboardManager)
 export class DashboardsList {

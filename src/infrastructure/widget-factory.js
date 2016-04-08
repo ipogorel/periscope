@@ -1,7 +1,6 @@
 import {inject} from 'aurelia-framework';
-import {Widget} from 'layout/widgets/widget';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {BackButtonPressedBehavior} from 'navigator/widgetbehavior/back-button-pressed-behavior';
+import {BackButtonPressedBehavior} from './../navigator/widgetbehavior/back-button-pressed-behavior';
 
 @inject(EventAggregator)
 export class WidgetFactory

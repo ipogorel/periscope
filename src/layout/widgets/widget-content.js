@@ -1,6 +1,3 @@
-import {WidgetEvent} from 'navigator/events/widget-event';
-
-
 export class WidgetContent {
   constructor(widget) {
     this._widget = widget;

@@ -1,7 +1,6 @@
 import {DashboardBase} from './dashboard-base';
 import $ from 'jquery';
 import lodash from 'lodash';
-import {computedFrom} from 'aurelia-framework';
 
 
 export class BootstrapDashboard extends DashboardBase {
@@ -9,13 +8,12 @@ export class BootstrapDashboard extends DashboardBase {
     super(name);
     this.widgetBaseHeight = 70;
     this.layoutStructure = [];
-
   }
 
 
   replaceWidget(oldWidget, newWidget, callback){
     super.replaceWidget(oldWidget, newWidget, callback);
-    this.layoutStructure =this.createLayoutStructure(this.layoutWidgets);
+    this.layoutStructure = this.createLayoutStructure(this.layoutWidgets);
   }
 
   addWidget(widget, dimensions){

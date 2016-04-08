@@ -3,7 +3,6 @@ import {Datasource} from './../../data/data-source';
 import {SwaggerSchemaProvider} from './../../data/schema/providers/swagger-schema-provider'
 import {WidgetContent} from './widget-content';
 import Swagger from "swagger-client"
-import Resolver from "swagger-client"
 import * as _ from 'lodash';
 
 export class DataSourceConfiguratorContent extends WidgetContent {

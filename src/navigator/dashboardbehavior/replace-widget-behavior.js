@@ -1,4 +1,3 @@
-import {WidgetFactory} from 'infrastructure/widget-factory';
 import {DashboardBehavior} from './dashboard-behavior';
 
 export class ReplaceWidgetBehavior extends DashboardBehavior  {

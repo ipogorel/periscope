@@ -1,4 +1,3 @@
-import {PeriscopeRouter} from '../periscope-router';
 import {DashboardBehavior} from './dashboard-behavior';
 import {EventAggregator} from 'aurelia-event-aggregator';
 

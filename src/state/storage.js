@@ -1,6 +1,3 @@
-/**
- * Created by User on 12/10/2015.
- */
 export class Storage{
   constructor(){
     this._provider = this._initProvider('Warning: Local Storage is disabled or unavailable.');

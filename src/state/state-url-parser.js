@@ -1,4 +1,4 @@
-import {UrlHelper} from 'helpers/url-helper'
+import {UrlHelper} from './../helpers/url-helper'
 
 export class StateUrlParser{
   static stateToQuery(widgetStates){

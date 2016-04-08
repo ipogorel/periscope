@@ -1,4 +1,4 @@
-import {SearchExpressionStateView} from 'state/presentation/search-expression-state-view';
+import {SearchExpressionStateView} from './../state/presentation/search-expression-state-view';
 export class StateViewFactory
 {
   constructor(){

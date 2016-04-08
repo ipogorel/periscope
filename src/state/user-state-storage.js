@@ -1,5 +1,5 @@
 import {Storage} from './storage';
-import {AppConfig} from 'app-config';
+import {AppConfig} from './../app-config';
 import {inject} from 'aurelia-framework';
 import lodash from 'lodash';
 

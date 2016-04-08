@@ -3,8 +3,8 @@ import {EventAggregator} from 'aurelia-event-aggregator';
 import $ from 'jquery';
 import {bootstrap} from 'bootstrap'
 import {WidgetContent} from './widget-content';
-import {DslExpressionManagerFactory} from 'dsl/dsl-expression-manager-factory';
-import {StringHelper} from 'helpers/string-helper';
+import {DslExpressionManagerFactory} from './../../dsl/dsl-expression-manager-factory';
+import {StringHelper} from './../../helpers/string-helper';
 
 
 export class DslSearchBoxContent extends WidgetContent {

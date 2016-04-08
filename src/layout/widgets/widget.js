@@ -1,7 +1,6 @@
 import {computedFrom} from 'aurelia-framework';
-import {WidgetEvent} from 'navigator/events/widget-event';
+import {WidgetEvent} from './../../navigator/events/widget-event';
 import lodash from 'lodash';
-import {Query} from 'data/query';
 
 export class Widget {
 

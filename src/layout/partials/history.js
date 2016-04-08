@@ -1,8 +1,7 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
-import {PeriscopeRouter} from 'navigator/periscope-router';
-import {NavigationHistory} from 'navigator/navigation-history';
-import {UserStateStorage} from 'state/user-state-storage';
-import {StateViewFactory} from 'infrastructure/state-view-factory';
+import {PeriscopeRouter} from './../../navigator/periscope-router';
+import {NavigationHistory} from './../../navigator/navigation-history';
+import {StateViewFactory} from './../../infrastructure/state-view-factory';
 
 @inject(PeriscopeRouter, NavigationHistory, StateViewFactory)
 export class History {
