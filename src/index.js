@@ -1,8 +1,8 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
-import {DashboardManager} from 'infrastructure/dashboard-manager';
-import {PeriscopeRouter} from 'navigator/periscope-router';
-import {UserStateStorage} from 'state/user-state-storage';
+import {DashboardManager} from './infrastructure/dashboard-manager';
+import {PeriscopeRouter} from './navigator/periscope-router';
+import {UserStateStorage} from './state/user-state-storage';
 
 
 @inject(DashboardManager, PeriscopeRouter, EventAggregator, UserStateStorage)

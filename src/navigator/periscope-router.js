@@ -1,4 +1,4 @@
-import {NavigationHistory} from './navigator/navigation-history'
+import {NavigationHistory} from './navigation-history'
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {UserStateStorage} from './../state/user-state-storage';
