@@ -2,7 +2,7 @@ import {Query} from './../../data/query'
 import {WidgetContent} from './widget-content';
 import * as _ from 'lodash';
 import $ from 'jquery';
-import kendo from 'kendo-ui';
+//import kendo from 'kendo-ui';
 
 export class ChartContent extends WidgetContent {
   constructor(widget) {

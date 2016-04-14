@@ -1,8 +1,10 @@
 import {inject} from 'aurelia-framework';
-import {DefaultDashboardConfiguration} from './config/default-dashboard-configuration';
+//import {DefaultDashboardConfiguration} from './config/default-dashboard-configuration';
+import {JqDashboardConfiguration} from './config/jq-dashboard-configuration';
 import $ from 'jquery';
 
-@inject(DefaultDashboardConfiguration)
+//@inject(DefaultDashboardConfiguration)
+@inject(JqDashboardConfiguration)
 export class App {
   constructor(dashboardsConfiguration) {
     dashboardsConfiguration.invoke();

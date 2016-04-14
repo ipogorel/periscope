@@ -12,7 +12,7 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*",
     "gridster": "local_packages/gridster/jquery.gridster.min.js",
-    "kendo.*": "local_packages/kendo/js/kendo.*.js"
+    //"kendo.*": "local_packages/kendo/js/kendo.*.js"
   },
   map: {
     "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0-beta.1.2.0",
@@ -46,11 +46,18 @@ System.config({
     "bootstrap": "github:twbs/bootstrap@3.3.6",
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.20",
+    "datatables": "npm:datatables.net@1.10.11",
+    "datatables.net-bs": "npm:datatables.net-bs@1.10.11",
+    "datatables.net-keytable": "npm:datatables.net-keytable@2.1.1",
+    "datatables.net-keytable-bs": "npm:datatables.net-keytable-bs@2.1.1",
+    "datatables.net-responsive": "npm:datatables.net-responsive@2.0.2",
+    "datatables.net-responsive-bs": "npm:datatables.net-responsive-bs@2.0.2",
+    "datatables.net-select": "npm:datatables.net-select@1.1.2",
+    "datatables.net-select-bs": "npm:datatables.net-select-bs@1.1.2",
     "fetch": "github:github/fetch@0.11.0",
     "font-awesome": "npm:font-awesome@4.5.0",
-    "jquery": "github:components/jquery@2.2.1",
-    "jquery.min": "github:components/jquery@2.2.1",
-    "kendo-ui": "/local_packages/kendo/kendo-ui-prof@2016.1.118.trial",
+    "jquery": "npm:jquery@2.2.3",
+    //"kendo-ui": "/local_packages/kendo/kendo-ui-prof@2016.1.118.trial",
     "lodash": "npm:lodash@4.6.1",
     "mike183/localDB": "github:mike183/localDB@0.2.1",
     "moment": "npm:moment@2.12.0",
@@ -58,7 +65,6 @@ System.config({
     "swagger-client": "npm:swagger-client@2.1.13",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.20",
     "text": "github:systemjs/plugin-text@0.0.3",
-    "twbs/bootstrap": "github:twbs/bootstrap@3.3.6",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -412,6 +418,43 @@ System.config({
       "pbkdf2": "npm:pbkdf2@3.0.4",
       "public-encrypt": "npm:public-encrypt@4.0.0",
       "randombytes": "npm:randombytes@2.0.3"
+    },
+    "npm:datatables.net-bs@1.10.11": {
+      "datatables.net": "npm:datatables.net@1.10.11",
+      "jquery": "npm:jquery@2.2.3"
+    },
+    "npm:datatables.net-keytable-bs@2.1.1": {
+      "datatables.net-bs": "npm:datatables.net-bs@1.10.11",
+      "datatables.net-keytable": "npm:datatables.net-keytable@2.1.1",
+      "jquery": "npm:jquery@2.2.3"
+    },
+    "npm:datatables.net-keytable@2.1.1": {
+      "datatables.net": "npm:datatables.net@1.10.11",
+      "jquery": "npm:jquery@2.2.3",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:datatables.net-responsive-bs@2.0.2": {
+      "datatables.net-bs": "npm:datatables.net-bs@1.10.11",
+      "datatables.net-responsive": "npm:datatables.net-responsive@2.0.2",
+      "jquery": "npm:jquery@2.2.3"
+    },
+    "npm:datatables.net-responsive@2.0.2": {
+      "datatables.net": "npm:datatables.net@1.10.11",
+      "jquery": "npm:jquery@2.2.3",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:datatables.net-select-bs@1.1.2": {
+      "datatables.net-bs": "npm:datatables.net-bs@1.10.11",
+      "datatables.net-select": "npm:datatables.net-select@1.1.2",
+      "jquery": "npm:jquery@2.2.3"
+    },
+    "npm:datatables.net-select@1.1.2": {
+      "datatables.net": "npm:datatables.net@1.10.11",
+      "jquery": "npm:jquery@2.2.3"
+    },
+    "npm:datatables.net@1.10.11": {
+      "jquery": "npm:jquery@2.2.3",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:debug@2.2.0": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",

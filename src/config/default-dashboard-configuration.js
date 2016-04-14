@@ -30,6 +30,7 @@ import {DashboardManager} from './../infrastructure/dashboard-manager';
 import {PeriscopeRouter} from './../navigator/periscope-router';
 
 import {Grid} from './../layout/widgets/grid';
+//import {JqGrid} from './../layout/widgets/jq-grid';
 import {Chart} from './../layout/widgets/chart';
 import {SearchBox} from './../layout/widgets/search-box';
 import {DetailedView} from './../layout/widgets/detailed-view';
@@ -50,7 +51,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     this._swaggerServiceFactory = swaggerServiceFactory;
     this._cacheManager = cacheManagerFactory(new MemoryCacheStorage());
   }
-
+  
   invoke(){
     var customersDataService = this._dataServiceFactory()
     customersDataService.configure({
@@ -334,7 +335,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     // Orders dashboard
-    var ordersGrid = this._widgetFactory.createWidget(Grid, {
+    var ordersGrid = this._widgetFactory.createWidget(JqGrid, {
       name:"gridWidgetOrders",
       header:"Orders",
       stateStorage: this._stateStorage,

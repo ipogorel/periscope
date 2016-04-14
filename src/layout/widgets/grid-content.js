@@ -2,7 +2,7 @@ import {WidgetContent} from './widget-content';
 import {Query} from './../../data/query'
 import $ from 'jquery';
 import * as _ from 'lodash';
-import kendo from 'kendo-ui';
+//import kendo from 'kendo-ui';
 
 export class GridContent extends WidgetContent {
   constructor(widget) {
@@ -83,9 +83,6 @@ export class GridContent extends WidgetContent {
     this._data = value;
   }
 
-  get kendoGrid(){
-
-  }
 
   refresh(){
     this.destroyGrid();
