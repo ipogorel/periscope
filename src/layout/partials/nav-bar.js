@@ -14,6 +14,6 @@ export class NavBar {
       e.preventDefault();
       $('body').removeClass('nav-expanded');
     });
-    //$('#collapseDashboards').collapse('show');
+    $('#collapseDashboards').collapse('show');
   }
 }

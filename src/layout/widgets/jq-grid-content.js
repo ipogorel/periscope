@@ -1,26 +1,25 @@
 import {WidgetContent} from './widget-content';
 import {Query} from './../../data/query'
 import $ from 'jquery';
+
 import factoryDt from 'datatables';
 import factoryDtBs from 'datatables.net-bs';
 import factoryDtSelect from 'datatables.net-select';
 import factoryDtResponsive from 'datatables.net-responsive'
 import factoryDtResponsiveBs from 'datatables.net-responsive-bs';
 import factoryDtKeytable from 'datatables.net-keytable';
+
 import 'datatables.net-bs/css/datatables.bootstrap.css!';
 import 'datatables.net-select-bs/css/select.bootstrap.css!';
 import 'datatables.net-responsive-bs/css/responsive.bootstrap.css!';
 import 'datatables.net-keytable-bs/css/keyTable.bootstrap.css!';
 
 import * as _ from 'lodash';
-/*
- npm install datatables.net-responsive
- npm install datatables.net-responsive-bs
-*/
 
 const DT_SELECT_EVENT = 'select.dt';
 const DT_DESELECT_EVENT = 'deselect.dt';
 const DT_DRAW_EVENT = 'draw.dt';
+const DT_DRAW_PAGE = 'page.dt';
 const DT_KEYFOCUS_EVENT = 'key-focus';
 
 export class JqGridContent extends WidgetContent {
@@ -34,8 +33,8 @@ export class JqGridContent extends WidgetContent {
 
   initGridLib(){
     let dtObj = factoryDt(undefined, $);
-    let dtSelectObj = factoryDtSelect(undefined, $);
     let dtObjBs = factoryDtBs(undefined, $);
+    let dtSelectObj = factoryDtSelect(undefined, $);
     let dtObjResponsive = factoryDtResponsive(undefined, $);
     let dtObjResponsiveBs = factoryDtResponsiveBs(undefined, $);
     let dtObjKeytable = factoryDtKeytable(undefined, $);
@@ -77,6 +76,8 @@ export class JqGridContent extends WidgetContent {
   refresh() {
       let self = this;
       var query = new Query();
+      query.take = 10;
+      query.skip = 0;
       /*query.sort = options.data.sort;
       query.take = options.data.take;
       query.skip = options.data.skip;
@@ -112,12 +113,14 @@ export class JqGridContent extends WidgetContent {
     this.dataTable.on(DT_DESELECT_EVENT, () => this.onDeselected())
     this.dataTable.on(DT_DRAW_EVENT, () => this.handleRedraw());
     this.dataTable.on(DT_KEYFOCUS_EVENT, ()=>this.onFocus());
+    this.dataTable.on(DT_DRAW_PAGE, ()=>this.onPageChanged());
     // handle double ckick
     var me = this;
     $(this.gridElement).find("tbody").on('dblclick', 'tr', e => {
       this.onActivated($(e.target.parentNode)[0]._DT_RowIndex);
     });
   }
+
 
   handleRedraw() {
     this.dataTable.rows().deselect();
@@ -127,12 +130,12 @@ export class JqGridContent extends WidgetContent {
     var cell = this.dataTable.cell({ focused: true });
     var data = cell.data();
     var row = this.dataTable.rows(cell.index().row);
+    this.onSelected(row.indexes()[0]);
     //this.dataTable.row('.selected').remove();
 
   }
 
   onDeselected() {
-    //this.deselectCallback.call(this.vm);
   }
 
   onSelected(idx) {
@@ -144,8 +147,11 @@ export class JqGridContent extends WidgetContent {
     this.widget.dataActivated.raise(this.data[idx]);
   }
 
+  onPageChanged(){
+    var info = this.dataTable.page.info();
+  }
+
   dataChanged() {
-    //this.logger.debug('data change detected - updating table');
     this.dataTable && this.dataTable.clear().rows.add(this.data).draw();
   }
 
@@ -155,5 +161,6 @@ export class JqGridContent extends WidgetContent {
     this.dataTable.off(DT_DRAW_EVENT);
     this.dataTable.destroy();
   }
+
 
 }

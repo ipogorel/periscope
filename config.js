@@ -11,8 +11,21 @@ System.config({
     "*": "dist/*",
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*",
-    "gridster": "local_packages/gridster/jquery.gridster.min.js",
-    //"kendo.*": "local_packages/kendo/js/kendo.*.js"
+    "gridster": "local_packages/gridster/jquery.gridster.min.js"
+  },
+  meta: {
+    "/local_packages/kendo/js/*":{
+      format: 'global',
+      deps: [
+        'jquery-min',
+      ]
+    },
+    "github:twbs/bootstrap*": {
+      format: "cjs",
+      deps: [
+        "jquery"
+      ]
+    }
   },
   map: {
     "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0-beta.1.2.0",
@@ -57,7 +70,8 @@ System.config({
     "fetch": "github:github/fetch@0.11.0",
     "font-awesome": "npm:font-awesome@4.5.0",
     "jquery": "npm:jquery@2.2.3",
-    //"kendo-ui": "/local_packages/kendo/kendo-ui-prof@2016.1.118.trial",
+    "jquery-min": "npm:jquery@2.2.3",
+    "kendo-ui": "/local_packages/kendo/js/kendo.all.min",
     "lodash": "npm:lodash@4.6.1",
     "mike183/localDB": "github:mike183/localDB@0.2.1",
     "moment": "npm:moment@2.12.0",
