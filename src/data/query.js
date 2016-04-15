@@ -17,10 +17,10 @@ export class Query {
   }
 
   get sortDir(){
-    return this._sort;
+    return this._sortDir;
   }
   set sortDir(value){
-    this._sort = value;
+    this._sortDir = value;
   }
 
   get take(){

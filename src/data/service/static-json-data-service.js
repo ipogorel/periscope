@@ -32,6 +32,9 @@ export class StaticJsonDataService extends DataService {
           d = evaluator.evaluate(d, options.filter);
         }
         var total = d.length;
+        // sort
+        if (options.sort)
+          d = _.orderBy(d,[options.sort],[options.sortDir]);
         var l = options.skip + options.take;
         d = l? _.slice(d, options.skip, (l>d.length?d.length:l)) : d;
         if (options.fields && options.fields.length>0)

@@ -28,6 +28,7 @@ export class JqGridContent extends WidgetContent {
    this.columns = this.settings.columns? this.settings.columns : [];
    this.navigatable = this.settings.navigatable;
    this.autoGenerateColumns = this.settings.autoGenerateColumns;
+   this.pageSize = this.settings.pageSize;
    this.initGridLib();
  }
 
@@ -40,68 +41,46 @@ export class JqGridContent extends WidgetContent {
     let dtObjKeytable = factoryDtKeytable(undefined, $);
   }
 
-  set columns(value){
-    this._columns = value;
-  }
-  get columns(){
-    return this._columns;
-  }
-
-  set data(value){
-    this._data = value;
-  }
-  get data(){
-    return this._data;
-  }
-
-  set navigatable(value){
-    this._navigatable = value;
-  }
-  get navigatable(){
-    return this._navigatable;
-  }
-
-
-  get autoGenerateColumns(){
-    return this._autoGenerateColumns;
-  }
-  set autoGenerateColumns(value){
-    this._autoGenerateColumns = value;
-  }
 
   attached(){
     this.createGrid();
   }
 
   refresh() {
-      let self = this;
-      var query = new Query();
-      query.take = 10;
-      query.skip = 0;
-      /*query.sort = options.data.sort;
-      query.take = options.data.take;
-      query.skip = options.data.skip;
-      query.serverSideFilter = self.widget.dataFilter;*/
-      self.widget.dataSource.getData(query).then(dH=>{
-        self.data = dH.data;
-      }, error => {
-        self.data = [];
-      });
+    if (this.dataTable)
+      this.dataTable.draw();
   }
 
 
-
   createGrid(){
+    var me = this;
     this.dataTable = $(this.gridElement).DataTable({
       select: true,
+      processing: true,
       responsive: true,
       filter: false,
-      data: this.data,
+      serverSide:true,
+      ajax: (request, drawCallback, settings)=>{
+        var query = new Query();
+        query.take = request.length;
+        query.skip = request.start;
+        if (request.order.length>0){
+          query.sort = me.columns[request.order[0].column].field;
+          query.sortDir = request.order[0].dir;
+        }
+        query.serverSideFilter = me.widget.dataFilter;
+        me.widget.dataSource.getData(query).then(dH=>{
+          drawCallback({data:dH.data,recordsTotal:dH.total,recordsFiltered:dH.total});
+        }, error => {
+          drawCallback({data:[]});
+        });
+      },
+      pageLength: this.pageSize?this.pageSize:10,
       keys: this.navigatable,
       columns: _.map(this.columns,c=>{
         return {
           data:c.field,
-          sTitle:c.title?c.title:c.field,
+          title:c.title?c.title:c.field,
           type: c.format,
           render: c.format? (data, type, full, meta) => {
             return data;
@@ -115,11 +94,12 @@ export class JqGridContent extends WidgetContent {
     this.dataTable.on(DT_KEYFOCUS_EVENT, ()=>this.onFocus());
     this.dataTable.on(DT_DRAW_PAGE, ()=>this.onPageChanged());
     // handle double ckick
-    var me = this;
     $(this.gridElement).find("tbody").on('dblclick', 'tr', e => {
       this.onActivated($(e.target.parentNode)[0]._DT_RowIndex);
     });
   }
+
+
 
 
   handleRedraw() {
@@ -139,21 +119,19 @@ export class JqGridContent extends WidgetContent {
   }
 
   onSelected(idx) {
-    this.widget.dataSelected.raise(this.data[idx]);
+    this.widget.dataSelected.raise(this.dataTable.rows(idx).data()[0]);
   }
 
 
   onActivated(idx){
-    this.widget.dataActivated.raise(this.data[idx]);
+    this.widget.dataActivated.raise(this.dataTable.rows(idx).data()[0]);
   }
 
   onPageChanged(){
     var info = this.dataTable.page.info();
   }
 
-  dataChanged() {
-    this.dataTable && this.dataTable.clear().rows.add(this.data).draw();
-  }
+
 
   detached(){
     this.dataTable.off(DT_SELECT_EVENT);

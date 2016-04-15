@@ -479,7 +479,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       stateStorage: this._stateStorage,
       navigatable: true,
       minHeight: 450,
-      pageSize: 40,
+      pageSize: 25,
       behavior:[
         new DataActivatedBehavior("order-dt-details",this._eventAggregator),
         new DataActivatedBehavior("order-dt-details",this._eventAggregator)
