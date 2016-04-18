@@ -30,8 +30,9 @@ import {DashboardManager} from './../infrastructure/dashboard-manager';
 import {PeriscopeRouter} from './../navigator/periscope-router';
 
 import {Grid} from './../layout/widgets/grid';
-import {JqGrid} from './../layout/widgets/jq-grid';
 import {Chart} from './../layout/widgets/chart';
+import {JqGrid} from './../layout/widgets/jq-grid';
+import {JqChart} from './../layout/widgets/jq-chart';
 import {SearchBox} from './../layout/widgets/search-box';
 import {DetailedView} from './../layout/widgets/detailed-view';
 import {DataSourceConfigurator} from './../layout/widgets/data-source-configurator';
@@ -176,9 +177,10 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = this._widgetFactory.createWidget(Chart, {
+    var chart = this._widgetFactory.createWidget(JqChart, {
       name:"chartWidget",
       header:"Country",
+      categoriesField:"Country",
       dataSource: dsCustomers,
       showHeader:true,
       dataFilter:"",
@@ -360,7 +362,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         {
           field: "OrderDate",
           title: "Order Date",
-          format: "{0: MMM.dd yyyy}"
+          format: "MMM.dd yyyy"
         }
         ,
         {
@@ -479,7 +481,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       stateStorage: this._stateStorage,
       navigatable: true,
       minHeight: 450,
-      pageSize: 25,
+      pageSize: 10,
       behavior:[
         new DataActivatedBehavior("order-dt-details",this._eventAggregator),
         new DataActivatedBehavior("order-dt-details",this._eventAggregator)
@@ -499,7 +501,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         {
           field: "OrderDate",
           title: "Order Date",
-          format: "date"
+          format: "MMM DD YYYY"
         }
         ,
         {

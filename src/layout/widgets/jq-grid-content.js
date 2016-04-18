@@ -1,5 +1,6 @@
 import {WidgetContent} from './widget-content';
 import {Query} from './../../data/query'
+import {FormatValueConverter} from './../../helpers/converters/value-format'
 import $ from 'jquery';
 
 import factoryDt from 'datatables';
@@ -29,6 +30,7 @@ export class JqGridContent extends WidgetContent {
    this.navigatable = this.settings.navigatable;
    this.autoGenerateColumns = this.settings.autoGenerateColumns;
    this.pageSize = this.settings.pageSize;
+   this.selectedColumnIndex = -1;
    this.initGridLib();
  }
 
@@ -78,12 +80,14 @@ export class JqGridContent extends WidgetContent {
       pageLength: this.pageSize?this.pageSize:10,
       keys: this.navigatable,
       columns: _.map(this.columns,c=>{
+        var col = c;
         return {
           data:c.field,
           title:c.title?c.title:c.field,
           type: c.format,
           render: c.format? (data, type, full, meta) => {
-            return data;
+            console.log(this.columns[meta.col].format);
+            return FormatValueConverter.format(data, this.columns[meta.col].format);
           }:{}
         };
       })
@@ -110,9 +114,11 @@ export class JqGridContent extends WidgetContent {
     var cell = this.dataTable.cell({ focused: true });
     var data = cell.data();
     var row = this.dataTable.rows(cell.index().row);
-    this.onSelected(row.indexes()[0]);
-    //this.dataTable.row('.selected').remove();
 
+    if (this.selectedColumnIndex!=cell.index().column) {
+      this.selectedColumnIndex = cell.index().column;
+      this.widget.dataFieldSelected.raise(this.columns[this.selectedColumnIndex].field);
+    }
   }
 
   onDeselected() {

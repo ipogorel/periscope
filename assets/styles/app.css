@@ -56,6 +56,11 @@ html, body {
 }
 .widget-container .portlet {
   margin: 0px 0px 0px;
+  height: 100%;
+}
+
+.widget-container .portlet .portlet-body{
+  height: 100%;
 }
 
 @media (min-width: 768px) {

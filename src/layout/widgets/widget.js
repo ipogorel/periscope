@@ -96,6 +96,9 @@ export class Widget {
   get header() {
     return this.settings.header;
   }
+  set header(value) {
+    this.settings.header = value;
+  }
 
   get resized() {
     return this._resized;
