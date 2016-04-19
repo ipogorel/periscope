@@ -435,7 +435,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //customers grid
-    var swGrid = this._widgetFactory.createWidget(Grid, {
+    var swGrid = this._widgetFactory.createWidget(JqGrid, {
       name:"swaggerGridWidget",
       header:"Swagger Data",
       showHeader:true,

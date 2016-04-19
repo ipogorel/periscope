@@ -42,17 +42,20 @@ export class JqGridContent extends WidgetContent {
 
 
   attached(){
-    if (this.autoGenerateColumns) {
-      this.createColumns().then(()=> {
-        this.createGrid();
-      })
-    }
-    else
       this.createGrid();
   }
 
   refresh() {
-    if (this.dataTable)
+    if (!this.dataTable)
+      return;
+
+    if (this.autoGenerateColumns) {
+      this.createColumns().then(()=> {
+        this.detached();
+        this.createGrid();
+      })
+    }
+    else
       this.dataTable.draw();
   }
 
@@ -62,17 +65,22 @@ export class JqGridContent extends WidgetContent {
     this.dataTable = $(this.gridElement).DataTable({
       select: true,
 
-      scrollY:        this._calculateHeight($(this.gridElement)),
-      deferRender:    true,
-      scroller:       true,
+      scrollY: this._calculateHeight($(this.gridElement)),
+      deferRender: true,
+      scroller: true,
       paging: true,
       pagingType: "simple",
 
       processing: true,
       responsive: true,
+      order: [],
       filter: false,
       serverSide:true,
       ajax: (request, drawCallback, settings)=>{
+        if (!me.widget.dataSource) {
+          drawCallback({data: []});
+          return;
+        }
         var query = new Query();
         query.take = request.length;
         query.skip = request.start;
@@ -89,10 +97,10 @@ export class JqGridContent extends WidgetContent {
       },
       pageLength: this.pageSize?this.pageSize:10,
       keys: this.navigatable,
-      columns: _.map(this.columns,c=>{
+      columns: !this.columns?[] : _.map(this.columns,c=>{
         return {
           data:c.field,
-          buttons: [ 'colvis' ],
+          defaultContent:'',
           title:c.title?c.title:c.field,
           type: c.format,
           render: c.format? (data, type, full, meta) => {
