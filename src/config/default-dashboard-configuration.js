@@ -133,12 +133,12 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
     //customers grid
-    var customersGrid = this._widgetFactory.createWidget(Grid, {
+    var customersGrid = this._widgetFactory.createWidget(JqGrid, {
       name:"gridWidget",
       header:"Customers",
       showHeader:true,
       minHeight: 450,
-      pageSize: 40,
+      pageSize: 25,
       stateStorage: this._stateStorage,
       navigatable: true,
       behavior:[
@@ -220,7 +220,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
           key: "orders:ordersSearchWidget",
           value: {
             stateType: "searchBoxState",
-            stateObject: "CustomerId = '" + filterEvent.activatedData.get("Id").toString() + "'"
+            stateObject: "CustomerId = '" + filterEvent.activatedData["Id"].toString() + "'"
           }
         }])
         },
@@ -242,7 +242,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       {size_x:3, size_y:"*", col:6, row:2},
       this._eventAggregator,
       this._widgetFactory,
-      message => { return ("record.Id=='" + message.selectedData.get("Id").toString() + "'");}
+      message => { return ("record.Id=='" + message.selectedData["Id"].toString() + "'");}
     );
 
 
@@ -337,12 +337,12 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     // Orders dashboard
-    var ordersGrid = this._widgetFactory.createWidget(Grid, {
+    var ordersGrid = this._widgetFactory.createWidget(JqGrid, {
       name:"gridWidgetOrders",
       header:"Orders",
       stateStorage: this._stateStorage,
       minHeight: 450,
-      pageSize: 40,
+      pageSize: 25,
       behavior:[
         new DataFilterHandleBehavior("ordersSearchChannel",this._eventAggregator),
         new DataActivatedBehavior("order-details",this._eventAggregator)
@@ -362,7 +362,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         {
           field: "OrderDate",
           title: "Order Date",
-          format: "MMM.dd yyyy"
+          format: "MMM DD YYYY"
         }
         ,
         {
@@ -413,7 +413,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         dataSource: dsOrders,
         showHeader:true
       },
-      message => { return ("record.Id=='" + message.activatedData.get("Id").toString() + "'"); }
+      message => { return ("record.Id=='" + message.activatedData["Id"].toString() + "'"); }
     );
     var manageNavigationStackBehavior = new ManageNavigationStackBehavior(this._eventAggregator);
     replaceWidgetBehavior.attach(dbOrders);

@@ -6,13 +6,11 @@ import $ from 'jquery';
 import factoryDt from 'datatables';
 import factoryDtBs from 'datatables.net-bs';
 import factoryDtSelect from 'datatables.net-select';
-import factoryDtResponsive from 'datatables.net-responsive'
-import factoryDtResponsiveBs from 'datatables.net-responsive-bs';
+import factoryDtScroller from 'datatables.net-scroller';
 import factoryDtKeytable from 'datatables.net-keytable';
 
 import 'datatables.net-bs/css/datatables.bootstrap.css!';
 import 'datatables.net-select-bs/css/select.bootstrap.css!';
-import 'datatables.net-responsive-bs/css/responsive.bootstrap.css!';
 import 'datatables.net-keytable-bs/css/keyTable.bootstrap.css!';
 
 import * as _ from 'lodash';
@@ -38,14 +36,19 @@ export class JqGridContent extends WidgetContent {
     let dtObj = factoryDt(undefined, $);
     let dtObjBs = factoryDtBs(undefined, $);
     let dtSelectObj = factoryDtSelect(undefined, $);
-    let dtObjResponsive = factoryDtResponsive(undefined, $);
-    let dtObjResponsiveBs = factoryDtResponsiveBs(undefined, $);
     let dtObjKeytable = factoryDtKeytable(undefined, $);
+    let dtObjScroller = factoryDtScroller(undefined, $);
   }
 
 
   attached(){
-    this.createGrid();
+    if (this.autoGenerateColumns) {
+      this.createColumns().then(()=> {
+        this.createGrid();
+      })
+    }
+    else
+      this.createGrid();
   }
 
   refresh() {
@@ -58,6 +61,13 @@ export class JqGridContent extends WidgetContent {
     var me = this;
     this.dataTable = $(this.gridElement).DataTable({
       select: true,
+
+      scrollY:        this._calculateHeight($(this.gridElement)),
+      deferRender:    true,
+      scroller:       true,
+      paging: true,
+      pagingType: "simple",
+
       processing: true,
       responsive: true,
       filter: false,
@@ -80,13 +90,12 @@ export class JqGridContent extends WidgetContent {
       pageLength: this.pageSize?this.pageSize:10,
       keys: this.navigatable,
       columns: _.map(this.columns,c=>{
-        var col = c;
         return {
           data:c.field,
+          buttons: [ 'colvis' ],
           title:c.title?c.title:c.field,
           type: c.format,
           render: c.format? (data, type, full, meta) => {
-            console.log(this.columns[meta.col].format);
             return FormatValueConverter.format(data, this.columns[meta.col].format);
           }:{}
         };
@@ -101,10 +110,17 @@ export class JqGridContent extends WidgetContent {
     $(this.gridElement).find("tbody").on('dblclick', 'tr', e => {
       this.onActivated($(e.target.parentNode)[0]._DT_RowIndex);
     });
+
   }
 
 
-
+  createColumns(){
+    return this.widget.dataSource.transport.readService.getSchema().then(schema=>{
+      this.columns = _.map(schema.fields,f=>{
+        return {field: f.field};
+      });
+    });
+  }
 
   handleRedraw() {
     this.dataTable.rows().deselect();
