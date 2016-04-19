@@ -20,6 +20,7 @@ const DT_DESELECT_EVENT = 'deselect.dt';
 const DT_DRAW_EVENT = 'draw.dt';
 const DT_DRAW_PAGE = 'page.dt';
 const DT_KEYFOCUS_EVENT = 'key-focus';
+const DT_KEY_EVENT = 'key';
 
 export class JqGridContent extends WidgetContent {
  constructor(widget){
@@ -42,7 +43,7 @@ export class JqGridContent extends WidgetContent {
 
 
   attached(){
-      this.createGrid();
+    this.createGrid();
   }
 
   refresh() {
@@ -64,6 +65,7 @@ export class JqGridContent extends WidgetContent {
     var me = this;
     this.dataTable = $(this.gridElement).DataTable({
       select: true,
+      lengthChange: false,
 
       scrollY: this._calculateHeight($(this.gridElement)),
       deferRender: true,
@@ -114,6 +116,8 @@ export class JqGridContent extends WidgetContent {
     this.dataTable.on(DT_DRAW_EVENT, () => this.handleRedraw());
     this.dataTable.on(DT_KEYFOCUS_EVENT, ()=>this.onFocus());
     this.dataTable.on(DT_DRAW_PAGE, ()=>this.onPageChanged());
+    this.dataTable.on(DT_KEY_EVENT, (e, datatable, key, cell, originalEvent)=>this.onKeyPressed(key, cell));
+
     // handle double ckick
     $(this.gridElement).find("tbody").on('dblclick', 'tr', e => {
       this.onActivated($(e.target.parentNode)[0]._DT_RowIndex);
@@ -136,12 +140,12 @@ export class JqGridContent extends WidgetContent {
 
   onFocus(){
     var cell = this.dataTable.cell({ focused: true });
-    var data = cell.data();
-    var row = this.dataTable.rows(cell.index().row);
-
     if (this.selectedColumnIndex!=cell.index().column) {
       this.selectedColumnIndex = cell.index().column;
-      this.widget.dataFieldSelected.raise(this.columns[this.selectedColumnIndex].field);
+      if (this.columns[this.selectedColumnIndex].selectable){
+        this.dataTable.column(this.columns[this.selectedColumnIndex].field).select();
+        this.widget.dataFieldSelected.raise(this.columns[this.selectedColumnIndex].field);
+      }
     }
   }
 
@@ -152,13 +156,19 @@ export class JqGridContent extends WidgetContent {
     this.widget.dataSelected.raise(this.dataTable.rows(idx).data()[0]);
   }
 
-
   onActivated(idx){
     this.widget.dataActivated.raise(this.dataTable.rows(idx).data()[0]);
   }
 
   onPageChanged(){
     var info = this.dataTable.page.info();
+  }
+
+  onKeyPressed(key, cell){
+    if (key===13) { // enter pressed
+      this.dataTable.rows('.selected').deselect();
+      this.dataTable.row(cell.index().row).select();
+    }
   }
 
 

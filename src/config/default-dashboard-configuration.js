@@ -473,74 +473,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     dbSwagger.addWidget(swgConfiguratorWidget,{size_x:4, size_y:"*", col:1, row:1});
     dbSwagger.addWidget(swGrid,{size_x:8, size_y:"*", col:5, row:1});
 
-
-    // Datatables Dashboard
-    var dtGrid = this._widgetFactory.createWidget(JqGrid, {
-      name:"dtWidgetOrders",
-      header:"Orders",
-      stateStorage: this._stateStorage,
-      navigatable: true,
-      minHeight: 450,
-      pageSize: 10,
-      behavior:[
-        new DataActivatedBehavior("order-dt-details",this._eventAggregator),
-        new DataActivatedBehavior("order-dt-details",this._eventAggregator)
-      ],
-      dataSource: dsOrders,
-      showHeader:true,
-      dataFilter:"",
-      columns:[
-        {
-          field: "Id",
-          title: "#"
-        },
-        {
-          field: "CustomerId",
-          title: "Customer"
-        },
-        {
-          field: "OrderDate",
-          title: "Order Date",
-          format: "MMM DD YYYY"
-        }
-        ,
-        {
-          field: "Freight"
-        },
-        {
-          field: "ShipName",
-          title: "Ship Name"
-        },
-        {
-          field: "ShipCountry",
-          title: "Ship Country"
-        }
-      ]
-    });
-
-    var dbDatatables = this._dashboardManager.createDashboard("datatables",{
-      title:"Datatables.net",
-      route: "/datatables"
-    });
-    dbDatatables.addWidget(dtGrid,{size_x:12, size_y:"*", col:1, row:1});
-    var rWB = new ReplaceWidgetBehavior(
-      'order-dt-details',
-      this._eventAggregator,
-      this._widgetFactory,
-      "dtWidgetOrders",
-      DetailedView,
-      {
-        name:"dtDetailedOrderWidget",
-        header:"Order Details",
-        behavior:[],
-        dataSource: dsOrders,
-        showHeader:true
-      },
-      message => { return ("record.Id=='" + message.activatedData["Id"].toString() + "'") }
-    );
-    var nSB = new ManageNavigationStackBehavior(this._eventAggregator);
-    rWB.attach(dbDatatables);
-    nSB.attach(dbDatatables);
+    
 
   }
 }
