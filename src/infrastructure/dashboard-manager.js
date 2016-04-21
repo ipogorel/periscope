@@ -1,5 +1,5 @@
 import lodash from 'lodash';
-import {BootstrapDashboard} from './../layout/bootstrap-dashboard';
+import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-dashboard';
 
 export class DashboardManager {
   constructor(){

@@ -34,18 +34,6 @@ export class DashboardBase
     this._route = dashboardConfiguration.route;
   }
 
-  addWidget(widget, dimensions) {
-    this._layoutWidgets.push({
-      widget: widget,
-      size_x: dimensions.size_x,
-      size_y: dimensions.size_y,
-      col: dimensions.col,
-      row: dimensions.row
-    })
-    widget.dashboard = this;
-  }
-
-
 
   getWidgetByName(widgetName) {
     var wl = _.find(this._layoutWidgets, w=> { return w.widget.name === widgetName });
@@ -56,6 +44,17 @@ export class DashboardBase
   getWidgetDimensions(widget){
     var lw = _.find(this._layoutWidgets, w=> { return w.widget === widget });
     return {size_x: lw.size_x, size_y: lw.size_y,  col: lw.col,  row: lw.row};
+  }
+
+  addWidget(widget, dimensions) {
+    this._layoutWidgets.push({
+      widget: widget,
+      size_x: dimensions.size_x,
+      size_y: dimensions.size_y,
+      col: dimensions.col,
+      row: dimensions.row
+    })
+    widget.dashboard = this;
   }
 
   removeWidget(widget) {
@@ -93,9 +92,15 @@ export class DashboardBase
     });
   }
 
+  refreshWidget(widget){
+    widget.refresh();
+  }
+
+
+
   refresh() {
     for (let i=0; i<this._layoutWidgets.length; i++) {
-      this._layoutWidgets[i].widget.refresh();
+      this.refreshWidget(this._layoutWidgets[i].widget);
     }
   }
 

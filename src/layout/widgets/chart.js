@@ -1,18 +1,27 @@
 import {customElement, inject, useView} from 'aurelia-framework';
 import {Widget} from './widget';
-import {ChartContent} from './chart-content';
 
-
-@customElement('chart')
-@useView('./widget.html')
 export class Chart extends Widget {
   constructor(settings) {
     super(settings);
+    this.categoriesField = settings.categoriesField;
+    this.seriesDefaults = settings.seriesDefaults;
     this.stateType = "chartState";
-    this.initContent();
+    this.attachBehaviors();
   }
 
-  initContent() {
-    this.content = new ChartContent(this);
+  get categoriesField(){
+    return this._categoriesField;
   }
+  set categoriesField(value){
+    this._categoriesField = value;
+  }
+
+  get seriesDefaults(){
+    return this._seriesDefaults;
+  }
+  set seriesDefaults(value){
+    this._seriesDefaults = value;
+  }
+
 }

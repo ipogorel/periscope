@@ -1,4 +1,4 @@
-import {DashboardBase} from './dashboard-base';
+import {DashboardBase} from './../dashboard-base';
 import $ from 'jquery';
 import gridster from 'gridster';
 
@@ -15,10 +15,6 @@ export class GridsterDashboard extends DashboardBase {
       widget_margins: [0, 0],
       widget_base_dimensions: [widgetBaseWidth,90],
       max_cols:3
-      /*draggable: {
-        stop: function(event, ui){
-        }
-      }*/
     }).data('gridster');
     this.gridster.disable();
   }

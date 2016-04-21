@@ -1,6 +1,6 @@
-import {WidgetContent} from './widget-content';
-import {Query} from './../../data/query'
-import {FormatValueConverter} from './../../helpers/converters/value-format'
+import {Grid} from './../grid';
+import {Query} from './../../../data/query'
+import {FormatValueConverter} from './../../../helpers/converters/value-format'
 import $ from 'jquery';
 
 import factoryDt from 'datatables';
@@ -22,13 +22,9 @@ const DT_DRAW_PAGE = 'page.dt';
 const DT_KEYFOCUS_EVENT = 'key-focus';
 const DT_KEY_EVENT = 'key';
 
-export class JqGridContent extends WidgetContent {
- constructor(widget){
-   super(widget);
-   this.columns = this.settings.columns? this.settings.columns : [];
-   this.navigatable = this.settings.navigatable;
-   this.autoGenerateColumns = this.settings.autoGenerateColumns;
-   this.pageSize = this.settings.pageSize;
+export class GridJq extends Grid {
+ constructor(settings){
+   super(settings);
    this.selectedColumnIndex = -1;
    this.initGridLib();
  }
@@ -47,6 +43,7 @@ export class JqGridContent extends WidgetContent {
   }
 
   refresh() {
+    super.refresh();
     if (!this.dataTable)
       return;
 
@@ -79,7 +76,7 @@ export class JqGridContent extends WidgetContent {
       filter: false,
       serverSide:true,
       ajax: (request, drawCallback, settings)=>{
-        if (!me.widget.dataSource) {
+        if (!me.dataSource) {
           drawCallback({data: []});
           return;
         }
@@ -90,8 +87,8 @@ export class JqGridContent extends WidgetContent {
           query.sort = me.columns[request.order[0].column].field;
           query.sortDir = request.order[0].dir;
         }
-        query.serverSideFilter = me.widget.dataFilter;
-        me.widget.dataSource.getData(query).then(dH=>{
+        query.serverSideFilter = me.dataFilter;
+        me.dataSource.getData(query).then(dH=>{
           drawCallback({data:dH.data,recordsTotal:dH.total,recordsFiltered:dH.total});
         }, error => {
           drawCallback({data:[]});
@@ -127,7 +124,7 @@ export class JqGridContent extends WidgetContent {
 
 
   createColumns(){
-    return this.widget.dataSource.transport.readService.getSchema().then(schema=>{
+    return this.dataSource.transport.readService.getSchema().then(schema=>{
       this.columns = _.map(schema.fields,f=>{
         return {field: f.field};
       });
@@ -144,7 +141,7 @@ export class JqGridContent extends WidgetContent {
       this.selectedColumnIndex = cell.index().column;
       if (this.columns[this.selectedColumnIndex].selectable){
         this.dataTable.column(this.columns[this.selectedColumnIndex].field).select();
-        this.widget.dataFieldSelected.raise(this.columns[this.selectedColumnIndex].field);
+        this.dataFieldSelected.raise(this.columns[this.selectedColumnIndex].field);
       }
     }
   }
@@ -153,11 +150,11 @@ export class JqGridContent extends WidgetContent {
   }
 
   onSelected(idx) {
-    this.widget.dataSelected.raise(this.dataTable.rows(idx).data()[0]);
+    this.dataSelected.raise(this.dataTable.rows(idx).data()[0]);
   }
 
   onActivated(idx){
-    this.widget.dataActivated.raise(this.dataTable.rows(idx).data()[0]);
+    this.dataActivated.raise(this.dataTable.rows(idx).data()[0]);
   }
 
   onPageChanged(){

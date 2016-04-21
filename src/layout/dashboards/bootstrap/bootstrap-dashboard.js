@@ -1,4 +1,4 @@
-import {DashboardBase} from './dashboard-base';
+import {DashboardBase} from './../dashboard-base';
 import $ from 'jquery';
 import lodash from 'lodash';
 
@@ -20,6 +20,7 @@ export class BootstrapDashboard extends DashboardBase {
     super.addWidget(widget, dimensions);
     this.layoutStructure =this.createLayoutStructure(this.layoutWidgets);
   }
+  
 
   removeWidget(widget){
     super.removeWidget(widget);

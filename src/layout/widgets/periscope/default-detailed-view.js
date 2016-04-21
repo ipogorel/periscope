@@ -1,13 +1,11 @@
 import * as _ from 'lodash';
-import {Query} from './../../data/query'
-import {WidgetContent} from './widget-content';
+import {Query} from './../../../data/query'
+import {DetailedView} from './../detailed-view';
 
-export class DetailedViewContent extends WidgetContent {
+export class DefaultDetailedView extends DetailedView {
 
-  constructor(widget) {
-    super(widget);
-    this.columns = widget.settings.columns;
-
+  constructor(settings) {
+    super(settings);
   }
 
   get data(){
@@ -17,12 +15,12 @@ export class DetailedViewContent extends WidgetContent {
     this._data = value;
   }
 
-  get fields() {
+  get viewFields() {
     var result = []
     if (!this.data)
       return result;
-    if (this.columns) {
-      result = _.map(this.columns, c=>{
+    if (this.fields) {
+      result = _.map(this.fields, c=>{
         return {
           name: c.title ? c.title : c.field,
           value: this.data[c.field]
@@ -40,19 +38,13 @@ export class DetailedViewContent extends WidgetContent {
     return result;
   }
 
-  set columns(value) {
-    this._columns = value;
-  }
-  get columns() {
-    return this._columns;
-  }
 
   refresh(){
     let q = new Query();
     q.take = 1;
     q.skip = 0;
-    q.serverSideFilter = this.widget.dataFilter;
-    this.widget.dataSource.getData(q).then(dH=>{
+    q.serverSideFilter = this.dataFilter;
+    this.dataSource.getData(q).then(dH=>{
       if (dH.data.length>0)
         this.data = dH.data[0];
     })

@@ -29,13 +29,11 @@ import {StateUrlParser} from './../state/state-url-parser';
 import {DashboardManager} from './../infrastructure/dashboard-manager';
 import {PeriscopeRouter} from './../navigator/periscope-router';
 
-import {Grid} from './../layout/widgets/grid';
-import {Chart} from './../layout/widgets/chart';
-import {JqGrid} from './../layout/widgets/jq-grid';
-import {JqChart} from './../layout/widgets/jq-chart';
-import {SearchBox} from './../layout/widgets/search-box';
-import {DetailedView} from './../layout/widgets/detailed-view';
-import {DataSourceConfigurator} from './../layout/widgets/data-source-configurator';
+import {GridJq} from './../layout/widgets/datatablesnet/grid-jq';
+import {ChartJs} from './../layout/widgets/chartjs/chart-js';
+import {DefaultSearchBox} from './../layout/widgets/periscope/default-search-box';
+import {DefaultDetailedView} from './../layout/widgets/periscope/default-detailed-view';
+import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
 
 import {DashboardConfiguration} from './dashboard-configuration';
 
@@ -120,7 +118,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //Search box
-    var searchBox = this._widgetFactory.createWidget(SearchBox, {
+    var searchBox = this._widgetFactory.createWidget(DefaultSearchBox, {
       name:"positionsSearchWidget",
       header:"Positions",
       showHeader:false,
@@ -133,7 +131,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
     //customers grid
-    var customersGrid = this._widgetFactory.createWidget(JqGrid, {
+    var customersGrid = this._widgetFactory.createWidget(GridJq, {
       name:"gridWidget",
       header:"Customers",
       showHeader:true,
@@ -177,7 +175,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = this._widgetFactory.createWidget(JqChart, {
+    var chart = this._widgetFactory.createWidget(ChartJs, {
       name:"chartWidget",
       header:"Country",
       categoriesField:"Country",
@@ -231,7 +229,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     var createWidgetBehavior = new CreateWidgetBehavior(
       'gridSelectionChannel',
-      DetailedView,
+      DefaultDetailedView,
       {
         name:"detailsWidgetCustomers",
         header:"Customer details",
@@ -337,7 +335,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     // Orders dashboard
-    var ordersGrid = this._widgetFactory.createWidget(JqGrid, {
+    var ordersGrid = this._widgetFactory.createWidget(GridJq, {
       name:"gridWidgetOrders",
       header:"Orders",
       stateStorage: this._stateStorage,
@@ -381,7 +379,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     //Search box
 
-    var searchBox = this._widgetFactory.createWidget(SearchBox, {
+    var searchBox = this._widgetFactory.createWidget(DefaultSearchBox, {
       name:"ordersSearchWidget",
       header:"Orders",
       showHeader:false,
@@ -405,7 +403,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       this._eventAggregator,
       this._widgetFactory,
       "gridWidgetOrders",
-      DetailedView,
+      DefaultDetailedView,
       {
         name:"detailsWidgetOrder",
         header:"Order Details",
@@ -435,7 +433,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //customers grid
-    var swGrid = this._widgetFactory.createWidget(JqGrid, {
+    var swGrid = this._widgetFactory.createWidget(GridJq, {
       name:"swaggerGridWidget",
       header:"Swagger Data",
       showHeader:true,
@@ -451,7 +449,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
 
-    var swgConfiguratorWidget =  this._widgetFactory.createWidget(DataSourceConfigurator, {
+    var swgConfiguratorWidget =  this._widgetFactory.createWidget(SwaggerDataSourceConfigurator, {
       name:"dsConfiguratorWidget",
       header:"Swagger Configuration",
       showHeader:true,

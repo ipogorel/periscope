@@ -11,13 +11,6 @@ export class Widget {
     this._navigationStack = [];
 
     this._backButtonPressed = new WidgetEvent();
-    this._dataSelected = new WidgetEvent();
-    this._dataActivated = new WidgetEvent();
-    this._dataFilterChanged = new WidgetEvent();
-    this._dataFieldSelected = new WidgetEvent();
-    this._dataSourceChanged = new WidgetEvent();
-
-    this.attachBehaviors(this.settings.behavior);
     this._resized = false;
   }
 
@@ -29,12 +22,6 @@ export class Widget {
     return this._settings;
   }
 
-  get content() {
-    return this.contentViewModel;
-  }
-  set content(value){
-    this.contentViewModel = value;
-  }
 
   get behaviors() {
     return this._behaviors;
@@ -151,10 +138,14 @@ export class Widget {
     this._navigationStack = value;
   }
 
-  attachBehaviors(behaviors){
-    if (behaviors) {
-      for (let b of behaviors)
-        b.attachToWidget(this);
+  attachBehavior(behavior){
+    behavior.attachToWidget(this);
+  }
+
+  attachBehaviors(){
+    if (this.settings.behavior) {
+      for (let b of this.settings.behavior)
+        this.attachBehavior(b);
     }
   }
 
@@ -169,6 +160,10 @@ export class Widget {
     }
   }
 
+  refresh(){
+
+  }
+
   resize(){
     if (!this.resized) {
       this._originalDimensions = this._dashboard.getWidgetDimensions(this);
@@ -179,15 +174,7 @@ export class Widget {
     this.resized = !this.resized;
   }
 
-  remove() {
-    if (this._dashboard != undefined)
-      this._dashboard.removeWidget(this);
-  }
 
-
-  refresh() {
-    this.content.refresh();
-  }
 
   back() {
     if (this._backButtonPressed)
@@ -212,38 +199,14 @@ export class Widget {
     this._backButtonPressed.attach(handler);
   }
 
-  get dataFieldSelected() {
-    return this._dataFieldSelected;
-  }
-  set dataFieldSelected(handler) {
-    this._dataFieldSelected.attach(handler);
-  }
 
-  get dataSelected() {
-    return this._dataSelected;
-  }
-  set dataSelected(handler) {
-    this._dataSelected.attach(handler);
-  }
-
-  get dataActivated() {
-    return this._dataActivated;
-  }
-  set dataActivated(handler) {
-    this._dataActivated.attach(handler);
-  }
-
-  get dataFilterChanged() {
-    return this._dataFilterChanged;
-  }
-  set dataFilterChanged(handler) {
-    this._dataFilterChanged.attach(handler);
-  }
-  get dataSourceChanged() {
-    return this._dataSourceChanged;
-  }
-  set dataSourceChanged(handler) {
-    this._dataSourceChanged.attach(handler);
+  _calculateHeight(contentContainerElement){
+    if (!contentContainerElement)
+      return this.settings.minHeight;
+    var p = $(contentContainerElement).parents(".widget-container")
+    var headerHeight = p.find(".portlet-header")[0].scrollHeight;
+    var parentHeight = p[0].offsetHeight - headerHeight;
+    return parentHeight > this.settings.minHeight? parentHeight : this.settings.minHeight;
   }
 }
 
