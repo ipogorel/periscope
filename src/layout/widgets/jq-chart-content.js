@@ -6,31 +6,29 @@ import * as _ from 'lodash';
 export class JqChartContent extends WidgetContent {
   constructor(widget) {
     super(widget);
+    this.chartData = {
+      labels:[],
+      datasets:[]
+    }
   }
 
-  attached(){
-
+  get chartData(){
+    return this._chartData;
   }
-
-
-  get data(){
-    return this._data;
-  }
-  set data(value){
-    this._data = value;
+  set chartData(value){
+    this._chartData = value;
   }
 
   refresh(){
     let query = new Query();
     query.serverSideFilter = this.widget.dataFilter;
     this.widget.dataSource.getData(query).then(dH=>{
-      this.data = this.mapData(dH.data,this.widget.categoriesField);
+      this.chartData = this.mapData(dH.data,this.widget.categoriesField);
     });
   }
 
   mapData(data, categoryField){
-    var lbl = [], d = [];
-
+    let lbl = [], d = [];
     _.forOwn(_.groupBy(data,categoryField), (v, k)=> {
       lbl.push(k);
       d.push(v.length);

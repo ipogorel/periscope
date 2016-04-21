@@ -473,7 +473,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     dbSwagger.addWidget(swgConfiguratorWidget,{size_x:4, size_y:"*", col:1, row:1});
     dbSwagger.addWidget(swGrid,{size_x:8, size_y:"*", col:5, row:1});
 
-    
+
 
   }
 }

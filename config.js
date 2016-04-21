@@ -74,7 +74,7 @@ System.config({
     "kendo-ui": "/local_packages/kendo/js/kendo.all.min",
     "lodash": "npm:lodash@4.6.1",
     "mike183/localDB": "github:mike183/localDB@0.2.1",
-    "moment": "npm:moment@2.12.0",
+    "moment": "npm:moment@2.13.0",
     "numeral": "npm:numeral@1.5.3",
     "pegjs": "npm:pegjs@0.9.0",
     "swagger-client": "npm:swagger-client@2.1.13",
@@ -579,9 +579,6 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"
-    },
-    "npm:moment@2.12.0": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:numeral@1.5.3": {
       "fs": "github:jspm/nodelibs-fs@0.1.2"
