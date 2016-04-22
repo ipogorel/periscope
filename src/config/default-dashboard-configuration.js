@@ -34,6 +34,7 @@ import {ChartJs} from './../layout/widgets/chartjs/chart-js';
 import {DefaultSearchBox} from './../layout/widgets/periscope/default-search-box';
 import {DefaultDetailedView} from './../layout/widgets/periscope/default-detailed-view';
 import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
+import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-dashboard';
 
 import {DashboardConfiguration} from './dashboard-configuration';
 
@@ -243,7 +244,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     );
 
 
-    var dbCustomers = this._dashboardManager.createDashboard("customers",{
+    var dbCustomers = this._dashboardManager.createDashboard(BootstrapDashboard, {
+      name: "customers",
       title:"Customers",
       route: "/customers"
     });
@@ -391,7 +393,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
 
-    var dbOrders = this._dashboardManager.createDashboard("orders",{
+    var dbOrders = this._dashboardManager.createDashboard(BootstrapDashboard,{
+      name: "orders",
       title:"Orders",
       route: "/orders"
     });
@@ -463,7 +466,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
 
-    var dbSwagger = this._dashboardManager.createDashboard("swagger-api",{
+    var dbSwagger = this._dashboardManager.createDashboard(BootstrapDashboard, "swagger-api",{
+      name: "swagger-api",
       title:"Swagger",
       route: "/swagger-api"
     });

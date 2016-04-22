@@ -1,5 +1,4 @@
 import lodash from 'lodash';
-import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-dashboard';
 
 export class DashboardManager {
   constructor(){
@@ -14,8 +13,8 @@ export class DashboardManager {
     return  _.find(this._dashboards, {name:dashboardName});
   }
   
-  createDashboard(name, dashboardConfiguration){
-    var dashboard = new BootstrapDashboard(name);
+  createDashboard(type, dashboardConfiguration){
+    var dashboard = new type();
     dashboard.configure(dashboardConfiguration);
     this._dashboards.push(dashboard);
     return dashboard;

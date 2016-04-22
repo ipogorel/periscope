@@ -4,15 +4,15 @@ import * as _ from 'lodash';
 
 export class DashboardBase
 {
-  constructor(name) {
+  constructor() {
     this._layout = [];
     this._behaviors = [];
-    this._name = name;
   }
 
   get name() {
     return this._name;
   }
+
 
   get route() {
     return this._route;
@@ -32,6 +32,7 @@ export class DashboardBase
   }
 
   configure(dashboardConfiguration){
+    this._name = dashboardConfiguration.name;
     this._title = dashboardConfiguration.title;
     this._route = dashboardConfiguration.route;
   }

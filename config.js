@@ -68,7 +68,7 @@ System.config({
     "datatables.net-select-bs": "npm:datatables.net-select-bs@1.1.2",
     "fetch": "github:github/fetch@0.11.0",
     "font-awesome": "npm:font-awesome@4.5.0",
-    "grofit/aurelia-chart": "github:grofit/aurelia-chart@0.1.0",
+    "grofit/aurelia-chart": "github:grofit/aurelia-chart@0.1.1",
     "jquery": "npm:jquery@2.2.3",
     "jquery-min": "npm:jquery@2.2.3",
     "kendo-ui": "/local_packages/kendo/js/kendo.all.min",
@@ -80,7 +80,7 @@ System.config({
     "swagger-client": "npm:swagger-client@2.1.13",
     "systemjs/plugin-css": "github:systemjs/plugin-css@0.1.20",
     "text": "github:systemjs/plugin-text@0.0.3",
-    "github:grofit/aurelia-chart@0.1.0": {
+    "github:grofit/aurelia-chart@0.1.1": {
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0-beta.1.2.0",
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-beta.1.2.0",
       "aurelia-framework": "npm:aurelia-framework@1.0.0-beta.1.2.2",
