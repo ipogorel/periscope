@@ -1,5 +1,3 @@
-import {computedFrom} from 'aurelia-framework';
-import {WidgetEvent} from './../../navigator/events/widget-event';
 import lodash from 'lodash';
 
 export class Widget {
@@ -8,10 +6,7 @@ export class Widget {
     // call method in child class
     this._settings = settings;
     this._behaviors = [];
-    this._navigationStack = [];
 
-    this._backButtonPressed = new WidgetEvent();
-    this._resized = false;
   }
 
   get self() {
@@ -73,13 +68,6 @@ export class Widget {
     return this._dataHolder;
   }
 
-  
-
-  @computedFrom('navigationStack')
-  get hasNavStack() {
-    return this.navigationStack && this.navigationStack.length > 0;
-  }
-
   get header() {
     return this.settings.header;
   }
@@ -87,12 +75,6 @@ export class Widget {
     this.settings.header = value;
   }
 
-  get resized() {
-    return this._resized;
-  }
-  set resized(value) {
-    this._resized = value;
-  }
 
   get stateStorage(){
     return this.settings.stateStorage;
@@ -130,14 +112,6 @@ export class Widget {
   }
 
 
-  get navigationStack() {
-    return this._navigationStack;
-  }
-
-  set navigationStack(value) {
-    this._navigationStack = value;
-  }
-
   attachBehavior(behavior){
     behavior.attachToWidget(this);
   }
@@ -164,22 +138,7 @@ export class Widget {
 
   }
 
-  resize(){
-    if (!this.resized) {
-      this._originalDimensions = this._dashboard.getWidgetDimensions(this);
-      this._dashboard.resizeWidget(this, {size_x: 12});
-    }
-    else
-      this._dashboard.resizeWidget(this,this._originalDimensions);
-    this.resized = !this.resized;
-  }
 
-
-
-  back() {
-    if (this._backButtonPressed)
-      this.backButtonPressed.raise(this.navigationStack);
-  }
 
 
   dispose(){
@@ -191,13 +150,6 @@ export class Widget {
     }
   }
 
-  /// EVENTS
-  get backButtonPressed() {
-    return this._backButtonPressed;
-  }
-  set backButtonPressed(handler) {
-    this._backButtonPressed.attach(handler);
-  }
 
 
   _calculateHeight(contentContainerElement){

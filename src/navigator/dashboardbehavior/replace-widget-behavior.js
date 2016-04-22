@@ -19,7 +19,6 @@ export class ReplaceWidgetBehavior extends DashboardBehavior  {
     this.subscription = this._eventAggregator.subscribe(this._chanel, message => {
       var originatorWidget = dashboard.getWidgetByName(me._widgetToReplaceName);
       var w = me._widgetFactory.createWidget(me._widgetType, me._widgetSettings);
-      w.navigationStack.push(originatorWidget);
       dashboard.replaceWidget(originatorWidget, w);
       if (me._mapper)
         w.dataFilter =  me._mapper(message);

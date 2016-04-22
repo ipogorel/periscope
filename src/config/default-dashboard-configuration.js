@@ -206,8 +206,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       minHeight: 450
     });
 
-    var changeRoureBefavior = new ChangeRouteBehavior(
-      {
+    var changeRoureBefavior = new ChangeRouteBehavior({
         chanel: "gridCommandChannel",
         newRoute: {
           title:'Orders',
@@ -237,7 +236,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         dataSource: dsCustomers,
         showHeader:true
       },
-      {size_x:3, size_y:"*", col:6, row:2},
+      {sizeX:3, sizeY:"*", col:6, row:2},
       this._eventAggregator,
       this._widgetFactory,
       message => { return ("record.Id=='" + message.selectedData["Id"].toString() + "'");}
@@ -248,9 +247,9 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       title:"Customers",
       route: "/customers"
     });
-    dbCustomers.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-    dbCustomers.addWidget(customersGrid,{size_x:6, size_y:"*", col:1, row:2});
-    dbCustomers.addWidget(chart, {size_x:"*", size_y:"*", col:7, row:2});
+    dbCustomers.addWidget(searchBox, {sizeX:12, sizeY:1, col:1, row:1});
+    dbCustomers.addWidget(customersGrid,{sizeX:6, sizeY:"*", col:1, row:2});
+    dbCustomers.addWidget(chart, {sizeX:"*", sizeY:"*", col:7, row:2});
 
     changeRoureBefavior.attach(dbCustomers);
     createWidgetBehavior.attach(dbCustomers);
@@ -396,8 +395,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       title:"Orders",
       route: "/orders"
     });
-    dbOrders.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-    dbOrders.addWidget(ordersGrid, {size_x:12, size_y:'*', col:1, row:2});
+    dbOrders.addWidget(searchBox, {sizeX:12, sizeY:1, col:1, row:1});
+    dbOrders.addWidget(ordersGrid, {sizeX:12, sizeY:'*', col:1, row:2});
     var replaceWidgetBehavior = new ReplaceWidgetBehavior(
       'order-details',
       this._eventAggregator,
@@ -468,8 +467,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       title:"Swagger",
       route: "/swagger-api"
     });
-    dbSwagger.addWidget(swgConfiguratorWidget,{size_x:4, size_y:"*", col:1, row:1});
-    dbSwagger.addWidget(swGrid,{size_x:8, size_y:"*", col:5, row:1});
+    dbSwagger.addWidget(swgConfiguratorWidget,{sizeX:4, sizeY:"*", col:1, row:1});
+    dbSwagger.addWidget(swGrid,{sizeX:8, sizeY:"*", col:5, row:1});
 
 
 

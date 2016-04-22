@@ -1,9 +1,11 @@
-import lodash from 'lodash';
+import {computedFrom} from 'aurelia-framework';
+import * as _ from 'lodash';
+
 
 export class DashboardBase
 {
   constructor(name) {
-    this._layoutWidgets = [];
+    this._layout = [];
     this._behaviors = [];
     this._name = name;
   }
@@ -21,8 +23,8 @@ export class DashboardBase
   }
 
 
-  get layoutWidgets() {
-    return this._layoutWidgets;
+  get layout() {
+    return this._layout;
   }
 
   get behaviors() {
@@ -36,29 +38,24 @@ export class DashboardBase
 
 
   getWidgetByName(widgetName) {
-    var wl = _.find(this._layoutWidgets, w=> { return w.widget.name === widgetName });
+    var wl = _.find(this._layout, w=> { return w.widget.name === widgetName });
     if (wl)
       return wl.widget;
   }
 
-  getWidgetDimensions(widget){
-    var lw = _.find(this._layoutWidgets, w=> { return w.widget === widget });
-    return {size_x: lw.size_x, size_y: lw.size_y,  col: lw.col,  row: lw.row};
-  }
-
   addWidget(widget, dimensions) {
-    this._layoutWidgets.push({
-      widget: widget,
-      size_x: dimensions.size_x,
-      size_y: dimensions.size_y,
-      col: dimensions.col,
-      row: dimensions.row
-    })
+    let lw = new LayoutWidget();
+    lw.widget = widget;
+    lw.sizeX = dimensions.sizeX;
+    lw.sizeY = dimensions.sizeY;
+    lw.col = dimensions.col;
+    lw.row = dimensions.row;
+    this._layout.push(lw);
     widget.dashboard = this;
   }
 
   removeWidget(widget) {
-    _.remove(this._layoutWidgets, w=>{
+    _.remove(this._layout, w=>{
       if (w.widget === widget) {
         widget.dispose();
         return true;
@@ -68,29 +65,48 @@ export class DashboardBase
   }
 
   replaceWidget(oldWidget, newWidget) {
-    var lw = _.find(this._layoutWidgets, w=> {return w.widget === oldWidget});
-    if (lw){
+    let oldLw = _.find(this._layout, w=> {return w.widget === oldWidget});
+    if (oldLw){
       newWidget.dashboard = this;
-      var newLayoutWidget = {
-        widget: newWidget,
-        size_x: lw.size_x,
-        size_y: lw.size_y,
-        col: lw.col,
-        row: lw.row
-      }
+      let newLw = new LayoutWidget();
+      newLw.widget = newWidget;
+      newLw.sizeX = oldLw.sizeX;
+      newLw.sizeY = oldLw.sizeY;
+      newLw.col = oldLw.col;
+      newLw.row = oldLw.row;
       //oldWidget.dispose();
-      this._layoutWidgets.splice(_.indexOf(this._layoutWidgets,lw), 1, newLayoutWidget);
+
+      newLw.navigationStack.push(oldWidget);
+      this._layout.splice(_.indexOf(this._layout,oldLw), 1, newLw);
     }
   }
 
-  resizeWidget(widget, dimensions){
-    var lw = _.find(this._layoutWidgets, w=> {return w.widget === widget});
-    if (!lw)
-      return;
-    _.forOwn(dimensions, (v,k)=>{
-      lw[k] = v;
-    });
+  restoreWidget(currentWidget){
+    let lw = _.find(this._layout, w=> {return w.widget === currentWidget});
+    let previousWidget = lw.navigationStack.pop();
+    if (previousWidget){
+      let previousLw = new LayoutWidget();
+      previousLw.widget = previousWidget;
+      previousLw.sizeX = lw.sizeX;
+      previousLw.sizeY = lw.sizeY;
+      previousLw.col = lw.col;
+      previousLw.row = lw.row;
+      this._layout.splice(_.indexOf(this._layout,lw), 1, previousLw);
+    }
   }
+
+
+  resizeWidget(widget, newSize){
+    var lw = _.find(this._layout, w=> {return w.widget === widget});
+    if (newSize) {
+      let x = newSize.sizeX?newSize.sizeX:lw.sizeX;
+      let y = newSize.sizeY?newSize.sizeY:lw.sizeY;
+      lw.resize(x, y);
+    }
+    else
+      lw.rollbackResize()
+  }
+
 
   refreshWidget(widget){
     widget.refresh();
@@ -99,16 +115,16 @@ export class DashboardBase
 
 
   refresh() {
-    for (let i=0; i<this._layoutWidgets.length; i++) {
-      this.refreshWidget(this._layoutWidgets[i].widget);
+    for (let i=0; i<this._layout.length; i++) {
+      this.refreshWidget(this._layout[i].widget);
     }
   }
 
   dispose(){
-    for (let i=0; i<this._layoutWidgets.length; i++) {
-      this._layoutWidgets[i].widget.dispose();
+    for (let i=0; i<this._layout.length; i++) {
+      this._layout[i].widget.dispose();
     }
-    this._layoutWidgets = [];
+    this._layout = [];
 
     while(true) {
       if (this._behaviors.length>0)
@@ -117,4 +133,80 @@ export class DashboardBase
         break;
     }
   }
+}
+
+export class LayoutWidget{
+  constructor(){
+    this.navigationStack = [];
+    this.resized = false;
+  }
+  get widget(){
+    return this._widget;
+  }
+  set widget(value){
+    this._widget = value;
+  }
+
+  get navigationStack(){
+    return this._navigationStack;
+  }
+  set navigationStack(value){
+    this._navigationStack = value;
+  }
+
+  get sizeX(){
+    return this._sizeX;
+  }
+  set sizeX(value){
+    this._sizeX = value;
+  }
+
+  get sizeY(){
+    return this._sizeY;
+  }
+  set sizeY(value){
+    this._sizeY = value;
+  }
+
+  get col(){
+    return this._col;
+  }
+  set col(value){
+    this._col = value;
+  }
+
+  get row(){
+    return this._row;
+  }
+  set row(value){
+    this._row = value;
+  }
+
+  get resized() {
+    return this._resized;
+  }
+  set resized(value) {
+    this._resized = value;
+  }
+
+  @computedFrom('navigationStack')
+  get hasNavStack() {
+    return this.navigationStack && this.navigationStack.length > 0;
+  }
+
+  resize(newSizeX, newSizeY){
+    this._originalDimensions = {sizeX:this.sizeX, sizeY:this.sizeY};
+    this.sizeX = newSizeX;
+    this.sizeY = newSizeY;
+    this.resized = true;
+  }
+
+  rollbackResize(){
+    if (this._originalDimensions){
+      this.sizeX = this._originalDimensions.sizeX;
+      this.sizeY = this._originalDimensions.sizeY;
+    }
+    this.resized = false;
+  }
+
 }
