@@ -23,7 +23,6 @@ import {JsonDataService} from './../data/service/json-data-service';
 import {Datasource} from './../data/data-source';
 import {StaticSchemaProvider} from './../data/schema/providers/static-schema-provider';
 
-import {WidgetFactory} from './../infrastructure/widget-factory';
 import {UserStateStorage} from './../state/user-state-storage';
 import {StateUrlParser} from './../state/state-url-parser';
 import {DashboardManager} from './../infrastructure/dashboard-manager';
@@ -38,15 +37,14 @@ import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-das
 
 import {DashboardConfiguration} from './dashboard-configuration';
 
-@inject(EventAggregator, WidgetFactory, UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
+@inject(EventAggregator,  UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
 export class DefaultDashboardConfiguration extends DashboardConfiguration  {
-  constructor(eventAggregator, widgetFactory, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
+  constructor(eventAggregator, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
     super();
     this._eventAggregator = eventAggregator;
     this._periscopeRouter = periscopeRouter;
     this._dashboardManager = dashboardManager;
     this._stateStorage = userStateStorage;
-    this._widgetFactory = widgetFactory;
     this._dataServiceFactory = dataServiceFactory;
     this._swaggerServiceFactory = swaggerServiceFactory;
     this._cacheManager = cacheManagerFactory(new MemoryCacheStorage());
@@ -119,7 +117,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //Search box
-    var searchBox = this._widgetFactory.createWidget(DefaultSearchBox, {
+    var searchBox = new DefaultSearchBox({
       name:"positionsSearchWidget",
       header:"Positions",
       showHeader:false,
@@ -132,7 +130,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
     //customers grid
-    var customersGrid = this._widgetFactory.createWidget(GridJq, {
+    var customersGrid = new GridJq({
       name:"gridWidget",
       header:"Customers",
       showHeader:true,
@@ -176,7 +174,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = this._widgetFactory.createWidget(ChartJs, {
+    var chart = new ChartJs({
       name:"chartWidget",
       header:"Country",
       categoriesField:"Country",
@@ -239,7 +237,6 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       },
       {sizeX:3, sizeY:"*", col:6, row:2},
       this._eventAggregator,
-      this._widgetFactory,
       message => { return ("record.Id=='" + message.selectedData["Id"].toString() + "'");}
     );
 
@@ -336,7 +333,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     // Orders dashboard
-    var ordersGrid = this._widgetFactory.createWidget(GridJq, {
+    var ordersGrid = new GridJq({
       name:"gridWidgetOrders",
       header:"Orders",
       stateStorage: this._stateStorage,
@@ -380,7 +377,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     //Search box
 
-    var searchBox = this._widgetFactory.createWidget(DefaultSearchBox, {
+    var searchBox = new DefaultSearchBox({
       name:"ordersSearchWidget",
       header:"Orders",
       showHeader:false,
@@ -403,7 +400,6 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     var replaceWidgetBehavior = new ReplaceWidgetBehavior(
       'order-details',
       this._eventAggregator,
-      this._widgetFactory,
       "gridWidgetOrders",
       DefaultDetailedView,
       {
@@ -435,7 +431,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //customers grid
-    var swGrid = this._widgetFactory.createWidget(GridJq, {
+    var swGrid = new GridJq({
       name:"swaggerGridWidget",
       header:"Swagger Data",
       showHeader:true,
@@ -451,7 +447,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
 
-    var swgConfiguratorWidget =  this._widgetFactory.createWidget(SwaggerDataSourceConfigurator, {
+    var swgConfiguratorWidget =  new SwaggerDataSourceConfigurator({
       name:"dsConfiguratorWidget",
       header:"Swagger Configuration",
       showHeader:true,
