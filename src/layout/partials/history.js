@@ -1,15 +1,14 @@
 import {inject, bindable, computedFrom} from 'aurelia-framework';
 import {PeriscopeRouter} from './../../navigator/periscope-router';
 import {NavigationHistory} from './../../navigator/navigation-history';
-import {StateViewFactory} from './../../infrastructure/state-view-factory';
+import {SearchExpressionStateView} from './../state/search-expression-state-view'
 
-@inject(PeriscopeRouter, NavigationHistory, StateViewFactory)
+@inject(PeriscopeRouter, NavigationHistory)
 export class History {
 
-  constructor(router, navigationHistory, stateViewFactory){
+  constructor(router, navigationHistory){
     this._router = router;
     this._navigationHistory = navigationHistory;
-    this._stateViewFactory = stateViewFactory;
 
   }
 
@@ -48,7 +47,12 @@ export class History {
 
   getStateView(stateItem){
     if (stateItem.value)
-      return this._stateViewFactory.createStateView(stateItem.value.stateType, stateItem.value.stateObject);
+      switch (stateItem.value.stateType){
+        case "searchBoxState":
+          return new SearchExpressionStateView(stateItem.value.stateObject);
+        default :
+          return null;
+      }
   }
 
 }

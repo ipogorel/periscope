@@ -1,4 +1,4 @@
-import {customElement, bindable, bindingMode, inject} from 'aurelia-framework';
+import {bindable, bindingMode} from 'aurelia-framework';
 import $ from 'jquery';
 
 export class List {
