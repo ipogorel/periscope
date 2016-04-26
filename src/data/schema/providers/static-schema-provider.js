@@ -1,4 +1,5 @@
-import {SchemaProvider} from "./schema-provider"
+import {SchemaProvider} from './schema-provider';
+
 export class StaticSchemaProvider extends SchemaProvider{
   constructor(schema){
     super();

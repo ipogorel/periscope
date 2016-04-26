@@ -1,5 +1,3 @@
-import {Container} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
 import {DashboardBehavior} from './dashboard-behavior';
 
 export class CreateWidgetBehavior extends DashboardBehavior {

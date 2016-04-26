@@ -1,7 +1,7 @@
 import {Storage} from './storage';
 import {AppConfig} from './../app-config';
 import {inject} from 'aurelia-framework';
-import lodash from 'lodash';
+import * as _ from 'lodash';
 
 @inject(Storage, AppConfig)
 export class UserStateStorage{

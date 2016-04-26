@@ -75,7 +75,6 @@ export class DashboardBase
       newLw.sizeY = oldLw.sizeY;
       newLw.col = oldLw.col;
       newLw.row = oldLw.row;
-      //oldWidget.dispose();
 
       newLw.navigationStack.push(oldWidget);
       this._layout.splice(_.indexOf(this._layout,oldLw), 1, newLw);

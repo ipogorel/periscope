@@ -1,7 +1,6 @@
-import lodash from 'lodash';
+import * as _ from 'lodash';
 
 export class DataHelper {
-
 
   static getNumericFields(fields){
     return _.filter(fields, f => {

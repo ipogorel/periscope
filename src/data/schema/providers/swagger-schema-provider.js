@@ -1,6 +1,6 @@
-import {SchemaProvider} from "./schema-provider"
-import Swagger from "swagger-client"
-import {Schema} from "../schema"
+import {SchemaProvider} from './schema-provider';
+import Swagger from "swagger-client";
+import {Schema} from './../schema-object';
 import * as _ from 'lodash';
 
 export class SwaggerSchemaProvider extends SchemaProvider{

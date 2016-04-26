@@ -1,7 +1,5 @@
-import {DataService} from './service/data-service'
 import * as _ from 'lodash';
-import {DataHolder} from './data-holder'
-import {DataHelper} from '../helpers/data-helper'
+import {DataHolder} from './data-holder';
 
 export class Datasource {
     

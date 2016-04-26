@@ -1,4 +1,4 @@
-import lodash from 'lodash';
+import * as _ from 'lodash';
 
 export class DashboardManager {
   constructor(){

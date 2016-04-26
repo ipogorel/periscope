@@ -1,4 +1,4 @@
-﻿import {StringHelper} from '../helpers/string-helper'
+﻿import {StringHelper} from '../helpers/string-helper';
 
 export class Query {
 

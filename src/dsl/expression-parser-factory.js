@@ -1,7 +1,8 @@
+import {Grammar} from './grammar';
 import {inject} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
-import {ExpressionParser} from '../dsl/expression-parser';
-import peg from 'pegjs';
+import {ExpressionParser} from './../dsl/expression-parser';
+import * as peg from 'pegjs';
 
 @inject(HttpClient)
 export class ExpressionParserFactory {
@@ -15,15 +16,11 @@ export class ExpressionParserFactory {
 
   createInstance(numericFieldList, stringFieldList, dateFieldList) {
     var that = this;
-    return this.http
-      .fetch('/parser_data/peg.js.grammar.txt')
-      .then(response => response.text())
-      .then(text=>{
-        var parserText = text.replace('@S@', that.concatenateFieldList(stringFieldList))
-          .replace('@N@', that.concatenateFieldList(numericFieldList))
-          .replace('@D@', that.concatenateFieldList(dateFieldList));
-        return new ExpressionParser(peg.buildParser(parserText));
-      });
+    var text = new Grammar().getGrammar();
+    var parserText = text.replace('@S@', that.concatenateFieldList(stringFieldList))
+      .replace('@N@', that.concatenateFieldList(numericFieldList))
+      .replace('@D@', that.concatenateFieldList(dateFieldList));
+    return new ExpressionParser(peg.buildParser(parserText));
   }
 
   concatenateFieldList(fieldList){

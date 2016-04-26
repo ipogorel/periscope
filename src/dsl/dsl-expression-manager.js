@@ -1,7 +1,6 @@
-import {DataHelper} from '../helpers/data-helper';
-import {Query} from '../data/query';
-import {StringHelper} from '../helpers/string-helper';
-import lodash from 'lodash';
+import {Query} from './../data/query';
+import {StringHelper} from './../helpers/string-helper';
+import * as _ from 'lodash';
 
 export class DslExpressionManager {
 

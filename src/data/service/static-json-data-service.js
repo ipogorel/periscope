@@ -1,10 +1,9 @@
 import {DataService} from './data-service';
-import {DataHelper} from '../../helpers/data-helper'
-import {Query} from '../query';
+import {DataHelper} from './../../helpers/data-helper';
 import {inject, transient} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
-import {QueryExpressionEvaluator} from './../query-expression-evaluator'
-import lodash from 'lodash';
+import {QueryExpressionEvaluator} from './../query-expression-evaluator';
+import * as _ from 'lodash';
 
 @transient()
 @inject(HttpClient)

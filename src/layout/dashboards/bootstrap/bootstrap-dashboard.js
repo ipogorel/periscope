@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import $ from 'jquery';
 
 
-
 export class BootstrapDashboard extends DashboardBase {
   constructor(name) {
     super(name);
@@ -11,11 +10,11 @@ export class BootstrapDashboard extends DashboardBase {
     this.layoutStructure = [];
   }
 
-
   replaceWidget(oldWidget, newWidget, callback){
     super.replaceWidget(oldWidget, newWidget, callback);
     this.layoutStructure = this.createLayoutStructure(this.layout);
   }
+
   restoreWidget(currentWidget){
     super.restoreWidget(currentWidget);
     this.layoutStructure = this.createLayoutStructure(this.layout);
@@ -25,7 +24,6 @@ export class BootstrapDashboard extends DashboardBase {
     super.addWidget(widget, dimensions);
     this.layoutStructure =this.createLayoutStructure(this.layout);
   }
-  
 
   removeWidget(widget){
     super.removeWidget(widget);
