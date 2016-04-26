@@ -1,6 +1,3 @@
-/**
- * Created by User on 8/19/2015.
- */
 String.prototype.in = function(array)
 {
   for (var i = 0; i < array.length; i++)

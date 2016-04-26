@@ -1,12 +1,12 @@
-import {Query} from './../../data/query'
-import {WidgetContent} from './widget-content';
+import {Query} from './../../../data/query'
+import {Chart} from './../chart';
 import * as _ from 'lodash';
 import $ from 'jquery';
 import kendo from 'kendo-ui';
 
-export class ChartContent extends WidgetContent {
-  constructor(widget) {
-    super(widget);
+export class ChartKendo extends Chart {
+  constructor(settings) {
+    super(settings);
 
     var self = this;
     this._chartDataSource = new kendo.data.DataSource({
@@ -14,10 +14,9 @@ export class ChartContent extends WidgetContent {
       transport: {
         read: options=> {
           let query = new Query();
-          query.serverSideFilter = self.widget.dataFilter;
-          self.widget.dataSource.getData(query).then(dH=>{
-            var a = 1;
-            options.success(self.mapData(dH.data, self.settings.categoriesField));
+          query.serverSideFilter = self.dataFilter;
+          self.dataSource.getData(query).then(dH=>{
+            options.success(self.mapData(dH.data, self.categoriesField));
           });
         }
       },
@@ -28,6 +27,7 @@ export class ChartContent extends WidgetContent {
   }
 
   refresh(){
+    super.refresh();
     this._chartDataSource.read();
   }
 
@@ -41,7 +41,7 @@ export class ChartContent extends WidgetContent {
       chartArea: {
         height: this._calculateHeight(this.chartElement)
       },
-      seriesDefaults: this.settings.seriesDefaults,
+      seriesDefaults: this.seriesDefaults,
       series: [{
         field: "value"
       }],
@@ -74,8 +74,7 @@ export class ChartContent extends WidgetContent {
         value: v.length
       });
     });
-     return result;
-      }
-
+    return result;
+  }
 
 }

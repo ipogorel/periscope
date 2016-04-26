@@ -1,0 +1,40 @@
+<template>
+    <div class="row" repeat.for="r of layoutStructure">
+      <template repeat.for="w of r.widgets">
+        <div css="${$parent.$parent.getColHeight(w)}" class="${$parent.$parent.getColWidth(w)} widget-container">
+          <!-- widget -->
+          <div class="portlet portlet-default">
+            <div class="portlet-header" show.bind="w.widget.showHeader">
+              <header>
+                <h4 class="portlet-title">
+                  <button type="button" show.bind="w.hasNavStack" class="btn btn-link" click.trigger="restoreWidget(w.widget)"><i class="fa fa-chevron-left"></i></button>
+                  ${w.widget.header}
+                  <a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><button type="button" class="btn btn-link" click.trigger="refreshWidget(w.widget)"><i class="fa fa-refresh"></i> Refresh</button></li>
+                    <li><button type="button" class="btn btn-link" click.trigger="removeWidget(w.widget)"><i class="fa fa-remove"></i> Delete</button></li>
+                    <li><button type="button" class="btn btn-link" click.trigger="resizeWidget(w.widget, {sizeX: 12})" show.bind="!w.resized"><i class="fa fa-arrows-h"></i> Maximize</button></li>
+                    <li><button type="button" class="btn btn-link" click.trigger="resizeWidget(w.widget)" show.bind="w.resized"><i class="fa fa-undo"></i> Undo Maximize</button></li>
+                  </ul>
+                </h4>
+              </header>
+            </div>
+            <div class="portlet-body">
+              <compose  view-model.bind='w.widget'></compose>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div id="basicModal" class="modal fade" ref='popWidgetHost'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" click.trigger="hide()">&times;</button>
+          </div>
+          <div class="modal-body widgets-panel-modal">
+          </div>
+        </div>
+      </div>
+    </div>
+</template>

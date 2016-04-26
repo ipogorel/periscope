@@ -1,14 +1,14 @@
 import {computedFrom} from 'aurelia-framework';
-import {Datasource} from './../../data/data-source';
-import {SwaggerSchemaProvider} from './../../data/schema/providers/swagger-schema-provider'
-import {WidgetContent} from './widget-content';
+import {Datasource} from './../../../data/data-source';
+import {SwaggerSchemaProvider} from './../../../data/schema/providers/swagger-schema-provider'
+import {DataSourceConfigurator} from './../data-source-configurator';
 import Swagger from "swagger-client"
 import * as _ from 'lodash';
 
-export class DataSourceConfiguratorContent extends WidgetContent {
-  constructor(widget){
-    super(widget);
-    this.definitionUrl = widget.settings.definitionsUrl.trim();
+export class SwaggerDataSourceConfigurator extends DataSourceConfigurator {
+  constructor(settings){
+    super(settings);
+    this.definitionUrl = settings.definitionsUrl.trim();
     this._initSwaggerClient(this.definitionUrl);
   }
 
@@ -74,9 +74,9 @@ export class DataSourceConfiguratorContent extends WidgetContent {
 
 
   submit(){
-    if (!this.widget.settings.dataSourceToConfigurate)
+    if (!this.dataSourceToConfigurate)
       throw "dataSourceToConfigurate is not provided";
-    let ds = this.widget.settings.dataSourceToConfigurate;
+    let ds = this.dataSourceToConfigurate;
     let url = this.client.scheme + "://" + this.client.host + this.client.basePath + this.client.apis[this.api].apis[this.method].path;
 
     let queryParams = _.map(_.filter(this.parameters, x=>{ return (x.value && x.in == "query")} ), p=>{
@@ -109,7 +109,7 @@ export class DataSourceConfiguratorContent extends WidgetContent {
         url: url,
         schemaProvider: new SwaggerSchemaProvider(this.definitionUrl, this.api, this.method, definitionModelName)
     });
-    this.widget.dataSourceChanged.raise(ds);
+    this.dataSourceChanged.raise(ds);
   }
 
   _initSwaggerClient(url){

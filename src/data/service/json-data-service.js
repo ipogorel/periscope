@@ -1,6 +1,4 @@
 ﻿import {DataService} from './data-service';
-import {DataHelper} from '../../helpers/data-helper'
-import {Query} from '../query';
 import {inject, transient} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
 

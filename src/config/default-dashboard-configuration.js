@@ -23,34 +23,34 @@ import {JsonDataService} from './../data/service/json-data-service';
 import {Datasource} from './../data/data-source';
 import {StaticSchemaProvider} from './../data/schema/providers/static-schema-provider';
 
-import {WidgetFactory} from './../infrastructure/widget-factory';
 import {UserStateStorage} from './../state/user-state-storage';
 import {StateUrlParser} from './../state/state-url-parser';
 import {DashboardManager} from './../infrastructure/dashboard-manager';
 import {PeriscopeRouter} from './../navigator/periscope-router';
 
-import {Grid} from './../layout/widgets/grid';
-import {Chart} from './../layout/widgets/chart';
-import {SearchBox} from './../layout/widgets/search-box';
-import {DetailedView} from './../layout/widgets/detailed-view';
-import {DataSourceConfigurator} from './../layout/widgets/data-source-configurator';
+import {GridJq} from './../layout/widgets/datatablesnet/grid-jq';
+import {ChartJs} from './../layout/widgets/chartjs/chart-js';
+import {ChartKendo} from './../layout/widgets/kendo/chart-kendo';
+import {DefaultSearchBox} from './../layout/widgets/periscope/default-search-box';
+import {DefaultDetailedView} from './../layout/widgets/periscope/default-detailed-view';
+import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
+import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-dashboard';
 
 import {DashboardConfiguration} from './dashboard-configuration';
 
-@inject(EventAggregator, WidgetFactory, UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
+@inject(EventAggregator,  UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
 export class DefaultDashboardConfiguration extends DashboardConfiguration  {
-  constructor(eventAggregator, widgetFactory, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
+  constructor(eventAggregator, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
     super();
     this._eventAggregator = eventAggregator;
     this._periscopeRouter = periscopeRouter;
     this._dashboardManager = dashboardManager;
     this._stateStorage = userStateStorage;
-    this._widgetFactory = widgetFactory;
     this._dataServiceFactory = dataServiceFactory;
     this._swaggerServiceFactory = swaggerServiceFactory;
     this._cacheManager = cacheManagerFactory(new MemoryCacheStorage());
   }
-
+  
   invoke(){
     var customersDataService = this._dataServiceFactory()
     customersDataService.configure({
@@ -118,7 +118,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //Search box
-    var searchBox = this._widgetFactory.createWidget(SearchBox, {
+    var searchBox = new DefaultSearchBox({
       name:"positionsSearchWidget",
       header:"Positions",
       showHeader:false,
@@ -131,12 +131,12 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
     //customers grid
-    var customersGrid = this._widgetFactory.createWidget(Grid, {
+    var customersGrid = new GridJq({
       name:"gridWidget",
       header:"Customers",
       showHeader:true,
       minHeight: 450,
-      pageSize: 40,
+      pageSize: 25,
       stateStorage: this._stateStorage,
       navigatable: true,
       behavior:[
@@ -175,9 +175,10 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = this._widgetFactory.createWidget(Chart, {
+    var chart = new ChartKendo({
       name:"chartWidget",
       header:"Country",
+      categoriesField:"Country",
       dataSource: dsCustomers,
       showHeader:true,
       dataFilter:"",
@@ -205,8 +206,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       minHeight: 450
     });
 
-    var changeRoureBefavior = new ChangeRouteBehavior(
-      {
+    var changeRoureBefavior = new ChangeRouteBehavior({
         chanel: "gridCommandChannel",
         newRoute: {
           title:'Orders',
@@ -217,7 +217,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
           key: "orders:ordersSearchWidget",
           value: {
             stateType: "searchBoxState",
-            stateObject: "CustomerId = '" + filterEvent.activatedData.get("Id").toString() + "'"
+            stateObject: "CustomerId = '" + filterEvent.activatedData["Id"].toString() + "'"
           }
         }])
         },
@@ -228,7 +228,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     var createWidgetBehavior = new CreateWidgetBehavior(
       'gridSelectionChannel',
-      DetailedView,
+      DefaultDetailedView,
       {
         name:"detailsWidgetCustomers",
         header:"Customer details",
@@ -236,20 +236,20 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         dataSource: dsCustomers,
         showHeader:true
       },
-      {size_x:3, size_y:"*", col:6, row:2},
+      {sizeX:3, sizeY:"*", col:6, row:2},
       this._eventAggregator,
-      this._widgetFactory,
-      message => { return ("record.Id=='" + message.selectedData.get("Id").toString() + "'");}
+      message => { return ("record.Id=='" + message.selectedData["Id"].toString() + "'");}
     );
 
 
-    var dbCustomers = this._dashboardManager.createDashboard("customers",{
+    var dbCustomers = this._dashboardManager.createDashboard(BootstrapDashboard, {
+      name: "customers",
       title:"Customers",
       route: "/customers"
     });
-    dbCustomers.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-    dbCustomers.addWidget(customersGrid,{size_x:6, size_y:"*", col:1, row:2});
-    dbCustomers.addWidget(chart, {size_x:"*", size_y:"*", col:7, row:2});
+    dbCustomers.addWidget(searchBox, {sizeX:12, sizeY:1, col:1, row:1});
+    dbCustomers.addWidget(customersGrid,{sizeX:6, sizeY:"*", col:1, row:2});
+    dbCustomers.addWidget(chart, {sizeX:"*", sizeY:"*", col:7, row:2});
 
     changeRoureBefavior.attach(dbCustomers);
     createWidgetBehavior.attach(dbCustomers);
@@ -334,12 +334,12 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     // Orders dashboard
-    var ordersGrid = this._widgetFactory.createWidget(Grid, {
+    var ordersGrid = new GridJq({
       name:"gridWidgetOrders",
       header:"Orders",
       stateStorage: this._stateStorage,
       minHeight: 450,
-      pageSize: 40,
+      pageSize: 25,
       behavior:[
         new DataFilterHandleBehavior("ordersSearchChannel",this._eventAggregator),
         new DataActivatedBehavior("order-details",this._eventAggregator)
@@ -359,7 +359,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         {
           field: "OrderDate",
           title: "Order Date",
-          format: "{0: MMM.dd yyyy}"
+          format: "MMM DD YYYY"
         }
         ,
         {
@@ -378,7 +378,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     //Search box
 
-    var searchBox = this._widgetFactory.createWidget(SearchBox, {
+    var searchBox = new DefaultSearchBox({
       name:"ordersSearchWidget",
       header:"Orders",
       showHeader:false,
@@ -391,18 +391,18 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
 
-    var dbOrders = this._dashboardManager.createDashboard("orders",{
+    var dbOrders = this._dashboardManager.createDashboard(BootstrapDashboard,{
+      name: "orders",
       title:"Orders",
       route: "/orders"
     });
-    dbOrders.addWidget(searchBox, {size_x:12, size_y:1, col:1, row:1});
-    dbOrders.addWidget(ordersGrid, {size_x:12, size_y:'*', col:1, row:2});
+    dbOrders.addWidget(searchBox, {sizeX:12, sizeY:1, col:1, row:1});
+    dbOrders.addWidget(ordersGrid, {sizeX:12, sizeY:'*', col:1, row:2});
     var replaceWidgetBehavior = new ReplaceWidgetBehavior(
       'order-details',
       this._eventAggregator,
-      this._widgetFactory,
       "gridWidgetOrders",
-      DetailedView,
+      DefaultDetailedView,
       {
         name:"detailsWidgetOrder",
         header:"Order Details",
@@ -410,7 +410,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         dataSource: dsOrders,
         showHeader:true
       },
-      message => { return ("record.Id=='" + message.activatedData.get("Id").toString() + "'"); }
+      message => { return ("record.Id=='" + message.activatedData["Id"].toString() + "'"); }
     );
     var manageNavigationStackBehavior = new ManageNavigationStackBehavior(this._eventAggregator);
     replaceWidgetBehavior.attach(dbOrders);
@@ -432,7 +432,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
     //customers grid
-    var swGrid = this._widgetFactory.createWidget(Grid, {
+    var swGrid = new GridJq({
       name:"swaggerGridWidget",
       header:"Swagger Data",
       showHeader:true,
@@ -448,7 +448,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     });
 
 
-    var swgConfiguratorWidget =  this._widgetFactory.createWidget(DataSourceConfigurator, {
+    var swgConfiguratorWidget =  new SwaggerDataSourceConfigurator({
       name:"dsConfiguratorWidget",
       header:"Swagger Configuration",
       showHeader:true,
@@ -463,11 +463,15 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
 
 
-    var dbSwagger = this._dashboardManager.createDashboard("swagger-api",{
+    var dbSwagger = this._dashboardManager.createDashboard(BootstrapDashboard, "swagger-api",{
+      name: "swagger-api",
       title:"Swagger",
       route: "/swagger-api"
     });
-    dbSwagger.addWidget(swgConfiguratorWidget,{size_x:4, size_y:"*", col:1, row:1});
-    dbSwagger.addWidget(swGrid,{size_x:8, size_y:"*", col:5, row:1});
+    dbSwagger.addWidget(swgConfiguratorWidget,{sizeX:4, sizeY:"*", col:1, row:1});
+    dbSwagger.addWidget(swGrid,{sizeX:8, sizeY:"*", col:5, row:1});
+
+
+
   }
 }

@@ -1,36 +1,32 @@
-import {WidgetContent} from './widget-content';
-import {Query} from './../../data/query'
+import {Grid} from './../grid';
+import {Query} from './../../../data/query'
 import $ from 'jquery';
 import * as _ from 'lodash';
 import kendo from 'kendo-ui';
 
-export class GridContent extends WidgetContent {
-  constructor(widget) {
-    super(widget);
-    this.columns = this.settings.columns? this.settings.columns : [];
-    this.navigatable = this.settings.navigatable;
-    this.autoGenerateColumns = this.settings.autoGenerateColumns;
-    
+
+export class GridKendo extends Grid {
+  constructor() {
+    super();
+
     var self = this;
     this._gridDataSource = new kendo.data.DataSource({
       type: "json",
-      pageSize: self.widget.settings.pageSize ? self.widget.settings.pageSize : 20,
+      pageSize: self.pageSize ? self.pageSize : 20,
       serverPaging: true,
       serverSorting: true,
-      group: self.widget.settings.group,
+      group: self.group,
       transport: {
         read: options=> {
-          if (self.widget.dataSource){
+          if (self.dataSource){
             var query = new Query();
             query.sort = options.data.sort;
             query.take = options.data.take;
             query.skip = options.data.skip;
-            query.serverSideFilter = self.widget.dataFilter;
-            self.widget.dataSource.getData(query).then(dH=>{
-              this.data = dH.data;
+            query.serverSideFilter = self.dataFilter;
+            self.dataSource.getData(query).then(dH=>{
               options.success(dH);
             }, error => {
-              this.data = [];
               options.success({total:0,data:[]});
             });
           }
@@ -61,33 +57,9 @@ export class GridContent extends WidgetContent {
     this._selectedRow = value;
   }
 
-  set columns(value){
-    this._columns = value;
-  }
-  get columns(){
-    return this._columns;
-  }
-
-  get autoGenerateColumns(){
-    return this._autoGenerateColumns;
-  }
-  set autoGenerateColumns(value){
-    this._autoGenerateColumns = value;
-  }
-
-
-  get data(){
-    return this._data;
-  }
-  set data(value){
-    this._data = value;
-  }
-
-  get kendoGrid(){
-
-  }
-
   refresh(){
+    super.refresh();
+    
     this.destroyGrid();
     if (this.autoGenerateColumns)
       this.columns = [];
@@ -130,8 +102,8 @@ export class GridContent extends WidgetContent {
         }
       },
       /*filterable: {
-        mode: "row"
-      },*/
+       mode: "row"
+       },*/
       navigatable: true, //this.navigatable,
       navigate: e => {
         // select the entire row
@@ -186,33 +158,9 @@ export class GridContent extends WidgetContent {
 
   }
 
-  /*resreshColumns(columnsSet){
-    if ($(this.gridElement).data("kendoGrid")) {
-      for (let fld of columnsSet) {
-        var c = _.find(this.columns, {'field': fld.field});
-        if (!c)
-          self.columns.push({field: fld.field, hidden: true});
-        else if ((!c.hidden) && (!c.format))
-          c.format = this.getColumnFormat(c.field, fld.type);
-      }
-      $(this.gridElement).data("kendoGrid").setOptions({
-        columns: this.columns
-      });
-    }
-  }*/
-
-
-  saveState(){
-    this.widget.state = {columns:this.columns};
-  }
-
-  restoreState(){
-    if (this.widget.state)
-      this.columns = this.widget.state.columns;
-  }
 
   onColumnSelected(colName){
-    this.widget.dataFieldSelected.raise(colName);
+    this.dataFieldSelected.raise(colName);
   }
 
   onActivated(dataItem){
@@ -220,7 +168,7 @@ export class GridContent extends WidgetContent {
     _.forOwn(dataItem, (v, k)=>{
       currentRecord.set(k,v);
     })
-    this.widget.dataActivated.raise(currentRecord);
+    this.dataActivated.raise(currentRecord);
   }
 
   onSelected(dataItem){ // assuming single row select for now
@@ -228,7 +176,7 @@ export class GridContent extends WidgetContent {
     _.forOwn(dataItem, (v, k)=>{
       currentRecord.set(k,v);
     })
-    this.widget.dataSelected.raise(currentRecord);
+    this.dataSelected.raise(currentRecord);
   }
 
 
@@ -275,3 +223,4 @@ export class GridContent extends WidgetContent {
   }
   /// End columns chooser
 }
+

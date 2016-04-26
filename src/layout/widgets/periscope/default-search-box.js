@@ -1,16 +1,14 @@
 import {Container, Decorators, bindable} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
 import $ from 'jquery';
-import {bootstrap} from 'bootstrap'
-import {WidgetContent} from './widget-content';
-import {DslExpressionManagerFactory} from './../../dsl/dsl-expression-manager-factory';
-import {StringHelper} from './../../helpers/string-helper';
+import {SearchBox} from './../search-box';
+import {DslExpressionManagerFactory} from './../../../dsl/dsl-expression-manager-factory';
+import {StringHelper} from './../../../helpers/string-helper';
 
 
-export class DslSearchBoxContent extends WidgetContent {
-
-  constructor(widget){
-    super(widget);
+export class DefaultSearchBox extends SearchBox {
+  constructor(settings){
+    super(settings);
+    
     var container = new Container();
     this._expressionManagerFactory = container.get(DslExpressionManagerFactory);
 
@@ -68,12 +66,13 @@ export class DslSearchBoxContent extends WidgetContent {
   }
 
   refresh(){
+      super.refresh();
       var self = this;
-      this._expressionManagerFactory.createInstance(this.widget.dataSource).then(
+      this._expressionManagerFactory.createInstance(this.dataSource).then(
         x=> {
           self.expressionManager = x;
-          if (self.widget.state){
-            self.searchString = self.widget.state;
+          if (self.state){
+            self.searchString = self.state;
             self.suggestionsListSettings.displaySuggestions = false;
           }
         });
@@ -227,7 +226,7 @@ export class DslSearchBoxContent extends WidgetContent {
 
   notifySearchCriteriaChanged() {
     if (this.isValid) {
-      this.widget.state = this.searchString;
+      this.state = this.searchString;
     }
     var self = this;
     self.assumptionString = "";
@@ -237,7 +236,7 @@ export class DslSearchBoxContent extends WidgetContent {
           var searchExpression = '';
           if (self.searchString!=='')
             var searchExpression = self.expressionManager.parse(self.searchString)
-          self.widget.dataFilterChanged.raise(searchExpression);
+          self.dataFilterChanged.raise(searchExpression);
         }
         /*else{
           self.assumptionString = self.createSearchStringAssumption(self.searchString)

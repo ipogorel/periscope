@@ -1,4 +1,3 @@
-import lodash from 'lodash';
 
 export class StateDiscriminator{
   static discriminate(widgetStates){

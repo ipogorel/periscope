@@ -1,7 +1,6 @@
-import lodash from 'lodash';
+import * as _ from 'lodash';
 
 export class DataHelper {
-
 
   static getNumericFields(fields){
     return _.filter(fields, f => {
@@ -68,18 +67,15 @@ export class DataHelper {
     return false;
   }
 
-  static isDate(value)
-  {
+  static isDate(value) {
     return ((new Date(value) !== "Invalid Date" && !isNaN(new Date(value))));
   }
 
-  static isString(value)
-  {
+  static isString(value) {
     return (typeof value === 'string' || value instanceof String);
   }
 
-  static isNumber(value)
-  {
+  static isNumber(value) {
     return (typeof value === 'number');
   }
 }

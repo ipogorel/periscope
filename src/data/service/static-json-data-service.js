@@ -1,10 +1,9 @@
 import {DataService} from './data-service';
-import {DataHelper} from '../../helpers/data-helper'
-import {Query} from '../query';
+import {DataHelper} from './../../helpers/data-helper';
 import {inject, transient} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-fetch-client';
-import {QueryExpressionEvaluator} from './../query-expression-evaluator'
-import lodash from 'lodash';
+import {QueryExpressionEvaluator} from './../query-expression-evaluator';
+import * as _ from 'lodash';
 
 @transient()
 @inject(HttpClient)
@@ -32,6 +31,9 @@ export class StaticJsonDataService extends DataService {
           d = evaluator.evaluate(d, options.filter);
         }
         var total = d.length;
+        // sort
+        if (options.sort)
+          d = _.orderBy(d,[options.sort],[options.sortDir]);
         var l = options.skip + options.take;
         d = l? _.slice(d, options.skip, (l>d.length?d.length:l)) : d;
         if (options.fields && options.fields.length>0)

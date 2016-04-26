@@ -1,0 +1,11 @@
+table.dataTable tbody tr.selected {
+  background-color: #d74b4b !important;
+  border-color: #d84f4f !important;
+}
+table.dataTable td.focus {
+  outline: 3px solid #d5d5d5 !important;
+}
+
+.dataTables_wrapper .pagination{
+  display: none;
+}

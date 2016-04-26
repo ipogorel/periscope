@@ -1,5 +1,5 @@
-import {customElement, bindable, inject, computedFrom} from 'aurelia-framework';
-import lodash from 'lodash';
+import {bindable} from 'aurelia-framework';
+import * as _ from 'lodash';
 
 export class CheckboxList {
   @bindable dataSource = null;

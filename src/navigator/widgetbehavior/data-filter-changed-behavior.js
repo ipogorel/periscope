@@ -1,5 +1,6 @@
 import {WidgetBehavior} from './widget-behavior';
 import {WidgetEventMessage} from '../events/widget-event-message';
+
 export class DataFilterChangedBehavior extends WidgetBehavior
 {
   constructor(channel, eventAggregator) {

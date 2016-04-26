@@ -1,6 +1,3 @@
-/**
- * Created by User on 8/31/2015.
- */
 export class ExpressionParser {
 
   constructor(pegParser)

@@ -3,7 +3,7 @@ import {DashboardBehavior} from './dashboard-behavior';
 export class ManageNavigationStackBehavior extends DashboardBehavior {
   constructor(eventAggregator) {
     super();
-    //this._chanel = chanel;
+    
     this._eventAggregator = eventAggregator;
   }
   attach(dashboard) {
