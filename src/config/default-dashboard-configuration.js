@@ -30,6 +30,7 @@ import {PeriscopeRouter} from './../navigator/periscope-router';
 
 import {GridJq} from './../layout/widgets/datatablesnet/grid-jq';
 import {ChartJs} from './../layout/widgets/chartjs/chart-js';
+import {ChartKendo} from './../layout/widgets/kendo/chart-kendo';
 import {DefaultSearchBox} from './../layout/widgets/periscope/default-search-box';
 import {DefaultDetailedView} from './../layout/widgets/periscope/default-detailed-view';
 import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
@@ -174,7 +175,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = new ChartJs({
+    var chart = new ChartKendo({
       name:"chartWidget",
       header:"Country",
       categoriesField:"Country",

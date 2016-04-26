@@ -10,8 +10,6 @@ export class ChartJs extends Chart {
       labels:[],
       datasets:[]
     }
-
-    //this.obj = {"labels":["Germany","Mexico","UK","Sweden","France","Spain","Canada","Argentina","Switzerland","Brazil","Austria","Italy","Portugal","USA","Venezuela","Ireland","Belgium","Norway","Denmark","Finland","Poland"],"datasets":[{"fillColor":"#ee5315","data":[11,5,7,2,11,5,3,3,2,9,2,3,2,13,4,1,2,1,2,2,1]}]};
   }
 
   get chartData(){
