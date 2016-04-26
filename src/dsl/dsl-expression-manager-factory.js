@@ -14,10 +14,10 @@ export class DslExpressionManagerFactory {
   createInstance(dataSource, fields) {
     return dataSource.transport.readService.getSchema().then(schema=>{
       let fields = schema.fields;
-      var allFields = _.map(fields,"field");
-      var numericFields = _.map(DataHelper.getNumericFields(fields),"field");
-      var stringFields = _.map(DataHelper.getStringFields(fields),"field");
-      var dateFields = _.map(DataHelper.getDateFields(fields),"field");
+      let allFields = _.map(fields,"field");
+      let numericFields = _.map(DataHelper.getNumericFields(fields),"field");
+      let stringFields = _.map(DataHelper.getStringFields(fields),"field");
+      let dateFields = _.map(DataHelper.getDateFields(fields),"field");
       let parser = this.expressionParserFactory.createInstance(numericFields, stringFields, dateFields);
       return new DslExpressionManager(parser, dataSource, allFields);
     })
