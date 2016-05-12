@@ -42,7 +42,7 @@ export class Datasource {
 
       let storage;
       let cacheKey = this.transport.readService.url + query.cacheKey();
-      if (this._cache&&this._cache.cacheManager){
+      /*if (this._cache&&this._cache.cacheManager){
         storage = this._cache.cacheManager.getStorage();
         let cachedDataHolder = storage.getItem(cacheKey);
         if (cachedDataHolder) {
@@ -52,11 +52,11 @@ export class Datasource {
             resolve(dataHolder);
           });
         }
-      }
+      }*/
       return this.transport.readService.read(
           {
             fields: query.fields,
-            filter: (query.serverSideFilter? query.serverSideFilter:""),
+            filter: query.filter,
             take: query.take,
             skip: query.skip,
             sort: query.sort,

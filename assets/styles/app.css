@@ -59,9 +59,9 @@ html, body {
   height: 100%;
 }
 
-.widget-container .portlet .portlet-body{
+/*.widget-container .portlet .portlet-body{
   height: 100%;
-}
+}*/
 
 @media (min-width: 768px) {
   .form-inline .form-control {

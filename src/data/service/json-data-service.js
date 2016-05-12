@@ -13,10 +13,12 @@ export class JsonDataService extends DataService {
         this._http = http;
     }
 
-    read(options) { //options: fields,query, take, skip, sort
-        var url = this.url + (this.queryMapper? this.queryMapper(options) : "");
+    read(options) { //options: fields,filter, take, skip, sort
+        let url = this.url
+        if (options.filter)
+          url+= (this.filterParser? this.filterParser.getFilter(options.filter) : "");
         return this._http
-            .fetch(this.url)
+            .fetch(url)
             .then(response => {return response.json(); })
             .then(jsonData => {
                 return {

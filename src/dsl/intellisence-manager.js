@@ -1,47 +1,26 @@
-import {Query} from './../data/query';
-import {StringHelper} from './../helpers/string-helper';
 import * as _ from 'lodash';
+import {Query} from './../data/query';
 
-export class DslExpressionManager {
-
-  constructor(parser, dataSource, fieldsList) {
+export class IntellisenceManager {
+  constructor(parser, dataSource, availableFields){
     this.dataSource = dataSource;
-    this.fields = fieldsList;
+    this.fields = availableFields;
     this.parser = parser;
   }
 
-  populate(searchStr, lastWord) {
-    let parserError = this.getParserError(searchStr);
+  populate(searchStr, lastWord){
+    let parserError = this._getParserError(searchStr);
     return this._getIntellisenseData(searchStr, lastWord, parserError);
   }
 
-  parse(searchStr){
-    var expression = this.parser.parse(searchStr);
-    return this._normalizeSerachExpression(expression);
-  }
 
-  validate(searchStr) {
-    return this.parser.validate(searchStr);
-  }
-
-  expectedToken(searchStr) {
-    let tokenName = "";
-    let parserError = this.getParserError(searchStr);
-    if (parserError!=null)
-      tokenName = this._interpreteParserError(parserError);
-    return tokenName;
-  }
-
-
-  getParserError(searchStr)
-  {
+  _getParserError(searchStr) {
     let result = null;
-    if (searchStr!="")
-    {
+    if (searchStr!="") {
       try {
-        this.parse(searchStr);
+        this.parser.parse(searchStr);
         try{
-          this.parse(searchStr + "^");
+          this.parser.parse(searchStr + "^");
         }
         catch(ex2){
           result = ex2;
@@ -52,6 +31,30 @@ export class DslExpressionManager {
       }
     }
     return result;
+  }
+
+
+
+  _getLastFieldName(searchStr, fieldsArray, index) {
+    var tmpArr = searchStr.substr(0, index).split(" ");
+    for (let i=(tmpArr.length-1); i>=0; i--)  {
+      let j = fieldsArray.findIndex(x=>x.toLowerCase() == tmpArr[i].trim().toLowerCase());
+      if (j>=0)
+        return fieldsArray[j];
+      //return tmpArr[i].trim();
+    }
+    return "";
+  }
+
+  _interpreteParserError(ex){
+    if (Object.prototype.toString.call(ex.expected) == "[object Array]") {
+      for (let desc of ex.expected) {
+        if ((desc.type == "other")||(desc.type == "end")) {//"FIELD_NAME" "OPERATOR" "FIELD_VALUE", "LOGIC_OPERATOR"
+          return desc.description;
+        }
+      }
+    }
+    return "";
   }
 
   _getIntellisenseData (searchStr, lastWord, pegException) {
@@ -102,18 +105,24 @@ export class DslExpressionManager {
           break;
       }
     });
-
   }
 
-  _interpreteParserError(ex){
-    if (Object.prototype.toString.call(ex.expected) == "[object Array]") {
-      for (let desc of ex.expected) {
-        if ((desc.type == "other")||(desc.type == "end")) {//"FIELD_NAME" "OPERATOR" "FIELD_VALUE", "LOGIC_OPERATOR"
-          return desc.description;
-        }
-      }
-    }
-    return "";
+
+  _getFieldValuesArray(fieldName, lastWord) {
+    let query = new Query();
+    query.take = 100;
+    query.skip = 0;
+    if (lastWord)
+      query.filter = this.parser.parse(fieldName + " = '" + lastWord + "%'");
+    query.fields = [fieldName];
+    return this.dataSource.getData(query).then(dH=>{
+      var result = _.map(dH.data,fieldName);
+      return _.uniq(result).sort();
+    })
+  }
+
+  _getStringComparisonOperatorsArray() {
+    return (["=", "in"]);
   }
 
   _getLogicalOperatorsArray() {
@@ -124,53 +133,7 @@ export class DslExpressionManager {
     return (["!=", "=", ">", "<", ">=", "<="])
   }
 
-  _getLastFieldName(searchStr, fieldsArray, index) {
-    var tmpArr = searchStr.substr(0, index).split(" ");
-    for (let i=(tmpArr.length-1); i>=0; i--)  {
-      let j = fieldsArray.findIndex(x=>x.toLowerCase() == tmpArr[i].trim().toLowerCase());
-      if (j>=0)
-        return fieldsArray[j];
-        //return tmpArr[i].trim();
-    }
-    return "";
-
-  }
-
-  _getStringComparisonOperatorsArray() {
-    return (["=", "in"]);
-  }
-
-
-  _getFieldValuesArray(fieldName, lastWord) {
-    let query = new Query();
-    query.take = 100;
-    query.skip = 0;
-    if (lastWord)
-      query.serverSideFilter = this.parse(fieldName + " = '" + lastWord + "%'");
-    else
-      query.serverSideFilter ="";
-    query.fields = [fieldName];
-    return this.dataSource.getData(query).then(dH=>{
-      var result = _.map(dH.data,fieldName);
-      return _.uniq(result).sort();
-    })
-  }
-
   _normalizeData(type, dataArray) {
     return _.map(dataArray,d=>{ return { type: type, value: d }});
   }
-
-  _normalizeSerachExpression(searchExpression){
-    var expr = new RegExp('record.([a-zA-Z0-9\%\_\-]*)', 'g');
-    var match;
-    while ((match = expr.exec(searchExpression)) !== null) {
-      for (let fld of this.fields){
-        if (match[1].toLowerCase()===fld.toLowerCase())
-            searchExpression = StringHelper.replaceAll(searchExpression, match[0], 'record.' + fld);
-      }
-    }
-    return searchExpression;
-  }
-
-
 }

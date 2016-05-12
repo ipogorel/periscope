@@ -23,7 +23,7 @@ export class GridKendo extends Grid {
             query.sort = options.data.sort;
             query.take = options.data.take;
             query.skip = options.data.skip;
-            query.serverSideFilter = self.dataFilter;
+            query.filter = self.dataFilter;
             self.dataSource.getData(query).then(dH=>{
               options.success(dH);
             }, error => {
@@ -88,7 +88,7 @@ export class GridKendo extends Grid {
       dataSource: this._gridDataSource,
       autoBind: false,
       groupable: true,
-      height: this._calculateHeight(this.gridElement),
+      height:  this.minHeight,
       sortable: true,
       scrollable: {
         virtual: true

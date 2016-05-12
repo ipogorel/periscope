@@ -57,6 +57,13 @@ export class Widget {
     this._type = value;
   }
 
+  set minHeight(value){
+    this.settings.minHeight = value;
+  }
+  get minHeight(){
+    return this.settings.minHeight;
+  }
+
   get showHeader(){
     return this.settings.showHeader;
   }
@@ -135,7 +142,6 @@ export class Widget {
   }
 
   refresh(){
-
   }
 
 
@@ -154,11 +160,11 @@ export class Widget {
 
   _calculateHeight(contentContainerElement){
     if (!contentContainerElement)
-      return this.settings.minHeight;
+      return this.minHeight;
     var p = $(contentContainerElement).parents(".widget-container")
     var headerHeight = p.find(".portlet-header")[0].scrollHeight;
     var parentHeight = p[0].offsetHeight - headerHeight;
-    return parentHeight > this.settings.minHeight? parentHeight : this.settings.minHeight;
+    return parentHeight > this.minHeight? parentHeight : this.minHeight;
   }
 }
 

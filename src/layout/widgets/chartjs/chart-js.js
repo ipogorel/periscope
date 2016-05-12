@@ -19,13 +19,11 @@ export class ChartJs extends Chart {
     this._chartData = value;
   }
 
-  attached(){
-  }
 
   refresh(){
     super.refresh();
     let query = new Query();
-    query.serverSideFilter = this.dataFilter;
+    query.filter = this.dataFilter;
     this.dataSource.getData(query).then(dH=> {
       this.chartData = this.mapData(dH.data,this.categoriesField);
     });

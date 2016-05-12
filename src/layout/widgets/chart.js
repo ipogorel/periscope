@@ -23,5 +23,4 @@ export class Chart extends Widget {
   set seriesDefaults(value){
     this._seriesDefaults = value;
   }
-
 }

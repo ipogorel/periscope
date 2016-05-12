@@ -7,8 +7,11 @@ export class SearchBox extends Widget {
     super(settings);
     this.stateType = "searchBoxState";
     this._dataFilterChanged = new WidgetEvent();
+    this._searchString = "";
     this.attachBehaviors();
   }
+
+
 
   get dataFilterChanged() {
     return this._dataFilterChanged;
@@ -17,6 +20,10 @@ export class SearchBox extends Widget {
     this._dataFilterChanged.attach(handler);
   }
 
-
-
+  get searchString(){
+    return this._searchString;
+  }
+  set searchString(value) {
+    this._searchString = value;
+  }
 }

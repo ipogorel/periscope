@@ -1,6 +1,7 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 
+
 /*behavior*/
 import {ManageNavigationStackBehavior} from './../navigator/dashboardbehavior/manage-navigation-stack-behavior';
 import {DataFieldSelectedBehavior} from './../navigator/widgetbehavior/data-field-selected-behavior';
@@ -22,6 +23,7 @@ import {StaticJsonDataService} from './../data/service/static-json-data-service'
 import {JsonDataService} from './../data/service/json-data-service';
 import {Datasource} from './../data/data-source';
 import {StaticSchemaProvider} from './../data/schema/providers/static-schema-provider';
+import {AstToJavascriptParser} from './../data/ast/parsers/ast-to-javascript-parser';
 
 import {UserStateStorage} from './../state/user-state-storage';
 import {StateUrlParser} from './../state/state-url-parser';
@@ -30,7 +32,6 @@ import {PeriscopeRouter} from './../navigator/periscope-router';
 
 import {GridJq} from './../layout/widgets/datatablesnet/grid-jq';
 import {ChartJs} from './../layout/widgets/chartjs/chart-js';
-import {ChartKendo} from './../layout/widgets/kendo/chart-kendo';
 import {DefaultSearchBox} from './../layout/widgets/periscope/default-search-box';
 import {DefaultDetailedView} from './../layout/widgets/periscope/default-detailed-view';
 import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
@@ -101,7 +102,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         }),
         dataMapper: data=>{
           return data.Results
-        }
+        },
+        filterParser: new AstToJavascriptParser()
       }
     )
     var dsCustomers = new Datasource({
@@ -175,7 +177,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     });
 
-    var chart = new ChartKendo({
+    //ChartKendo
+    var chart = new ChartJs({
       name:"chartWidget",
       header:"Country",
       categoriesField:"Country",
@@ -410,7 +413,18 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         dataSource: dsOrders,
         showHeader:true
       },
-      message => { return ("record.Id=='" + message.activatedData["Id"].toString() + "'"); }
+      message => {
+        return [
+          {
+            "left": {
+              "field": "Id",
+              "type": "string",
+              "operand": "=",
+              "value": message.activatedData["Id"].toString()
+            }
+          }
+        ]
+      }
     );
     var manageNavigationStackBehavior = new ManageNavigationStackBehavior(this._eventAggregator);
     replaceWidgetBehavior.attach(dbOrders);

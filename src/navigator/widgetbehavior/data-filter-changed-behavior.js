@@ -12,8 +12,7 @@ export class DataFilterChangedBehavior extends WidgetBehavior
   attachToWidget(widget) {
     super.attachToWidget(widget);
     var me = this;
-    widget.dataFilterChanged = function(filter)
-    {
+    widget.dataFilterChanged = function(filter) {
       var message = new WidgetEventMessage(me.widget.name);
       message.dataFilter = filter;
       me._eventAggregator.publish(me._channel, message);

@@ -1,26 +1,22 @@
+import * as peg from 'pegjs';
+
 export class ExpressionParser {
 
-  constructor(pegParser)
-  {
-    this.parser =  pegParser;
+  constructor(grammarText) {
+    this.parser =  peg.buildParser(grammarText);
   }
 
-  parse(searchString)
-  {
+  parse(searchString) {
     return this.parser.parse(searchString);
   }
 
-  validate(searchString)
-  {
+  validate(searchString) {
     try{
       this.parser.parse(searchString);
       return true;
     }
-    catch(ex)
-    {
+    catch(ex) {
       return false;
     }
   }
-
 }
-

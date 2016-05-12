@@ -2,7 +2,7 @@
   configure(configuration){
     this.url = configuration.url;
     this.schemaProvider = configuration.schemaProvider;
-    this.queryMapper = configuration.queryMapper;
+    this.filterParser = configuration.filterParser;
     this.totalMapper = configuration.totalMapper;
     this.dataMapper = configuration.dataMapper;
   }
@@ -22,7 +22,7 @@ export class DataServiceConfiguration {
       this._url = options.url;
       this._schemaProvider = options.schemaProvider;
       this._totalMapper = options.totalMapper;
-      this._queryMapper = options.queryMapper;
+      this._filterParser = options.filterParser;
       this._dataMapper = options.dataMapper;
     }
   }
@@ -39,8 +39,8 @@ export class DataServiceConfiguration {
     return this._totalMapper;
   }
 
-  get queryMapper(){
-    return this._queryMapper;
+  get filterParser(){
+    return this._filterParser;
   }
 
   get dataMapper(){

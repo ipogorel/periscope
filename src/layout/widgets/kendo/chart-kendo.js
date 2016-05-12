@@ -14,7 +14,7 @@ export class ChartKendo extends Chart {
       transport: {
         read: options=> {
           let query = new Query();
-          query.serverSideFilter = self.dataFilter;
+          query.filter = self.dataFilter;
           self.dataSource.getData(query).then(dH=>{
             options.success(self.mapData(dH.data, self.categoriesField));
           });

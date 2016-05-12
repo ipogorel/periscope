@@ -1,6 +1,9 @@
 ﻿import {StringHelper} from '../helpers/string-helper';
 
 export class Query {
+  constructor (){
+    //this.filter = [];
+  }
 
   get sort(){
     return this._sort;
@@ -44,24 +47,23 @@ export class Query {
     this._skip = value;
   }
 
-  /*get clientSideFilter() {
-    return this._clientSideFilter;
-  }
-  set clientSideFilter(value) {
-    this._clientSideFilter = value;
-  }*/
-
-
-  get serverSideFilter() {
+  /*get serverSideFilter() {
     return this._serverSideFilter;
   }
   set serverSideFilter(value) {
     this._serverSideFilter = value;
+  }*/
+
+  get filter(){
+    return this._filter;
+  }
+  set filter(value){
+    this._filter = value;
   }
 
   cacheKey(){
     return Math.abs(StringHelper.hashCode(
-        ((this.serverSideFilter)?this.serverSideFilter:"") +
+        ((this.filter)?JSON.stringify(this.filter):"") +
         (this.fields?this.fields.join(""):"") +
         (this.sort?this.sort:"") +
         (this.sortDir?this.sortDir:"") +

@@ -24,13 +24,15 @@ export class StaticJsonDataService extends DataService {
         return response.json();
       })
       .then(jsonData => {
-        var d = jsonData;
-        d = this.dataMapper? this.dataMapper(d) : d;
+        let d = this.dataMapper? this.dataMapper(jsonData) : jsonData;
         if (options.filter){
-          var evaluator = new QueryExpressionEvaluator();
-          d = evaluator.evaluate(d, options.filter);
+          let f = options.filter;
+          if (_.isArray(f) && this.filterParser && this.filterParser.type === "clientSide")
+            f = this.filterParser.getFilter(options.filter);
+          let evaluator = new QueryExpressionEvaluator();
+          d = evaluator.evaluate(d, f);
         }
-        var total = d.length;
+        let total = d.length;
         // sort
         if (options.sort)
           d = _.orderBy(d,[options.sort],[options.sortDir]);

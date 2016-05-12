@@ -64,7 +64,7 @@ export class GridJq extends Grid {
       select: true,
       lengthChange: false,
 
-      scrollY: this._calculateHeight($(this.gridElement)),
+      scrollY: this.minHeight - 40 - 30,//40px - header height, 30px - footer height
       deferRender: true,
       scroller: true,
       paging: true,
@@ -87,7 +87,7 @@ export class GridJq extends Grid {
           query.sort = me.columns[request.order[0].column].field;
           query.sortDir = request.order[0].dir;
         }
-        query.serverSideFilter = me.dataFilter;
+        query.filter = me.dataFilter;
         me.dataSource.getData(query).then(dH=>{
           drawCallback({data:dH.data,recordsTotal:dH.total,recordsFiltered:dH.total});
         }, error => {

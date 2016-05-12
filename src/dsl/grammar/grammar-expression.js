@@ -1,4 +1,7 @@
-const DSL_GRAMMAR = `
+import {Grammar} from './grammar';
+import {DataHelper} from './../../helpers/data-helper';
+
+const DSL_GRAMMAR_EXPRESSION = `
 {
 function createStringExpression(fieldname, value){
  		var prefix = "record.";
@@ -141,8 +144,31 @@ quote = [\\'\\"]
 `;
 
 
-export class Grammar {
+export class GrammarExpression extends Grammar{
+  constructor(dataFields){
+    super();
+    this.text = DSL_GRAMMAR_EXPRESSION;
+    this.dataFields = dataFields;
+  }
+
   getGrammar(){
-    return DSL_GRAMMAR;
+    let stringFieldList = _.map(DataHelper.getStringFields(this.dataFields),"field");
+    let numericFieldList = _.map(DataHelper.getNumericFields(this.dataFields),"field");
+    let dateFieldList = _.map(DataHelper.getDateFields(this.dataFields),"field");
+    let parserText = this.text.replace('@S@', this._concatenateFields(stringFieldList))
+      .replace('@N@', this._concatenateFields(numericFieldList))
+      .replace('@D@', this._concatenateFields(dateFieldList));
+    return parserText;
+  }
+
+  _concatenateFields(fieldList){
+    for (var i = 0; i < fieldList.length; i++) {
+      fieldList[i] = '\'' + fieldList[i] + '\'i';
+    }
+    if (fieldList.length>0)
+      return fieldList.join('/ ');
+    else
+      return "'unknown_field'"
   }
 }
+
