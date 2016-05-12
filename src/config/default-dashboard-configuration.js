@@ -320,7 +320,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         }),
         dataMapper: data=>{
           return data.Results
-        }
+        },
+        filterParser: new AstToJavascriptParser()
       }
     );
 
