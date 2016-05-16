@@ -37,12 +37,15 @@ import {DefaultDetailedView} from './../layout/widgets/periscope/default-detaile
 import {SwaggerDataSourceConfigurator} from './../layout/widgets/periscope/swagger-data-source-configurator';
 import {BootstrapDashboard} from './../layout/dashboards/bootstrap/bootstrap-dashboard';
 
+import {Authentication} from './../auth/authentication';
+import {PermissionsManager} from './../authorization/permissions-manager';
 import {DashboardConfiguration} from './dashboard-configuration';
 
-@inject(EventAggregator,  UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager))
+@inject(EventAggregator,  UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager), Authentication, PermissionsManager)
 export class DefaultDashboardConfiguration extends DashboardConfiguration  {
-  constructor(eventAggregator, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory){
+  constructor(eventAggregator, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory, authentication, permissionsManager){
     super();
+    this._authentication = authentication;
     this._eventAggregator = eventAggregator;
     this._periscopeRouter = periscopeRouter;
     this._dashboardManager = dashboardManager;
@@ -50,9 +53,17 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
     this._dataServiceFactory = dataServiceFactory;
     this._swaggerServiceFactory = swaggerServiceFactory;
     this._cacheManager = cacheManagerFactory(new MemoryCacheStorage());
+    this._permissionsManager = permissionsManager;
   }
   
   invoke(){
+    this._permissionsManager.configure(config=>{
+      config.withAuthinticationManager(this._authentication).withPermissionsMatrix([{
+        resource: "detailsWidgetCustomers",
+        role: "member",
+        permissions:['r']
+      }]);
+    });
     var customersDataService = this._dataServiceFactory()
     customersDataService.configure({
         url:'/data/customers.json',
@@ -229,6 +240,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       }
     );
 
+
     var createWidgetBehavior = new CreateWidgetBehavior(
       'gridSelectionChannel',
       DefaultDetailedView,
@@ -241,7 +253,17 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       },
       {sizeX:3, sizeY:"*", col:6, row:2},
       this._eventAggregator,
-      message => { return ("record.Id=='" + message.selectedData["Id"].toString() + "'");}
+      message => { return [
+        {
+          "left": {
+            "field": "Id",
+            "type": "string",
+            "operand": "==",
+            "value": message.selectedData["Id"].toString()
+          }
+        }
+      ]
+      }
     );
 
 
@@ -419,8 +441,8 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
           {
             "left": {
               "field": "Id",
-              "type": "string",
-              "operand": "=",
+              "type": "number",
+              "operand": "==",
               "value": message.activatedData["Id"].toString()
             }
           }

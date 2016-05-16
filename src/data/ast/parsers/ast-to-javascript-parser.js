@@ -18,34 +18,41 @@ export class AstToJavascriptParser extends AstParser{
   _parseTree(treeNode, result){
     if (treeNode.left) {
       result.push(this._createExpression(treeNode.connector, treeNode.left));
-      this._parseTree(treeNode.right, result);
+      if (treeNode.right)
+        this._parseTree(treeNode.right, result);
     }
-    else {
+    else
       result.push(this._createExpression(treeNode.connector, treeNode));
-      return result.join(" ");
-    }
+    return result.join(" ");
   }
 
 
   _createExpression(connector, node){
-
     let result = "";
     let prefix = "record.";
     let fieldname = node.field;
     let operand = node.operand;
     let value = node.value;
-    let v = value.trim().toLowerCase();
 
-    if (v.length>=2){
-      if ((v.indexOf("%")===0)&&(v.lastIndexOf("%")===(v.length-1)))
-        result = prefix + fieldname + ".toLowerCase().includes('" + v.substring(1,value.length-1) + "')"
-      else if (v.indexOf("%")===0)
-        result = prefix + fieldname + ".toLowerCase().endsWith('" + v.substring(1,value.length) + "')"
-      else if (v.lastIndexOf("%")===(value.length-1))
-        result = prefix + fieldname + ".toLowerCase().startsWith('" + v.substring(0,value.length-1) + "')"
+    if (node.type=='string') {
+      let v = value.trim().toLowerCase();
+      if (v.length >= 2) {
+        if ((v.indexOf("%") === 0) && (v.lastIndexOf("%") === (v.length - 1)))
+          result = prefix + fieldname + ".toLowerCase().includes('" + v.substring(1, value.length - 1) + "')"
+        else if (v.indexOf("%") === 0)
+          result = prefix + fieldname + ".toLowerCase().endsWith('" + v.substring(1, value.length) + "')"
+        else if (v.lastIndexOf("%") === (value.length - 1))
+          result = prefix + fieldname + ".toLowerCase().startsWith('" + v.substring(0, value.length - 1) + "')"
+      }
+      if (result == "")
+        result = prefix + fieldname + ".toLowerCase() " + operand + " '" + v + "'";
     }
-    if (result == "")
-      result = prefix + fieldname + ".toLowerCase() " + operand + " '" + v + "'";
+    else if (node.type=='number'){
+      result = prefix + fieldname + operand + " " + value;
+    }
+    else if (node.type=='date'){
+      result = prefix + fieldname + operand + " '" + value + "'";
+    }
     result=(connector? connector:"") +" (" + prefix + fieldname + "!=null && " + result + ")";
     return result;
   }

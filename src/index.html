@@ -1,15 +1,33 @@
 <template>
-  <require from='./layout/partials/breadcrumbs'></require>
-  <section id="dashboard" class="au-animate">
-    <div class="row">
-      <div class="col-md-12">
-        <!--<breadcrumbs></breadcrumbs>-->
-      </div>
-    </div>
-    <div class="row dashboard-container">
-      <div class="col-md-12">
-        <compose view-model.bind='dashboard'></compose>
-      </div>
-    </div>
-  </section>
+  <div class="account-wrapper">
+    <div class="account-body">
+      <h3>Periscope Demo App.</h3>
+      <h5>Please sign in to get access.</h5>
+      <form class="form account-form">
+        <div class="form-group">
+          <label for="login-username" class="placeholder-hidden">Username</label>
+          <input type="text" class="form-control" id="login-username" placeholder="Username" tabindex="1" value.bind="model.username & validate">
+        </div> <!-- /.form-group -->
+        <div class="form-group">
+          <label for="login-password" class="placeholder-hidden">Password</label>
+          <input type="password" class="form-control" id="login-password" placeholder="Password" tabindex="2"  value.bind="model.password & validate">
+        </div> <!-- /.form-group -->
+        <div class="form-group clearfix">
+          <div class="pull-left">
+            <label class="checkbox-inline">
+              <input type="checkbox" class="" value="" tabindex="3"> <small>Remember me</small>
+            </label>
+          </div>
+          <div class="pull-right">
+            <small><a>Forgot Password?</a></small>
+          </div>
+        </div> <!-- /.form-group -->
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block btn-lg" tabindex="4" click.trigger="submit()">
+            Signin &nbsp; <i class="fa fa-play-circle"></i>
+          </button>
+        </div> <!-- /.form-group -->
+      </form>
+    </div> <!-- /.account-body -->
+  </div>
 </template>

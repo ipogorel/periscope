@@ -1,5 +1,6 @@
 <template>
-  <dl class="dl-horizontal">
+  <require from="./../../../authorization/permissions-custom-attribute"></require>
+  <dl class="dl-horizontal" permissions.bind="'r'">
     <template repeat.for="f of viewFields">
       <dt>${f.name}</dt>
       <dd>${f.value}</dd>

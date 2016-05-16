@@ -1,4 +1,4 @@
-import {DataHelper} from './../data-helper'
+import {DataHelper} from './../data-helper';
 import numeral from 'numeral';
 import moment from 'moment';
 

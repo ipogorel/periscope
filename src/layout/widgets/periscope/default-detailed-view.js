@@ -14,6 +14,7 @@ export class DefaultDetailedView extends DetailedView {
   set data(value){
     this._data = value;
   }
+  
 
   get viewFields() {
     var result = []

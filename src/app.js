@@ -1,18 +1,21 @@
 import {inject} from 'aurelia-framework';
 import {DefaultDashboardConfiguration} from './config/default-dashboard-configuration';
+import {UserStateStorage} from './state/user-state-storage';
 import $ from 'jquery';
 
-@inject(DefaultDashboardConfiguration)
+@inject(DefaultDashboardConfiguration, UserStateStorage)
 export class App {
-  constructor(dashboardsConfiguration) {
+  constructor(dashboardsConfiguration, userStateStorage) {
     dashboardsConfiguration.invoke();
+    userStateStorage.clearAll();
   }
 
 
   configureRouter(config, router){
     config.title = 'Periscope';
     config.map([
-      { route: ['/', '/:dashboard'],  name: 'dashboard',  moduleId: './index',  nav: true, title:'Dashboard' }
+      { route: '/',  name: 'dashboard',  moduleId: './index',  nav: true, title:'Login' },
+      { route: ['/#/', '/:dashboard'],  name: 'dashboard',  moduleId: './dashboard',  nav: true, title:'Dashboard' }
     ]);
     this.router = router;
   }

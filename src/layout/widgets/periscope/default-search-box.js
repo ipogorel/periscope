@@ -216,5 +216,4 @@ export class DefaultSearchBox extends SearchBox {
       }
     }, 500);
   }
-
 }

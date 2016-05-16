@@ -102,10 +102,10 @@ export class Widget {
   get dataFilter() {
     return this._dataFilter;
   }
-
   set dataFilter(value) {
     this._dataFilter = value;
   }
+  
 
   get type() {
     return this._type;
