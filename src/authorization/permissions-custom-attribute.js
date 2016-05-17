@@ -25,10 +25,14 @@ export class PermissionsCustomAttribute {
     }
     for (let p of permissions){
       if (!this.permissionsManager.hasPermisson(p, widgetName)) {
-        this.element.hidden = true;
+        if (p==='r')
+          this.element.hidden = true;
+        if (p==='w')
+          this.element.disabled = true;
         return;
       }
     }
     this.element.hidden = false;
+    this.element.disabled = false;
   }
 }

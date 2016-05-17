@@ -59,13 +59,37 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
   invoke(){
     this._permissionsManager.configure(config=>{
       config.withAuthinticationManager(this._authentication).withPermissionsMatrix([{
-        resource: "detailsWidgetCustomers",
-        role: "member",
-        permissions:[]
+        resource: "positionsSearchWidget",
+        roles: ['member','admin'],
+        permissions:['r','w']
+      },{
+        resource: "gridWidget",
+        roles: ['member','admin'],
+        permissions:['r','w']
+      },{
+        resource: "chartWidget",
+        roles: ['member','admin'],
+        permissions:['r','w']
       },{
         resource: "detailsWidgetCustomers",
-        role: "admin",
+        roles: ['admin'],
+        permissions:['r','w']
+      },{
+        resource: "gridWidgetOrders",
+        roles: ['member', 'admin'],
+        permissions:['r','w']
+      },{
+        resource: "ordersSearchWidget",
+        roles: ['member'],
         permissions:['r']
+      },{
+        resource: "ordersSearchWidget",
+        roles: ['admin'],
+        permissions:['r','w']
+      },{
+        resource: "detailsWidgetOrder",
+        roles: ['member', 'admin'],
+        permissions:['r','w']
       }
       ]);
     });

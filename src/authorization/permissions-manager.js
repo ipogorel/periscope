@@ -16,11 +16,13 @@ export class PermissionsManager {
 
   hasPermisson(permission, resourceName){
     for (let r of this._authentication.getRoles()){
-      let w = _.find(this._permissionsMatrix,{'resource':resourceName, 'role': r});
+      let w = _.find(this._permissionsMatrix, p => {
+       return (p.resource === resourceName && _.indexOf(p.roles,r)>=0)
+      });
       if (w)
         return _.indexOf(w.permissions,permission)>=0;
     }
-    return true;
+    return false;
   }
 }
 

@@ -24,7 +24,7 @@ export class Authentication {
   }
 
   logout(){
-    this.storage.remove(this.username);
+    this.storage.removeItem(this.username);
   }
 
   isAuthenticated() {

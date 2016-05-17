@@ -1,11 +1,12 @@
 <template>
   <require from='./controls/list'></require>
+  <require from="./../../../authorization/permissions-custom-attribute"></require>
   <div class="row search-box-widget">
     <div class="col-md-12">
         <div class="form-group has-feedback search-box-widget-input ${isValid ? '' : 'has-error'}">
           <div class="input-group">
             <div class="input-group-addon"><i class="fa ${isValid ? 'fa-check success-check-mark' : 'fa-close'}"></i></div>
-            <input type="text" ref="searchBox" placeholder="Search..." class="form-control" autofocus value.bind="searchString"/>
+            <input type="text" ref="searchBox" placeholder="Search..." class="form-control" autofocus value.bind="searchString" permissions.bind="'w'"/>
           </div>
         </div>
     </div>

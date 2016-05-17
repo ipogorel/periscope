@@ -1,4 +1,7 @@
 a.nav-expander {
+  position: absolute;
+  right: 0;
+  top: 0;
   color: #FFFFFF;
   display: block;
   font-size: 15px;
@@ -6,11 +9,8 @@ a.nav-expander {
   height: 50px;
   margin-right: 0;
   padding: 1em 1.6em 2em;
-  position: absolute;
-  right: 0;
   text-decoration: none;
   text-transform: uppercase;
-  top: 0;
   transition: right 0.3s ease-in-out 0s;
   z-index: 12;
 
