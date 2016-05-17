@@ -20,7 +20,7 @@ export class PermissionsManager {
       if (w)
         return _.indexOf(w.permissions,permission)>=0;
     }
-    return false;
+    return true;
   }
 }
 

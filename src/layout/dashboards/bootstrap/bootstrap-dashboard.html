@@ -1,7 +1,8 @@
 <template>
+    <require from="./../../../authorization/permissions-custom-attribute"></require>
     <div class="row" repeat.for="r of layoutStructure">
       <template repeat.for="w of r.widgets">
-        <div css="${$parent.$parent.getColHeight(w)}" class="${$parent.$parent.getColWidth(w)} widget-container">
+        <div css="${$parent.$parent.getColHeight(w)}" class="${$parent.$parent.getColWidth(w)} widget-container" permissions.bind="{widgetName:w.widget.name,permissions:'r'}">
           <!-- widget -->
           <div class="portlet portlet-default">
             <div class="portlet-header" show.bind="w.widget.showHeader">

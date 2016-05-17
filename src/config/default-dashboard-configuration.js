@@ -61,8 +61,13 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
       config.withAuthinticationManager(this._authentication).withPermissionsMatrix([{
         resource: "detailsWidgetCustomers",
         role: "member",
+        permissions:[]
+      },{
+        resource: "detailsWidgetCustomers",
+        role: "admin",
         permissions:['r']
-      }]);
+      }
+      ]);
     });
     var customersDataService = this._dataServiceFactory()
     customersDataService.configure({
