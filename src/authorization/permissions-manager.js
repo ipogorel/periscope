@@ -15,11 +15,12 @@ export class PermissionsManager {
   }
 
   hasPermisson(permission, resourceName){
-    let w = _.find(this._permissionsMatrix,{'resource':resourceName, 'role': this._authentication.getRole()});
-    if (!w) // permissions for this widget and role are not stated
-      return false;
-    else
-      return _.indexOf(w.permissions,permission)>=0;
+    for (let r of this._authentication.getRoles()){
+      let w = _.find(this._permissionsMatrix,{'resource':resourceName, 'role': r});
+      if (w)
+        return _.indexOf(w.permissions,permission)>=0;
+    }
+    return false;
   }
 }
 

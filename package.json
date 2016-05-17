@@ -65,6 +65,7 @@
   "jspm": {
     "dependencies": {
       "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-beta.1.2.0",
+      "aurelia-auth": "npm:aurelia-auth@^2.1.3",
       "aurelia-binding": "npm:aurelia-binding@^1.0.0-beta.1.3.5",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-beta.1.2.0",
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@^1.0.0-beta.1.2.0",

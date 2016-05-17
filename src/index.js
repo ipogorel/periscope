@@ -2,21 +2,23 @@ import {inject} from 'aurelia-framework';
 import {PeriscopeRouter} from './navigator/periscope-router';
 import {length, required, date, datetime, email, equality, exclusion, inclusion, format, url, numericality} from 'aurelia-validatejs';
 import {ValidationEngine, Validator} from 'aurelia-validatejs';
+//import {AuthService} from 'aurelia-auth';
+import {AuthService} from './auth/auth-service';
 
-@inject(PeriscopeRouter)
+@inject(PeriscopeRouter, AuthService)
 export class Index {
 
   errors = [];
   model;
   subscriber;
 
-  constructor(periscopeRouter){
+  constructor(periscopeRouter, authService){
     this._router = periscopeRouter;
+    this._authService = authService;
     this.model = new LoginModel();
     this.validator = new Validator(this.model)
       .ensure('username')
       .required()
-      .email()
       .ensure('password')
       .required();
     this.reporter = ValidationEngine.getValidationReporter(this.model);
@@ -28,6 +30,7 @@ export class Index {
   hasErrors() {
     return !!this.errors.length;
   }
+
   renderErrors(result) {
     this.errors.splice(0, this.errors.length);
     result.forEach(error => {
@@ -38,12 +41,22 @@ export class Index {
   submit() {
     this.validator.validate();
     if (!this.hasErrors()) {
-      this._router.navigate({
-        title: "Customers",
-        route: "/customers",
-        dashboardName: "customers"
-      });
+      this._authService.login(this.model.username, this.model.password).then(response=>{
+        this._router.navigate({
+          title: "Customers",
+          route: "/customers",
+          dashboardName: "customers"
+        });
+      }, error => {
+        this.renderErrors([error]);
+      })
     }
+  }
+  authenticate(name){
+    return this._authService.authenticate(name, false, null)
+      .then((response)=>{
+        console.log("auth response " + response);
+      });
   }
 
   detached() {

@@ -13,7 +13,7 @@ export class PermissionsCustomAttribute {
   bind() {
     if (!this.value)
       return;
-    let widgetName = this.element.au.permissions.scope.bindingContext.name;
+    let widgetName = this.element.au.permissions.scope.bindingContext.name; // get widget name
     let permissions = this.value;
     if (!_.isArray(permissions))
       permissions = this.value.split(",");

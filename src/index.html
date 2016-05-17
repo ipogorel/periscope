@@ -4,6 +4,11 @@
       <h3>Periscope Demo App.</h3>
       <h5>Please sign in to get access.</h5>
       <form class="form account-form">
+        <ul class="list-unstyled">
+          <li repeat.for="error of errors">
+            <span class="text-danger">${error.message}</span>
+          </li>
+        </ul>
         <div class="form-group">
           <label for="login-username" class="placeholder-hidden">Username</label>
           <input type="text" class="form-control" id="login-username" placeholder="Username" tabindex="1" value.bind="model.username & validate">
@@ -27,6 +32,11 @@
             Signin &nbsp; <i class="fa fa-play-circle"></i>
           </button>
         </div> <!-- /.form-group -->
+        <!--<div>
+          <button class="btn btn-block btn-google-plus" click.delegate="authenticate('github')">
+            <span class="ion-social-googleplus"></span>Sign in with Google
+          </button>
+        </div>-->
       </form>
     </div> <!-- /.account-body -->
   </div>

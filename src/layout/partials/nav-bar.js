@@ -1,10 +1,19 @@
 import $ from 'jquery';
 import bootstrap from 'bootstrap';
-import {bindable} from 'aurelia-framework';
+import {Authentication} from './../../auth/authentication';
+import {inject, bindable} from 'aurelia-framework';
 
+@inject(Authentication)
 export class NavBar {
   @bindable router = null;
 
+  constructor(authentication){
+    this.authentication = authentication;
+  }
+
+  get showExpander(){
+    return this.authentication.isAuthenticated();
+  }
   attached() {
     $('#nav-expander').on('click',function(e){
       e.preventDefault();
