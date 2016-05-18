@@ -1,4 +1,6 @@
 import {inject} from 'aurelia-framework';
+import {Router} from 'aurelia-router';
+
 import {EventAggregator} from 'aurelia-event-aggregator';
 
 
@@ -28,7 +30,7 @@ import {AstToJavascriptParser} from './../data/ast/parsers/ast-to-javascript-par
 import {UserStateStorage} from './../state/user-state-storage';
 import {StateUrlParser} from './../state/state-url-parser';
 import {DashboardManager} from './../infrastructure/dashboard-manager';
-import {PeriscopeRouter} from './../navigator/periscope-router';
+
 
 import {GridJq} from './../layout/widgets/datatablesnet/grid-jq';
 import {ChartJs} from './../layout/widgets/chartjs/chart-js';
@@ -41,13 +43,13 @@ import {Authentication} from './../auth/authentication';
 import {PermissionsManager} from './../authorization/permissions-manager';
 import {DashboardConfiguration} from './dashboard-configuration';
 
-@inject(EventAggregator,  UserStateStorage, DashboardManager, PeriscopeRouter, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager), Authentication, PermissionsManager)
+@inject(EventAggregator,  UserStateStorage, DashboardManager, Router, Factory.of(StaticJsonDataService), Factory.of(JsonDataService), Factory.of(CacheManager), Authentication, PermissionsManager)
 export class DefaultDashboardConfiguration extends DashboardConfiguration  {
-  constructor(eventAggregator, userStateStorage, dashboardManager, periscopeRouter, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory, authentication, permissionsManager){
+  constructor(eventAggregator, userStateStorage, dashboardManager, router, dataServiceFactory, swaggerServiceFactory, cacheManagerFactory, authentication, permissionsManager){
     super();
     this._authentication = authentication;
     this._eventAggregator = eventAggregator;
-    this._periscopeRouter = periscopeRouter;
+    this._router = router;
     this._dashboardManager = dashboardManager;
     this._stateStorage = userStateStorage;
     this._dataServiceFactory = dataServiceFactory;
@@ -251,11 +253,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
 
     var changeRoureBefavior = new ChangeRouteBehavior({
         chanel: "gridCommandChannel",
-        newRoute: {
-          title:'Orders',
-          route: '/orders',
-          dashboardName:'orders'
-        },
+        newRoute: '/orders',
         paramsMapper: filterEvent => {return StateUrlParser.stateToQuery([{
           key: "orders:ordersSearchWidget",
           value: {
@@ -265,7 +263,7 @@ export class DefaultDashboardConfiguration extends DashboardConfiguration  {
         }])
         },
         eventAggregator: this._eventAggregator,
-        router: this._periscopeRouter
+        router: this._router
       }
     );
 

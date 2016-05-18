@@ -1,13 +1,11 @@
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {DashboardManager} from './infrastructure/dashboard-manager';
-import {PeriscopeRouter} from './navigator/periscope-router';
 
 
-@inject(DashboardManager, PeriscopeRouter, EventAggregator)
+@inject(DashboardManager, EventAggregator)
 export class Dashboard {
-  constructor(dashboardManager, periscopeRouter, eventAggregator) {
-    this._router = periscopeRouter;
+  constructor(dashboardManager, eventAggregator) {
     this._dashboardManager = dashboardManager;
     this._eventAggregator = eventAggregator;
   }

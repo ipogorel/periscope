@@ -18,13 +18,7 @@ export class ChangeRouteBehavior extends DashboardBehavior {
       var params = me._paramsMapper ? me._paramsMapper(message) : "";
       if ((params!=="")&&(params.indexOf("?")!=0))
         params="?" + params;
-      var navItem = {
-          //route: me._newRoute.route,
-          route: me._newRoute.route + (params!==""? params : ""),
-          title: me._newRoute.title,
-          dashboardName: me._newRoute.dashboardName
-      }
-      me._router.navigate(navItem);
+      me._router.navigate(me._newRoute + (params!==""? params : ""));
     });
   }
 

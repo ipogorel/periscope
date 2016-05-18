@@ -34,5 +34,7 @@ export class SearchBox extends Widget {
   restoreState(){
     if (this.state)
       this.searchString = this.state;
+    else
+      this.searchString = "";
   }
 }

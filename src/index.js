@@ -1,19 +1,19 @@
 import {inject} from 'aurelia-framework';
-import {PeriscopeRouter} from './navigator/periscope-router';
+import {Router} from 'aurelia-router';
 import {length, required, date, datetime, email, equality, exclusion, inclusion, format, url, numericality} from 'aurelia-validatejs';
 import {ValidationEngine, Validator} from 'aurelia-validatejs';
 //import {AuthService} from 'aurelia-auth';
 import {AuthService} from './auth/auth-service';
 
-@inject(PeriscopeRouter, AuthService)
+@inject(Router, AuthService)
 export class Index {
 
   errors = [];
   model;
   subscriber;
 
-  constructor(periscopeRouter, authService){
-    this._router = periscopeRouter;
+  constructor(router, authService){
+    this._router = router;
     this._authService = authService;
     this.model = new LoginModel();
     this.validator = new Validator(this.model)
@@ -42,11 +42,7 @@ export class Index {
     this.validator.validate();
     if (!this.hasErrors()) {
       this._authService.login(this.model.username, this.model.password).then(response=>{
-        this._router.navigate({
-          title: "Customers",
-          route: "/customers",
-          dashboardName: "customers"
-        });
+        this._router.navigate("/customers");
       }, error => {
         this.renderErrors([error]);
       })

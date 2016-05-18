@@ -3,12 +3,9 @@ export class NavigationHistory {
     this._history = [];
   }
 
-
-
   get items(){
     return this._history;
   }
-
 
   add(url, title, dashboard, state, dateTime) {
     this._history.push({url, title, dashboard, state, dateTime});

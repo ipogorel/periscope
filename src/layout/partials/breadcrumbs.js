@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import {computedFrom} from 'aurelia-framework';
-import {inject, bindable} from 'aurelia-framework';
-import {PeriscopeRouter} from './../../navigator/periscope-router';
+import {inject} from 'aurelia-framework';
+import {Router} from 'aurelia-router';
 import {NavigationHistory} from './../../navigator/navigation-history';
 import {UserStateStorage} from './../../state/user-state-storage';
 
-@inject(PeriscopeRouter, NavigationHistory, UserStateStorage)
+@inject(Router, NavigationHistory, UserStateStorage)
 export class Breadcrumbs {
 
   constructor(router, navigationHistory, userStateStorage){
@@ -21,7 +21,6 @@ export class Breadcrumbs {
   }
 
 
-  @computedFrom('currentRoute')
   get history(){
     var nH = this._navigationHistory.items;
     var result = [];
@@ -37,7 +36,7 @@ export class Breadcrumbs {
 
 
   navigate(routeItem){
-    this._router.navigate(routeItem);
+    this._router.navigate(routeItem.url);
   }
 
 }

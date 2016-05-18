@@ -1,11 +1,11 @@
-import {inject, bindable, computedFrom} from 'aurelia-framework';
+import {inject} from 'aurelia-framework';
 import {DashboardManager} from './../../infrastructure/dashboard-manager';
-import {PeriscopeRouter} from './../../navigator/periscope-router';
+import {Router} from 'aurelia-router';
 
-@inject(PeriscopeRouter, DashboardManager)
+@inject(Router, DashboardManager)
 export class DashboardsList {
-  constructor(periscopeRouter, dashboardManager){
-    this._periscopeRouter = periscopeRouter;
+  constructor(router, dashboardManager){
+    this._router = router;
     this._dashboardManager = dashboardManager;
   }
 
@@ -14,11 +14,6 @@ export class DashboardsList {
   }
 
   navigate(dashboard){
-    this._periscopeRouter.navigate({
-        route: dashboard.route,
-        title: dashboard.title,
-        dashboardName: dashboard.name
-      }
-    );
+    this._router.navigate(dashboard.route);
   }
 }
