@@ -16,7 +16,7 @@ export class App {
   configureRouter(config, router){
     config.title = 'Periscope';
     config.addPipelineStep('authorize', AuthorizeStep);
-    config.addPipelineStep('authorize', HistoryStep);
+    config.addPipelineStep('preActivate', HistoryStep);
     config.map([
       { route: '',  name: 'login',  moduleId: './index',  nav: true, title:'Login' },
       { route: ['/#/', '/:dashboard'],  name: 'dashboard',  moduleId: './dashboard',  nav: true, title:'Dashboard' }
