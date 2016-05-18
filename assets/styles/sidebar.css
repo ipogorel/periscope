@@ -1,19 +1,20 @@
-a.nav-expander {
+.right-nav {
   position: absolute;
-  right: 0;
+  right: 0em;
   top: 0;
+  padding: 1em 1.6em 2em;
+}
+
+.right-nav a {
+
   color: #FFFFFF;
   display: block;
   font-size: 15px;
   font-weight: 400;
-  height: 50px;
   margin-right: 0;
-  padding: 1em 1.6em 2em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: right 0.3s ease-in-out 0s;
   z-index: 12;
-
   transition: right 0.3s ease-in-out 0s;
   -webkit-transition: right 0.3s ease-in-out 0s;
   -moz-transition: right 0.3s ease-in-out 0s;
@@ -21,17 +22,24 @@ a.nav-expander {
 
 }
 
-a.nav-expander:hover {
-  cursor: pointer;
-  background: none repeat scroll 0 0 #000000;
+.right-nav a.logout {
+  right: 0.5em;
+}
+.right-nav a.expand {
+  right: 3em;
 }
 
-a.nav-expander.fixed {
+.right-nav a:hover {
+  cursor: pointer;
+  background-color: #000000;
+}
+
+.right-nav a.fixed {
   position: fixed;
 }
 
-.nav-expanded a.nav-expander.fixed {
-  right: 20em;
+.nav-expanded .right-nav a.expand {
+  right: 18em;
 }
 
 

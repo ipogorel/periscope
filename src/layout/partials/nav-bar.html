@@ -15,9 +15,6 @@
           <history></history>
         </div>
       </li>
-      <li>
-        <h4><a  role="button" click.trigger="logout"><i class="fa fa-sign-out"></i> Logout</a></h4>
-      </li>
     </ul>
 
   </nav>
@@ -28,10 +25,15 @@
         ${router.title}
       </a>
     </div>
-    <div class="navbar-header pull-right" show.bind="showExpander">
-      <a id="nav-expander" class="nav-expander fixed">
-        <i class="fa fa-bars fa-lg white"></i>
-      </a>
+    <div class="navbar-header pull-right" show.bind="showMenu" >
+      <div class="right-nav">
+            <a  click.trigger="logout()" class="fixed logout">
+              <i class="fa fa-sign-out fa-lg white"></i>
+            </a>
+            <a id="nav-expander" class="fixed expand">
+              <i class="fa fa-bars fa-lg white"></i>
+            </a>
+      </div>
     </div>
   </div>
 

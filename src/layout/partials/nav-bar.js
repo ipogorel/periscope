@@ -1,25 +1,25 @@
 import $ from 'jquery';
 import bootstrap from 'bootstrap';
-import {PeriscopeRouter} from './../../navigator/periscope-router';
-import {Authentication} from './../../auth/authentication';
+import {AuthService} from './../../auth/auth-service';
 import {inject, bindable} from 'aurelia-framework';
+import {Router} from 'aurelia-router';
 
-@inject(Authentication, PeriscopeRouter)
+@inject(AuthService, Router)
 export class NavBar {
   @bindable router = null;
 
-  constructor(authentication, periscopeRouter){
-    this.authentication = authentication;
-    this.periscopeRouter = periscopeRouter;
+  constructor(authService, router){
+    this.authService = authService;
+    this.router = router;
   }
 
-  get showExpander(){
-    return this.authentication.isAuthenticated();
+  get showMenu(){
+    return this.authService.isAuthenticated();
   }
 
   logout(){
-    this.authentication.logout();
-    //this.periscopeRouter.navigate("/");
+    this.authService.logout();
+    this.router.navigate("/");
   }
 
   attached() {

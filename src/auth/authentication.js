@@ -12,7 +12,7 @@ const const_userroles = [{
 
 export class Authentication {
   constructor(){
-    this.storage = sessionStorage;
+    this.storage = localStorage;
     this.username = "stub_auth_username";
   }
   
